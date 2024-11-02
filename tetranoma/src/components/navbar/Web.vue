@@ -1,7 +1,7 @@
 <script setup>
 import { RouterLink, useRoute } from 'vue-router'
 import logo from '@/assets/logo.jpg'
-import NavigationLinks from './NavigationLinks.vue'
+import NavigationLinks from '../NavigationLinks.vue'
 
 </script>
 
