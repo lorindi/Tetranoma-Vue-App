@@ -34,13 +34,10 @@ const toggleMenu = () => {
                 :class="['w-6 h-1 bg-[#42BB8B] rounded-sm origin-left ease-in-out duration-500', isOpen ? '-rotate-45' : '']">
             </div>
         </button>
-        <motion.nav v-if="isOpen" 
-            initial="{ opacity: 0, translateY: -20 }" 
-            animate="{ opacity: 1, translateY: 0 }"
-            exit="{ opacity: 0, translateY: -20 }" 
-            transition="{ duration: 15}"
-            class="absolute flex flex-col w-[100%] items-center justify-center top-[125px] left-0 bg bg-[#fafafa] h-[250px] gap-[50px] py-[30px] z-[5] rounded-br-lg rounded-bl-lg shadow-lg shadow-gray-400"
-            >
+        <nav v-motion :initial="{ opacity: 0, translateY: -20 }" :enter="{ opacity: 1, translateY: 0 }"
+            :leave="{ opacity: 0, translateY: -20 }"
+            :transition="{ enter: { duration: 0.5 }, leave: { duration: 1.0 } }" v-if="isOpen"
+            class="absolute flex flex-col w-[100%] items-center justify-center top-[125px] left-0 bg bg-[#fafafa] h-[250px] gap-[50px] py-[30px] z-[5] rounded-br-lg rounded-bl-lg shadow-lg shadow-gray-400">
             <div class="flex gap-10">
                 <RouterLink to="/about"
                     :class="[isActiveLink('/about') ? 'text-[#42BB8B]' : '', 'hover:text-[#117277] tracking-wide text-lg']">
@@ -59,8 +56,8 @@ const toggleMenu = () => {
                     Add
                 </RouterLink>
             </div>
-            <Search />
-        </motion.nav>
+            <Search size="medium" />
+        </nav>
     </div>
 
 </template>
