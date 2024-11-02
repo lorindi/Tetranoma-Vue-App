@@ -6,6 +6,9 @@ export default {
       fontFamily: {
         sans: ["Poppins", "sans-serif"],
       },
+      backgroundImage: {
+        "custom-image": "url('./src/assets/tablet-cover1.png')",
+      },
       // gridTemplateColumns: {
       //   "70/30": "70% 28%",
       // },
