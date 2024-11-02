@@ -22,7 +22,7 @@ const isActiveLink = (routePath) => {
 
   </RouterLink>
   <RouterLink v-for="link in links" :key="link.path" :to="link.path"
-    :class="[isActiveLink(link.path) ? 'text-[#42BB8B]' : '', 'hover:text-[#117277]', 'tracking-wide']">
+    :class="[isActiveLink(link.path) ? 'text-[#42BB8B]' : '', 'hover:text-[#117277]', 'tracking-wide text-lg']">
     {{ link.label }}
   </RouterLink>
 </template>
