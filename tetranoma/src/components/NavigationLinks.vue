@@ -18,7 +18,7 @@ const isActiveLink = (routePath) => {
 <template>
   <RouterLink to="/"
     :class="[isActiveLink('/') ? 'text-[#42BB8B]' : '', 'xs:flex sm:flex md:hidden lg:hidden xl:hidden 2xl:hidden  hover:text-[#117277] tracking-wide text-lg']">
-    <i :class="['pi pi-home text-[#117277]', iconClasses]"></i>
+    <i :class="['pi pi-home text-[#117277]']"></i>
 
   </RouterLink>
   <RouterLink v-for="link in links" :key="link.path" :to="link.path"
