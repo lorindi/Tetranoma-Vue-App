@@ -8,10 +8,10 @@ import Web from './Web.vue'
     <div class="hidden w-full h-full sm:flex-col sm:flex">
         <Mobile />
     </div>
-    <div class="hidden w-full h-full md:flex">
+    <div class="hidden w-full h-full md:flex sm:hidden lg:hidden xl:hidden 2xl:hidden">
         <Tablet />
     </div>
-    <div class="hidden w-full h-full items-center justify-center lg:flex xl:flex 2xl:flex">
+    <div class="hidden w-full h-full items-center justify-center lg:flex xl:flex 2xl:flex md:hidden sm:hidden">
         <Web />
     </div>
 </template>
