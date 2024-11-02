@@ -3,7 +3,7 @@ import NavigationLinks from '../NavigationLinks.vue'
 
 </script>
 <template>
-    <footer class="flex w-full max-w-[1336px] items-start justify-around p-[30px]">
+    <footer class="flex w-full max-w-[1336px] items-start justify-between p-[30px]">
 
         <div class="flex flex-col gap-[30px]">
             <div class="">
@@ -29,13 +29,13 @@ import NavigationLinks from '../NavigationLinks.vue'
 
         <div class="flex gap-[20px]">
             <a href="#" class="text-gray-700 hover:text-[#42BB8B]">
-                <i class="pi pi-facebook"></i>
+                <i class="pi pi-facebook text-3xl"></i>
             </a>
             <a href="#" class="text-gray-700 hover:text-[#42BB8B]">
-                <i class="pi pi-twitter"></i>
+                <i class="pi pi-twitter text-3xl"></i>
             </a>
             <a href="#" class="text-gray-700 hover:text-[#42BB8B]">
-                <i class="pi pi-instagram"></i> 
+                <i class="pi pi-instagram text-3xl"></i> 
             </a>
         </div>
 
