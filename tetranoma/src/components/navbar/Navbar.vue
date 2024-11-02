@@ -5,7 +5,7 @@ import Web from './Web.vue'
 </script>
 
 <template>
-    <div class="hidden w-full h-full sm:flex-col sm:flex">
+    <div class="hidden w-full h-full sm:flex-col xs:flex sm:flex md:hidden lg:hidden xl:hidden 2xl:hidden">
         <Mobile />
     </div>
     <div class="hidden w-full h-full md:flex sm:hidden lg:hidden xl:hidden 2xl:hidden">
