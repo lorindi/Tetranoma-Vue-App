@@ -5,8 +5,8 @@ import { RouterLink, useRoute } from 'vue-router'
 const links = [
   { path: '/about', label: 'About' },
   { path: '/contact', label: 'Contact' },
-  { path: '/list', label: 'List' },
-  { path: '/add', label: 'Add' },
+  { path: '/figures', label: 'List' },
+  { path: '/add-figure', label: 'Add' },
 ]
 
 const isActiveLink = (routePath) => {
