@@ -7,66 +7,23 @@ const props = defineProps({
   size: {
     type: String,
     default: 'medium',
-    validator: (value) => ['small', 'medium', 'large'].includes(value),
+    validator: (value) => ['default'].includes(value),
   },
 });
 
-// Computed property for container classes
-const containerClasses = computed(() => {
-  if (props.size === 'small') {
-    return 'p-1 w-[250px]';
-  } else if (props.size === 'large') {
-    return 'px-2 py-1 w-[600px]';
-  } else {
-    return 'px-1 py-1 w-[350px]';
-  }
-});
+const containerClasses = 'p-1 w-[250px] md:px-1 md:py-1 md:w-[350px] lg:px-2 lg:py-1 lg:w-[600px] xl:px-2 xl:py-1 xl:w-[600px] 2xl:px-2 2xl:py-1 2xl:w-[600px]'
+const inputClasses = 'text-xs p-1 md:text-base md:p-2 lg:text-lg lg:p-3 xl:text-lg xl:p-3 2xl:text-lg 2xl:p-3'
+const buttonClasses = 'p-1 md:p-2 lg:p-3 xl:p-3 2xl:p-3'
+const iconClasses = 'text-base md:text-2xl lg:text-3xl xl:text-3xl 2xl:text-3xl'
 
-// Computed property for input classes
-const inputClasses = computed(() => {
-  if (props.size === 'small') {
-    return 'text-xs p-1';
-  } else if (props.size === 'large') {
-    return 'text-lg p-3';
-  } else {
-    return 'text-base p-2';
-  }
-});
-
-// Computed property for button classes
-const buttonClasses = computed(() => {
-  if (props.size === 'small') {
-    return 'p-1';
-  } else if (props.size === 'large') {
-    return 'p-3';
-  } else {
-    return 'p-2';
-  }
-});
-
-// Computed property for icon classes
-const iconClasses = computed(() => {
-  if (props.size === 'small') {
-    return 'text-base';
-  } else if (props.size === 'large') {
-    return 'text-3xl';
-  } else {
-    return 'text-2xl';
-  }
-});
 </script>
 
 <template>
   <div :class="['flex items-center border border-gray-300 bg-[#FAFAFA]', containerClasses]">
-    <input
-      type="text"
-      :class="['flex-grow border-none outline-none', inputClasses]"
-    />
+    <input type="text" :class="['flex-grow border-none outline-none', inputClasses]" />
     <button :class="['ml-2', buttonClasses]">
       <i :class="['pi pi-search text-[#117277]', iconClasses]"></i>
     </button>
   </div>
-   <!-- <Search size="small" />
-    <Search size="medium" />
-    <Search size="large" /> -->
+
 </template>
