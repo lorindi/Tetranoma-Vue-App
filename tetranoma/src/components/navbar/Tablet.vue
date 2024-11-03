@@ -15,7 +15,7 @@ const toggleMenu = () => {
 </script>
 
 <template>
-    <div class="flex w-full h-full items-center justify-between px-[30px] relative">
+    <div class="flex w-full h-full items-center justify-between px-[10px] relative">
         <RouterLink to="/" class="">
             <img :src="logo" alt="" class="rounded-full p-[10px] w-[125px] " />
         </RouterLink>
