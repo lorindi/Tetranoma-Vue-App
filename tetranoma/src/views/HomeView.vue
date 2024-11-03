@@ -5,9 +5,9 @@ import HomeCover from '/img/homeCover.jpg'
 
 <template>
     <section class="flex flex-col-reverse w-full max-w-[1336px] h-auto gap-[30px] items-center justify-between p-[15px] mt-[30px]
-    lg:flex-row lg:p-[30px] lg:mt-[0px]  lg:h-[calc(100vh-125px)]
-    xl:flex-row xl:p-[30px] xl:mt-[0px]  xl:h-[calc(100vh-125px)]
-    2xl:flex-row 2xl:p-[30px] 2xl:mt-[0px]  2xl:h-[calc(100vh-125px)]
+    lg:flex-row lg:p-[30px] lg:mt-[0px] lg:h-[calc(100vh-125px)]
+    xl:flex-row xl:p-[30px] xl:mt-[0px] xl:h-[calc(100vh-125px)]
+    2xl:flex-row 2xl:p-[30px] 2xl:mt-[0px] 2xl:h-[calc(100vh-125px)]
     ">
         <div class="flex flex-col-reverse gap-[50px] w-full items-center
         lg:flex-col lg:items-start
