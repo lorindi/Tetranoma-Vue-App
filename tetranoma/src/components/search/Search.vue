@@ -1,13 +1,12 @@
 <script setup>
-import { computed } from 'vue';
 import { defineProps } from 'vue';
 
 // Define component props
 const props = defineProps({
   size: {
     type: String,
-    default: 'medium',
-    validator: (value) => ['default'].includes(value),
+    default: 'default',
+    // validator: (value) => ['default'].includes(value),
   },
 });
 
