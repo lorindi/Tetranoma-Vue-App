@@ -1,3 +1,4 @@
+import CreateAccountView from '@/views/CreateAccountView.vue'
 import HomeView from '@/views/HomeView.vue'
 import SignInView from '@/views/SignInView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
@@ -14,6 +15,11 @@ const router = createRouter({
             path: '/sign-in',
             name: 'sign-in',
             component: SignInView,
+        },
+        {
+            path: '/create-account',
+            name: 'create-account',
+            component: CreateAccountView,
         },
     ],
 })
