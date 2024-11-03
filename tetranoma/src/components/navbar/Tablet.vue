@@ -29,7 +29,7 @@ const toggleMenu = () => {
             <div class="flex gap-10">
                 <NavigationLinks />
             </div>
-            <Search size="medium" />
+            <Search size="default" />
         </nav>
     </div>
 
