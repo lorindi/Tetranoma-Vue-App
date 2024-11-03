@@ -14,7 +14,7 @@ import NavigationLinks from '../NavigationLinks.vue'
         <div class="flex flex-col gap-[30px] 
         ">
             <div class="">
-                <h2 class="">Tetranoma</h2>
+                <h2 class="text-3xl text-[#8865BD]">Tetranoma</h2>
                 <p class="text-gray-600 mt-2 text-center md:text-left text-sm
             lg:text-base
             xl:text-base
