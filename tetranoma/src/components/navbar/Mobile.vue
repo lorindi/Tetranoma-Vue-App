@@ -26,7 +26,7 @@ const toggleMenu = () => {
             :transition="{ enter: { duration: 0.5 }, leave: { duration: 1.0 } }" v-if="isOpen"
             class="absolute flex flex-col w-[100%] items-center justify-center top-[125px] left-0 bg bg-[#fafafa] h-auto gap-[50px] py-[30px] z-[5] rounded-br-lg rounded-bl-lg shadow-lg shadow-gray-400">
 
-            <Search size="small" />
+            <Search size="default" />
           
 
             <NavigationLinks />
