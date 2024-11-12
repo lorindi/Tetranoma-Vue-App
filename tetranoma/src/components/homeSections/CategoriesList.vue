@@ -1,7 +1,6 @@
 <script setup>
 import CardCategory from '../cards/CardCategory.vue';
 
-
 const categories = [
   { category: 'film', icon: 'pi-video', title: 'Film', desc: 'Explore iconic movie-themed 3D figures.' },
   { category: 'game', icon: 'pi-star', title: 'Game', desc: 'Game-inspired models for every fan.' },
@@ -31,8 +30,8 @@ defineProps({
 
 <template>
 
-  <section class="w-full max-w-[1336px] px-[10px]"
-    :class="type === 'list' ? 'flex flex-wrap items-center justify-evenly gap-[5px] md:gap-[10px]' : ''">
+  <section if="type === 'list'"
+    class="w-full max-w-[1336px] px-[10px] flex flex-wrap items-center justify-evenly gap-[5px] md:gap-[10px]">
     <CardCategory v-for="(category, index) in categories.slice(0, limit)" :key="index" :category="category.category"
       :icon="category.icon" :title="category.title" :desc="category.desc" />
   </section>
