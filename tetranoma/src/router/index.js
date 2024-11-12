@@ -4,6 +4,7 @@ import ContactView from '@/views/ContactView.vue'
 import CreateAccountView from '@/views/CreateAccountView.vue'
 import FiguresView from '@/views/FiguresView.vue'
 import HomeView from '@/views/HomeView.vue'
+import SearchByCategoryView from '@/views/SearchByCategoryView.vue'
 import SignInView from '@/views/SignInView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -29,6 +30,11 @@ const router = createRouter({
             path: '/figures',
             name: 'figures',
             component: FiguresView,
+        },
+        {
+            path: '/search-figure',
+            name: 'search-figure',
+            component: SearchByCategoryView,
         },
         {
             path: '/add-figure',
