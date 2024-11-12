@@ -18,7 +18,7 @@ const iconClasses = 'text-base md:text-2xl lg:text-3xl xl:text-3xl 2xl:text-3xl'
 </script>
 
 <template>
-  <div :class="['flex items-center border border-gray-300 bg-[#FAFAFA]', containerClasses]">
+  <div :class="['flex items-center border border-gray-300 bg-[#FAFAFA] rounded-md', containerClasses]">
     <input type="text" :class="['flex-grow border-none outline-none', inputClasses]" />
     <button :class="['ml-2', buttonClasses]">
       <i :class="['pi pi-search text-[#117277]', iconClasses]"></i>
