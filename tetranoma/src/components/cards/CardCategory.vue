@@ -23,7 +23,7 @@ defineProps({
 
 </script>
 <template>
-    <RouterLink :to="`/figures/${category}`" 
+    <RouterLink :to="`/figures`" 
     class="flex flex-col items-center justify-around py-[10px] px-[5px] mx-[3px] my-[10px] shadow-md 
     w-[90px] h-[90px]
     sm:w-[125px] sm:h-[125px] 
