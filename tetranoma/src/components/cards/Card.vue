@@ -1,5 +1,6 @@
 <script>
 import { RouterLink } from 'vue-router';
+import { defineProps } from 'vue';
 
 export default {
     props: {
