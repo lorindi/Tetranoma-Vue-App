@@ -4,12 +4,12 @@ import HomeCover from '/img/homeCover.jpg'
 </script>
 
 <template>
-    <section class="flex flex-col-reverse w-full max-w-[1336px] h-auto gap-[30px] items-center justify-between p-[15px] mt-[30px] bg-[#FAFAFA]
+    <section class="flex flex-col-reverse w-full max-w-[1336px] h-auto gap-[30px] items-center justify-between p-[15px] my-[30px] bg-[#FAFAFA]
     lg:flex-row lg:p-[30px] lg:mt-[0px] lg:h-[calc(100vh-125px)]
     xl:flex-row xl:p-[30px] xl:mt-[0px] xl:h-[calc(100vh-125px)]
     2xl:flex-row 2xl:p-[30px] 2xl:mt-[0px] 2xl:h-[calc(100vh-125px)]
     ">
-        <div class="flex flex-col gap-[50px] w-full items-center
+        <div class="flex flex-col gap-[30px] w-full items-center
         lg:flex-col lg:items-start
         xl:flex-col xl:items-start
         2xl:flex-col 2xl:items-start
@@ -19,23 +19,23 @@ import HomeCover from '/img/homeCover.jpg'
                 xl:items-start
                 2xl:items-start
             ">
-                <h1 class="text-3xl tracking-wide
-                lg:text-5xl
-                xl:text-5xl
-                2xl:text-5xl
+                <h1 class="text-3xl tracking-wide text-center
+                lg:text-5xl lg:text-start
+                xl:text-5xl xl:text-start
+                2xl:text-5xl 2xl:text-start
                 ">Discover the World of 3D Printing</h1>
-                <p class="text-base text-gray-700 tracking-wide w-[90%]
+                <p class="text-base text-gray-700 tracking-wide w-[95%] text-start
                 md:text-lg
-                lg:text-2xl
-                xl:text-2xl
-                2xl:text-2xl
+                lg:text-2xl lg:text-start
+                xl:text-2xl xl:text-start
+                2xl:text-2xl 2xl:text-start
                 "> Discover a world of 3D printed figures, from ready-made designs to fully custom creations. Whether
                     you're looking for unique models or want to bring your own ideas to life, we've got you covered.</p>
             </div>
             <!-- <Search type="default" /> -->
             <RouterLink to="/"
                 class="relative inline-block p-[2px] rounded-lg bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:from-[#00AEDD] hover:to-yellow-500">
-                <span class="block bg-white text-gray-800 font-bold py-3 px-4 rounded-lg">
+                <span class="block bg-white text-gray-800 font-bold py-3 px-4 rounded-lg text-base">
                     View 3D Figures
                 </span>
             </RouterLink>
