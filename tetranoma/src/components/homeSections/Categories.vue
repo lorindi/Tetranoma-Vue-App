@@ -4,7 +4,5 @@ import CategoriesList from './CategoriesList.vue';
 </script>
 
 <template>
-  <div class="xs:flex sm:flex md:flex">
-    <CategoriesList :limit="4" type="list" />
-  </div>
+    <CategoriesList :limit="3" type="list" />
 </template>
