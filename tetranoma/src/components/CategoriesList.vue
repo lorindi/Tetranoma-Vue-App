@@ -1,5 +1,5 @@
 <script setup>
-import CardCategory from '../cards/CardCategory.vue';
+import CardCategory from '@/components/cards/CardCategory.vue';
 
 const categories = [
   { category: 'film', icon: 'pi-video', title: 'Film', desc: 'Explore iconic movie-themed 3D figures.' },
