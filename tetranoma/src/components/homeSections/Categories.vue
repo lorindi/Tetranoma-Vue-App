@@ -13,7 +13,7 @@ import CategoriesList from '../CategoriesList.vue';
             </RouterLink>
         </div>
         <div class="">
-            <CategoriesList :limit="3" type="list" />
+            <CategoriesList :limit="4" type="list" />
         </div>
     </div>
 </template>
