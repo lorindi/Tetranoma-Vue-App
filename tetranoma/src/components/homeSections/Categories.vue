@@ -1,6 +1,6 @@
 <script setup>
 
-import CategoriesList from './CategoriesList.vue';
+import CategoriesList from '../CategoriesList.vue';
 </script>
 
 <template>
