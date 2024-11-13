@@ -1,11 +1,14 @@
 <script setup>
 import CategoriesList from '@/components/CategoriesList.vue';
+import FiguresList from '@/components/FiguresList.vue';
 import Search from '@/components/search/Search.vue';
 
 
 
 </script>
 <template>
-    <Search size="default" />
-    
+    <div class="flex flex-col w-full max-w-[1336px] items-center justify-center">
+        <Search size="default" />
+        <FiguresList />
+    </div>
 </template>
