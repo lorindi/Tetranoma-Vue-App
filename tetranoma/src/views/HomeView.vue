@@ -12,7 +12,7 @@ import FiguresList from '@/components/FiguresList.vue';
     <Hero />
     <Categories />
 
-    <FiguresList :limit="3" />
+    <FiguresList :limit="4" />
 
 
 </template>
