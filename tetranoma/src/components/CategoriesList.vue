@@ -31,7 +31,7 @@ defineProps({
 <template>
 
   <section if="type === 'list'"
-    class="w-full max-w-[1336px] px-[10px] flex flex-wrap items-center justify-evenly gap-[5px] md:gap-[10px]">
+    class="w-full max-w-[1336px] px-[10px] grid grid-cols-2 justify-items-center  xl:flex flex-wrap xl:items-center xl:justify-evenly gap-[5px] md:gap-[10px]">
     <CardCategory v-for="(category, index) in categories.slice(0, limit)" :key="index" :category="category.category"
       :icon="category.icon" :title="category.title" :desc="category.desc" />
   </section>
