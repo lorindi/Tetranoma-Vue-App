@@ -54,28 +54,30 @@ const figures = [
 ];
 
 const props = defineProps({
-  limit: {
-    type: Number,
-  },
+    limit: {
+        type: Number,
+    },
 });
 
 const limitedFigures = computed(() => {
-  const maxLimit = props.limit ?? figures.length;
-  return figures.slice(0, maxLimit);
+    const maxLimit = props.limit ?? figures.length;
+    return figures.slice(0, maxLimit);
 });
 </script>
 
 <template>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <CardFigure
-            v-for="(figure, index) in limitedFigures"
-            :key="index"
-            :link="figure.link"
-            :imgUrl="figure.imgUrl"
-            :title="figure.title"
-            :description="figure.description"
-            :rating="figure.rating"
-            :type="figure.type"
-        />
+    <div class="flex gap-2 w-full max-w-[1336px] items-center justify-center flex-wrap my-[50px]
+    sm:
+    md:
+    lg:gap-5
+    xl:gap-5
+    ">
+        <div class="grid grid-cols-2 gap-4 w-full justify-items-center 
+                    lg:flex lg:flex-wrap lg:items-center lg:justify-center lg:gap-5
+                    xl:grid xl:grid-cols-4 xl:gap-0">
+            <CardFigure v-for="(figure, index) in limitedFigures" :key="index" :link="figure.link"
+                :imgUrl="figure.imgUrl" :title="figure.title" :description="figure.description" :rating="figure.rating"
+                :type="figure.type" />
+        </div>
     </div>
 </template>
