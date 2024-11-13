@@ -24,7 +24,7 @@ defineProps({
 </script>
 <template>
     <RouterLink :to="`/figures`" 
-    class="flex flex-col items-center justify-around py-[10px] px-[5px] mx-[3px] my-[10px] shadow-md 
+    class="flex flex-col items-center justify-around py-[10px] px-[5px] mx-[3px] my-[10px] shadow-md bg-white rounded-lg
     w-[90px] h-[90px]
     sm:w-[125px] sm:h-[125px] 
     md:w-[150px] md:h-[125px] md:mx-[10px] md:flex-row
