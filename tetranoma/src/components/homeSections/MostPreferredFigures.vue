@@ -4,7 +4,7 @@ import HeaderWithLink from '../HeaderWithLink.vue';
 
 </script>
 <template>
-    <div class="w-full max-w-[1336px]">
+    <div class="flex flex-col w-full max-w-[1336px] items-center">
         <HeaderWithLink title="Top Rated" link="/figures" linkText="Explore" />
         <FiguresList :limit="4" />
     </div>
