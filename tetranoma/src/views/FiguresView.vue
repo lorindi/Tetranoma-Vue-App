@@ -1,5 +1,5 @@
 <script setup>
-import CategoriesList from '@/components/homeSections/CategoriesList.vue';
+import CategoriesList from '@/components/CategoriesList.vue';
 import Search from '@/components/search/Search.vue';
 
 
