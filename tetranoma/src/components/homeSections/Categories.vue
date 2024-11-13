@@ -5,7 +5,7 @@ import CategoriesList from '../CategoriesList.vue';
 </script>
 
 <template>
-    <div class="flex flex-col w-full max-w-[1336px] min-h-[350px] gap-14 ">
+    <div class="flex flex-col w-full max-w-[1336px] min-h-[350px] gap-14 my-[20px]">
         <div class="flex items-start justify-between px-[15px] lg:px-[30px]">
             <h4 class=" font-semibold text-base lg:text-xl ">Most popular categories</h4>
             <RouterLink to="/search-figure" class="flex gap-2 items-center">
