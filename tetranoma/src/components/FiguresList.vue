@@ -66,8 +66,8 @@ const limitedFigures = computed(() => {
 </script>
 
 <template>
-        <div class="grid grid-cols-2 gap-0 w-full justify-items-center my-[15px] max-w-[1336px]
-                    xl:grid xl:grid-cols-4 xl:gap-0">
+        <div class="grid grid-cols-2 w-[95%] justify-items-center my-[15px] max-w-[1336px]
+                    xl:grid xl:grid-cols-4">
             <CardFigure v-for="(figure, index) in limitedFigures" :key="index" :link="figure.link"
                 :imgUrl="figure.imgUrl" :title="figure.title" :description="figure.description" :rating="figure.rating"
                 :type="figure.type" />
