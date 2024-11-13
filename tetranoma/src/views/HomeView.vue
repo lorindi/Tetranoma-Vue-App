@@ -6,10 +6,7 @@ import MostPreferredFigures from '@/components/homeSections/MostPreferredFigures
 </script>
 
 <template>
-
     <Hero />
     <Categories />
     <MostPreferredFigures />
-
-
 </template>
