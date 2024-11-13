@@ -1,4 +1,5 @@
 <script setup>
+import { ref, onMounted } from 'vue';
 import CardCategory from '@/components/cards/CardCategory.vue';
 
 const categories = [
@@ -15,25 +16,63 @@ const categories = [
   { category: 'decor', icon: 'pi-palette', title: 'Decor', desc: 'Stylish 3D designs to enhance your space.' },
 ];
 
-defineProps({
+const props = defineProps({
   limit: {
     type: Number,
-    default: 11,
   },
   type: {
     type: String,
     default: 'list',
-    validator: (value) => ['list'].includes(value),
+    validator: (value) => ['list', 'home'].includes(value),
   },
+});
+
+const responsiveLimit = ref(categories.length);
+
+const setResponsiveLimit = () => {
+  if (props.type === 'home') {
+    if (window.matchMedia('(max-width: 640px)').matches) {
+      responsiveLimit.value = 6;
+    } else if (window.matchMedia('(max-width: 1024px)').matches) {
+      responsiveLimit.value = 6;
+    } else if (window.matchMedia('(min-width: 1025px) and (max-width: 1535px)').matches) {
+      responsiveLimit.value = 3;
+    } else if (window.matchMedia('(min-width: 1536px)').matches) {
+      responsiveLimit.value = 4;
+    }
+  } else {
+    responsiveLimit.value = props.limit ?? categories.length;
+  }
+};
+
+onMounted(() => {
+  setResponsiveLimit();
+  window.addEventListener('resize', setResponsiveLimit);
 });
 </script>
 
 <template>
-
-  <section if="type === 'list'"
-    class="w-full max-w-[1336px] px-[10px] grid grid-cols-2 justify-items-center  xl:flex flex-wrap xl:items-center xl:justify-evenly gap-[5px] md:gap-[10px]">
-    <CardCategory v-for="(category, index) in categories.slice(0, limit)" :key="index" :category="category.category"
-      :icon="category.icon" :title="category.title" :desc="category.desc" />
+  <section v-if="type === 'list'"
+  class="w-full max-w-[1336px] px-[10px] grid grid-cols-2 justify-items-center xl:flex flex-wrap xl:items-center xl:justify-evenly gap-[5px] md:gap-[10px]">
+    <CardCategory
+      v-for="(category, index) in categories.slice(0, limit)"
+      :key="index"
+      :category="category.category"
+      :icon="category.icon"
+      :title="category.title"
+      :desc="category.desc"
+    />
   </section>
 
+  <section v-else
+    class="w-full max-w-[1336px] px-[10px] grid grid-cols-3 md:grid-cols-3 2xl:grid-cols-4 gap-4 justify-items-center">
+    <CardCategory
+      v-for="(category, index) in categories.slice(0, responsiveLimit)"
+      :key="index"
+      :category="category.category"
+      :icon="category.icon"
+      :title="category.title"
+      :desc="category.desc"
+    />
+  </section>
 </template>
