@@ -1,5 +1,5 @@
 <script setup>
-import CardFigure from './cards/CardFigure.vue';
+import CardFigure from '../cards/CardFigure.vue';
 import { computed } from 'vue';
 
 const figures = [
