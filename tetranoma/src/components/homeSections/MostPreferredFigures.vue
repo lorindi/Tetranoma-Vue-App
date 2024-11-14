@@ -1,5 +1,5 @@
 <script setup>
-import FiguresList from '../FiguresList.vue';
+import FiguresList from '../lists/FiguresList.vue';
 import HeaderWithLink from '../HeaderWithLink.vue';
 
 </script>
