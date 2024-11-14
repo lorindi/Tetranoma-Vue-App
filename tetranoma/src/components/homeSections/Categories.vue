@@ -1,7 +1,7 @@
 <script setup>
 
 import { RouterLink } from 'vue-router';
-import CategoriesList from '../CategoriesList.vue';
+import CategoriesList from '../lists/CategoriesList.vue';
 import HeaderWithLink from '../HeaderWithLink.vue';
 </script>
 
