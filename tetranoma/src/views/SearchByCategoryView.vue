@@ -1,5 +1,5 @@
 <script setup>
-import CategoriesList from '@/components/CategoriesList.vue';
+import CategoriesList from '@/components/lists/CategoriesList.vue';
 
 
 
