@@ -50,10 +50,11 @@ onMounted(() => {
   window.addEventListener('resize', setResponsiveLimit);
 });
 </script>
-
+<!-- xl:flex flex-wrap xl:items-center xl:justify-evenly gap-[5px] md:gap-[10px] -->
 <template>
   <section v-if="type === 'list'"
-  class="w-full max-w-[1336px] px-[10px] grid grid-cols-2 justify-items-center xl:flex flex-wrap xl:items-center xl:justify-evenly gap-[5px] md:gap-[10px]">
+  class="w-full max-w-[1336px] px-[10px] grid grid-cols-3 justify-items-center xl:grid-cols-4
+  ">
     <CardCategory
       v-for="(category, index) in categories.slice(0, limit)"
       :key="index"
