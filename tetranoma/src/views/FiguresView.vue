@@ -9,6 +9,6 @@ import Search from '@/components/search/Search.vue';
 <template>
     <div class="flex flex-col w-full max-w-[1336px] items-center justify-center my-[50px]">
         <Search size="default" />
-        <FiguresList />
+        <FiguresList :type="list"/>
     </div>
 </template>
