@@ -32,7 +32,7 @@ const toggleMenu = () => {
             :transition="{ enter: { duration: 0.5 }, 
             leave: { duration: 1.0 } }" 
             v-if="isOpen"
-            class="absolute flex flex-col w-[100%] items-center justify-center top-[0px] left-0 bg bg-[#fafafa] h-[550px] gap-[50px] py-[30px] z-[5] rounded-br-lg rounded-bl-lg shadow-lg shadow-gray-400">
+            class="absolute flex flex-col w-[100%] pt-[100px] items-center justify-center top-[0px] left-0 bg bg-[#fafafa] h-[550px] gap-[50px] py-[30px] z-[5] rounded-br-lg rounded-bl-lg shadow-lg">
             <div class="flex gap-10">
                 <NavigationLinks :toggleMenu="toggleMenu" />
             </div>
