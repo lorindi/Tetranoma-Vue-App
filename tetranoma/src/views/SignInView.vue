@@ -15,7 +15,7 @@ const handleSubmit = (e) => {
 <template>
     <div class="flex items-center justify-center  min-h-[calc(100vh-125px)] ">
 
-        <div class="bg-white shadow-xl rounded-lg p-8 max-w-sm w-full shadow-gray-400 dark:shadow-gray-900 dark:bg-gray-800">
+        <div class="bg-white shadow-xl rounded-lg p-8 max-w-sm w-full z-10 shadow-gray-400 dark:shadow-gray-900 dark:bg-gray-800">
             <h2 class="text-2xl font-bold text-center text-[#42BB8B] mb-6">Sign In</h2>
             <form @submit="handleSubmit">
                 <div class="mb-4">
