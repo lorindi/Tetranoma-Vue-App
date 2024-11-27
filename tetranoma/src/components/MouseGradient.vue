@@ -12,16 +12,16 @@ const gradientColors = computed(() => {
   console.log("Updating gradient colors based on theme")
   return isDark.value
     ? {
-        // Тъмни цветове с по-голяма прозрачност за тъмната тема
-        color1: "rgba(70, 180, 140, 0.15)",  // тъмно мента
-        color2: "rgba(76, 137, 175, 0.15)",  // тъмно синьо
-        color3: "rgba(150, 100, 175, 0.15)",  // тъмно лилаво
+        // Dark colors with higher transparency for dark theme
+        color1: "rgba(70, 180, 140, 0.15)",  // dark mint
+        color2: "rgba(76, 137, 175, 0.15)",  // dark blue
+        color3: "rgba(150, 100, 175, 0.15)", // dark purple
       }
     : {
-        // Светли цветове със същата прозрачност за светлата тема
-        color1: "rgba(150, 255, 220, 0.25)", // светло мента
-        color2: "rgba(156, 217, 255, 0.25)", // светло синьо
-        color3: "rgba(230, 180, 255, 0.25)",  // светло лилаво
+        // Light colors with same transparency for light theme
+        color1: "rgba(150, 255, 220, 0.25)", // light mint
+        color2: "rgba(156, 217, 255, 0.25)", // light blue
+        color3: "rgba(230, 180, 255, 0.25)", // light purple
       }
 })
 
