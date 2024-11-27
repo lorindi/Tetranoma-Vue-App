@@ -13,7 +13,7 @@ watch(isDark, (newValue) => {
 </script>
 
 <template>
-  <div class="fixed top-4 right-4">
+  <div class="fixed bottom-[30px] right-[30px]">
     <label class="relative inline-flex items-center cursor-pointer">
       <input
         ref="toggleRef"
@@ -29,7 +29,7 @@ watch(isDark, (newValue) => {
                after:absolute after:top-[4px] after:left-[4px] after:bg-white 
                after:border-gray-300 after:border after:rounded-full after:h-7 
                after:w-7 after:transition-all dark:border-gray-600 
-               peer-checked:bg-blue-600 after:flex after:items-center 
+               peer-checked:bg-blue-900 after:flex after:items-center 
                after:justify-center after:text-lg"
       ></div>
     </label>
