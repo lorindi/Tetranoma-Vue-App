@@ -11,7 +11,7 @@ const handleClick = () => {
 </script>
 
 <template>
-    <button @click="handleClick" class="flex flex-col gap-[4.5px] cursor-pointer z-20">
+    <button @click="handleClick" class="flex flex-col gap-[4.5px] cursor-pointer z-30">
         <div
             :class="['w-6 h-1 bg-[#42BB8B] rounded-sm origin-left ease-in-out duration-500', isOpen ? 'rotate-45' : '']">
         </div>
