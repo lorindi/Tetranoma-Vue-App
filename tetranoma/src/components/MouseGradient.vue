@@ -44,7 +44,7 @@ onUnmounted(() => {
 
 <template>
   <div 
-    class="pointer-events-none fixed inset-0 z-3 transition-opacity"
+    class="pointer-events-none fixed inset-0 z-1 transition-opacity"
     :style="{
       background: `radial-gradient(600px at ${mouseX}px ${mouseY}px, 
       ${gradientColors.color3}, 
