@@ -6,7 +6,7 @@ import DarkMode from './components/darkMode/DarkMode.vue';
 </script>
 
 <template>
-    <div class="w-full h-full flex flex-col items-center  bg-[#FAFAFA]">
+    <div class="w-full h-full flex flex-col items-center bg-[#FAFAFA] dark:bg-gray-900 dark:text-white">
         <DarkMode />
         <Navbar />
         <RouterView class="w-full h-full flex justify-center max-w-[1336px]" />
