@@ -30,7 +30,7 @@ watch(isDark, (newValue) => {
                after:absolute after:top-[4px] after:left-[4px] after:bg-white 
                after:border-gray-300 after:border after:rounded-full after:h-7 
                after:w-7 after:transition-all dark:border-gray-600 
-               peer-checked:bg-blue-900"
+               peer-checked:bg-gray-900"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
