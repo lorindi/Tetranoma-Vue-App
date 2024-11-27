@@ -19,7 +19,7 @@ defineProps(['toggleMenu'])
 <template>
   <RouterLink to="/"
   @click="toggleMenu"
-    :class="[isActiveLink('/') ? 'text-[#42BB8B]' : '', 'xs:flex sm:flex md:hidden lg:hidden xl:hidden 2xl:hidden  hover:text-[#117277] tracking-wide text-lg']">
+    :class="[isActiveLink('/') ? 'text-[#42BB8B]' : '', 'xs:flex sm:flex md:hidden lg:hidden xl:hidden 2xl:hidden  hover:text-[#117277] tracking-wide text-lg ']">
     <i :class="['pi pi-home text-[#117277]']"></i>
   </RouterLink>
 
