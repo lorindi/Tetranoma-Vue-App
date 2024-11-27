@@ -4,7 +4,7 @@ import HomeCover from '/img/homeCover.jpg'
 </script>
 
 <template>
-    <section class="flex flex-col-reverse w-full max-w-[1336px] h-auto gap-[30px] items-center justify-between p-[15px] my-[30px] bg-[#FAFAFA]
+    <section class="flex flex-col-reverse w-full max-w-[1336px] h-auto gap-[30px] items-center justify-between p-[15px] my-[30px] bg-[#FAFAFA] dark:bg-gray-900 lg:rounded-xl
     lg:flex-row lg:p-[30px] lg:mt-[0px] lg:h-[calc(100vh-125px)]
     xl:flex-row xl:p-[30px] xl:mt-[0px] xl:h-[calc(100vh-125px)]
     2xl:flex-row 2xl:p-[30px] 2xl:mt-[0px] 2xl:h-[calc(100vh-125px)]
@@ -24,7 +24,7 @@ import HomeCover from '/img/homeCover.jpg'
                 xl:text-5xl xl:text-start
                 2xl:text-5xl 2xl:text-start
                 ">Discover the World of 3D Printing</h1>
-                <p class="text-base text-gray-700 tracking-wide w-[95%] text-start
+                <p class="text-base text-gray-700 tracking-wide w-[95%] text-start dark:text-gray-400
                 md:text-lg
                 lg:text-2xl lg:text-start
                 xl:text-2xl xl:text-start
@@ -35,7 +35,7 @@ import HomeCover from '/img/homeCover.jpg'
             <!-- <Search type="default" /> -->
             <RouterLink to="/"
                 class="relative inline-block p-[2px] rounded-lg bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:from-[#00AEDD] hover:to-yellow-500">
-                <span class="block bg-white text-gray-800 font-bold py-3 px-4 rounded-lg text-base">
+                <span class="block bg-white text-gray-800 font-bold py-3 px-4 rounded-lg text-base dark:bg-gray-800 dark:text-white">
                     View 3D Figures
                 </span>
             </RouterLink>
