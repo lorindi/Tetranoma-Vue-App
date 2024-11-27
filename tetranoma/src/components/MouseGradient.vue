@@ -22,11 +22,12 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="pointer-events-none fixed inset-0 z-3 transition-opacity" :style="{
+  <div class="pointer-events-none fixed inset-0 z-3 transition-opacity dark:bg-black" :style="{
     background: `radial-gradient(600px at ${mouseX}px ${mouseY}px, 
-      rgba(230, 180, 255, 0.25), 
-      rgba(156, 217, 255, 0.25), 
-      rgba(150, 255, 220, 0.25), 
-        transparent 80%)`
+    rgba(230, 180, 255, 0.25), 
+    rgba(156, 217, 255, 0.25), 
+    rgba(150, 255, 220, 0.25), 
+    
+        transparent 150%)`
   }" />
 </template>
