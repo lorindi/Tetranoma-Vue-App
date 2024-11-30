@@ -1,7 +1,5 @@
 <script setup>
-import { defineProps } from 'vue';
 
-// Define component props
 const props = defineProps({
   size: {
     type: String,
