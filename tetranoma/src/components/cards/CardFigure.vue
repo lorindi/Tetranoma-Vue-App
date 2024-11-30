@@ -34,7 +34,7 @@ const isRatingVisible = computed(() => props.type === 'cardRating' && props.rati
 </script>
 
 <template>
-    <RouterLink :to="`/figures/${link}`" class="flex flex-col bg-white shadow-md rounded-lg overflow-hidden h-[200px] w-[140px] my-[10px] dark:bg-gray-800 z-10
+    <RouterLink :to="`/figures/${link}`" class="flex flex-col bg-white shadow-md rounded-lg overflow-hidden h-[200px] w-[140px] my-[10px] dark:bg-gray-700 z-10
     sm:w-[250px] sm:h-[300px] 
     md:w-[300px] md:h-[350px] 
     lg:w-[300px] lg:h-[360px] lg:my-[15px]
@@ -44,7 +44,7 @@ const isRatingVisible = computed(() => props.type === 'cardRating' && props.rati
         <h2 class="text-sm sm:text-xl md:text-2xl font-semibold mb-[3px]">{{ title.length > 17 ? title.slice(0, 17) + '...' : title }}</h2>
         <p class="text-sm sm:text-base md:text-lg text-gray-700 mb-[3px] dark:text-gray-400">{{ description.length > 28 ? description.slice(0, 28) + '...' : description }}</p>
         <div v-if="isRatingVisible" class="flex items-center">
-          <span class="text-yellow-500 mr-1 text-sm sm:text-base md:text-lg ">★</span>
+          <span class="text-[#00BD7E] mr-1 text-sm sm:text-base md:text-lg ">★</span>
           <span class="text-gray-700 text-sm sm:text-base md:text-lg dark:text-white">{{ rating }}</span>
         </div>
       </div>
