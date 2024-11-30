@@ -1,44 +1,72 @@
 <script setup>
-import { RouterLink } from 'vue-router';
-import { ref } from 'vue';
+import { RouterLink } from "vue-router"
+import { useAuthStore } from "@/stores/auth"
+import { useForm } from "vee-validate"
+import * as yup from "yup"
+import { useRouter } from "vue-router"
+import { useToast } from "vue-toastification"
 
-const email = ref('');
-const password = ref('');
+const router = useRouter()
+const toast = useToast()
+const authStore = useAuthStore()
 
-const handleSubmit = (e) => {
-  e.preventDefault();
-  // Handle form submission here
-  console.log({ email: email.value, password: password.value });
-};
+// Дефиниране на схемата за валидация
+const schema = yup.object({
+    email: yup
+        .string()
+        .required("Email is required")
+        .email("Email must be valid"),
+    password: yup
+        .string()
+        .required("Password is required")
+        .min(6, "Password must be at least 6 characters")
+})
+
+// Инициализиране на формата с VeeValidate
+const { handleSubmit, values, errors } = useForm({
+    validationSchema: schema,
+    validateOnMount: false,
+    initialValues: {
+        email: "",
+        password: ""
+    }
+})
+
+// Функция за обработка на формата
+const onSubmit = handleSubmit(async (values) => {
+    console.log("Form submitted with values:", values)
+    try {
+        await authStore.login(values)
+        toast.success("Successfully logged in!")
+        router.push("/")
+    } catch (error) {
+        console.error("Login error:", error)
+        toast.error("Login failed. Please try again.")
+    }
+})
 </script>
 
 <template>
-    <div class="flex items-center justify-center  min-h-[calc(100vh-125px)] ">
-
-        <div class="bg-white shadow-xl rounded-lg p-8 max-w-sm w-full z-10 shadow-gray-400 dark:shadow-gray-900 dark:bg-gray-800">
+    <div class="flex items-center justify-center min-h-[calc(100vh-125px)]">
+        <div
+            class="bg-white shadow-xl rounded-lg p-8 max-w-sm w-full z-10 shadow-gray-400 dark:shadow-gray-900 dark:bg-gray-800">
             <h2 class="text-2xl font-bold text-center text-[#42BB8B] mb-6">Sign In</h2>
-            <form @submit="handleSubmit">
+
+            <form @submit="onSubmit">
                 <div class="mb-4">
                     <label for="email" class="block text-gray-700 font-medium mb-2 dark:text-white">Email</label>
-                    <input 
-                        v-model="email"
-                        type="email" 
-                        id="email" 
-                        placeholder="Enter your email"
-                        class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#42BB8B] focus:border-transparent dark:bg-gray-700 dark:text-white"
-                        required 
-                    />
+                    <input v-model="values.email" type="email" id="email" placeholder="Enter your email"
+                        class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#42BB8B] focus:border-transparent dark:bg-gray-700 dark:text-white" />
+                    <span v-if="errors.email && meta.email?.touched" class="text-red-500 text-sm mt-1">{{ errors.email
+                        }}</span>
                 </div>
+
                 <div class="mb-6">
                     <label for="password" class="block text-gray-700 font-medium mb-2 dark:text-white">Password</label>
-                    <input 
-                        v-model="password"
-                        type="password" 
-                        id="password" 
-                        placeholder="Enter your password"
-                        class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#42BB8B] focus:border-transparent dark:bg-gray-700 dark:text-white"
-                        required 
-                    />
+                    <input v-model="values.password" type="password" id="password" placeholder="Enter your password"
+                        class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#42BB8B] focus:border-transparent dark:bg-gray-700 dark:text-white" />
+                    <span v-if="errors.password && meta.password?.touched" class="text-red-500 text-sm mt-1">{{
+                        errors.password }}</span>
                 </div>
 
                 <button type="submit"
@@ -46,12 +74,13 @@ const handleSubmit = (e) => {
                     Sign In
                 </button>
             </form>
+
             <p class="text-center text-gray-600 mt-4">
-                Don't have an account? <RouterLink to="/create-account" class="text-[#42BB8B] hover:underline">Create
-                    Account</RouterLink>
+                Don't have an account?
+                <RouterLink to="/create-account" class="text-[#42BB8B] hover:underline">
+                    Create Account
+                </RouterLink>
             </p>
         </div>
     </div>
 </template>
-
-<style scoped></style>
