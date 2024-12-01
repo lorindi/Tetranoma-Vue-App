@@ -34,7 +34,7 @@ import HomeCover from '/img/homeCover.jpg'
             </div>
             <!-- <Search type="default" /> -->
             <RouterLink to="/"
-                class="relative inline-block p-[2px] rounded-lg bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:from-[#00AEDD] hover:to-yellow-500">
+                class="relative inline-block p-[2px] rounded-lg bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:from-[#00AEDD] hover:to-[#00BD7E]">
                 <span class="block bg-[#FAFAFA] text-gray-800 font-bold py-3 px-4 rounded-lg text-base dark:bg-gray-800 dark:text-white">
                     View 3D Figures
                 </span>
