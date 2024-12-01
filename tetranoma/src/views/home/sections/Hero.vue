@@ -43,7 +43,7 @@ import HomeCover from '/img/homeCover.jpg'
 
         </div>
 
-        <img :src="HomeCover" alt="HomeCover" class=" object-cover h-[200px] w-full opacity-80 rounded-lg
+        <img :src="HomeCover" alt="HomeCover" class=" object-cover h-[200px] w-full opacity-80 rounded-lg dark:opacity-80 dark:hover:opacity-90
 
         lg:h-[600px] lg:w-[500px]
         xl:h-[600px] xl:w-[500px]
