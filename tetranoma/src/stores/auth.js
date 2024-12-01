@@ -10,6 +10,17 @@ export const useAuthStore = defineStore("auth", {
   }),
   
   actions: {
+    async createAccount(userData) {
+      console.log("Creating account with data:", userData)
+      try {
+        const response = await api.post("/auth/create-account", userData)
+        console.log("Account creation successful:", response.data)
+        return response.data
+      } catch (error) {
+        console.error("Account creation error:", error.response?.data || error.message)
+        throw error
+      }
+    },
     async login(credentials) {
       // console.log("Attempting login with:", credentials)
       try {
