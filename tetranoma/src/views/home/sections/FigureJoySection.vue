@@ -9,7 +9,7 @@ import homeCover from '/img/3dPrintingCover.jpg'
         <div class="flex items-center justify-center w-full flex-1">
 
             <img :src="homeCover"
-                class="h-full max-h-[300px] lg:max-h-[500px] w-full rounded-lg shadow-lg object-cover object-center " />
+                class="h-full max-h-[300px] lg:max-h-[500px] w-full rounded-lg shadow-lg object-cover object-center dark:opacity-80 dark:hover:opacity-90" />
         </div>
 
 
