@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink } from "vue-router"
-import { useAuthStore } from "@/stores/auth"
+import { useAuthStore } from "@/stores/useAuthStore"
 import { useForm, useField } from "vee-validate"
 import * as yup from "yup"
 import { useRouter } from "vue-router"
@@ -28,12 +28,10 @@ const { handleSubmit } = useForm({
 const { value: email, errorMessage: emailError, handleBlur: emailBlur } = useField("email")
 const { value: password, errorMessage: passwordError, handleBlur: passwordBlur } = useField("password")
 
-console.log("Form fields state:", { email, emailError, password, passwordError })
 
 const onSubmit = handleSubmit(async (values) => {
-  console.log("Form submitted with values:", values)
   try {
-    await authStore.login(values)
+    await authStore.signIn(values)
     toast.success("Successfully logged in!")
     router.push("/")
   } catch (error) {
