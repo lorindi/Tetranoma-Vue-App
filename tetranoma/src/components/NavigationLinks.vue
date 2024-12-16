@@ -2,7 +2,7 @@
 import { RouterLink, useRoute } from 'vue-router'
 
 import { storeToRefs } from "pinia"
-import { useAuthStore } from "@/stores/auth"
+import { useAuthStore } from "@/stores/useAuthStore"
 
 const authStore = useAuthStore()
 const { isAuthenticated } = storeToRefs(authStore)
