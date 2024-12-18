@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue"
-import { useForm } from "vee-validate"
+import { useForm, useField } from "vee-validate"
 import * as yup from "yup"
 import { useToast } from "vue-toastification"
 import { useFiguresStore } from "@/stores/useFiguresStore"
@@ -10,8 +10,9 @@ import FormField from "@/components/form/formField/FormField.vue"
 import Title from "@/components/common/title/Title.vue"
 import FormGridContainer from "@/components/form/formGridContainer/FormGridContainer.vue"
 import FormButton from "@/components/form/formButton/FormButton.vue"
+import { useRouter } from "vue-router"
 
-
+const router = useRouter()
 const toast = useToast()
 const figuresStore = useFiguresStore()
 const formRef = ref(null)
@@ -20,6 +21,7 @@ const categories = [
   "sci-fi", "historical", "animals", "architecture",
   "educational", "decor"
 ]
+const imageUrls = ref("")
 
 const schema = yup.object({
   title: yup.string().required("Title is required").min(1, "Title must be at least 1 character"),
@@ -30,29 +32,31 @@ const schema = yup.object({
   images: yup.array().min(1, "At least one image is required")
 })
 
-const { handleSubmit, errors, values } = useForm({
-  validationSchema: schema,
-  initialValues: {
-    title: "",
-    description: "",
-    category: "",
-    price: 0,
-    stock: 0,
-    images: []
-  }
+const { handleSubmit } = useForm({
+  validationSchema: schema
 })
 
-const imageUrls = ref("")
+const { value: title, errorMessage: titleError, handleBlur: titleBlur } = useField("title")
+const { value: description, errorMessage: descriptionError, handleBlur: descriptionBlur } = useField("description")
+const { value: category, errorMessage: categoryError, handleBlur: categoryBlur } = useField("category")
+const { value: price, errorMessage: priceError, handleBlur: priceBlur } = useField("price")
+const { value: stock, errorMessage: stockError, handleBlur: stockBlur } = useField("stock")
+const { value: images, errorMessage: imagesError, handleBlur: imagesBlur } = useField("images")
+
 
 const onSubmit = handleSubmit(async (values) => {
-  console.log("Form submitted with values:", values)
   try {
     const formData = {
-      ...values,
+      title: title.value,
+      description: description.value,
+      category: category.value,
+      price: Number(price.value),
+      stock: Number(stock.value),
       images: imageUrls.value.split(",").map(url => url.trim())
     }
     await figuresStore.createFigure(formData)
     toast.success("Figure created successfully!")
+    router.push("/figures")
   } catch (error) {
     console.error("Error submitting form:", error)
     toast.error(error.response?.data?.message || "Error creating figure")
@@ -68,48 +72,36 @@ const formMotion = useMotion(formRef, {
   }
 })
 </script>
+
 <template>
-  <div class="w-full h-full md:p-8 flex flex-col items-center justify-center my-14">
-    <Title 
-        title="Create New Figure" 
-      />
+  <div class="w-full min-h-[calc(100vh-125px)] md:p-8 flex flex-col items-center justify-center">
+    <Title title="Create New Figure" />
 
-    <div class="w-full lg:max-w-4xl 
-                md:bg-white/80 md:dark:bg-gray-800/90 md:backdrop-blur-lg rounded-2xl xs:rounded-3xl 
-                md:shadow-2xl p-4 xs:p-6 sm:p-8 
-                md:border md:border-gray-100 md:dark:border-gray-700">
-
-
-
+    <div
+      class="w-full lg:max-w-4xl md:bg-white/80 md:dark:bg-gray-800/90 md:backdrop-blur-lg rounded-2xl xs:rounded-3xl md:shadow-2xl p-4 xs:p-6 sm:p-8 md:border md:border-gray-100 md:dark:border-gray-700">
       <form ref="formRef" @submit="onSubmit" class="space-y-4 xs:space-y-6 sm:space-y-8">
-
         <FormGridContainer>
-          <FormField v-model="values.title" label="Title" type="text" icon="pencil" placeholder="Enter figure title"
-            :error="errors.title" required />
-          <FormField v-model="values.category" label="Category" type="select" icon="tags" placeholder="Select category"
-            :options="categories" :error="errors.category" required />
+          <FormField v-model="title" label="Title" type="text" icon="pencil" placeholder="Enter figure title"
+            :error="titleError" @blur="titleBlur" required />
+          <FormField v-model="category" label="Category" type="select" icon="tags" placeholder="Select category"
+            :options="categories" :error="categoryError" @blur="categoryBlur" required />
         </FormGridContainer>
 
-
-        <FormField v-model="values.description" label="Description" type="textarea" icon="align-left"
-          placeholder="Describe your figure" :error="errors.description" required />
-
+        <FormField v-model="description" label="Description" type="textarea" icon="align-left"
+          placeholder="Describe your figure" :error="descriptionError" @blur="descriptionBlur" required />
 
         <FormGridContainer :columns="2" :gap="4">
-          <FormField v-model="values.price" label="Price" type="number" icon="dollar" placeholder="Enter price"
-            :error="errors.price" required />
-
-          <FormField v-model="values.stock" label="Stock" type="number" icon="box" placeholder="Enter stock"
-            :error="errors.stock" required />
+          <FormField v-model="price" label="Price" type="number" icon="dollar" placeholder="Enter price" :error="priceError"
+            @blur="priceBlur" required />
+          <FormField v-model="stock" label="Stock" type="number" icon="box" placeholder="Enter stock" :error="stockError"
+            @blur="stockBlur" required />
         </FormGridContainer>
 
-        <FormField v-model="values.images" label="Images" type="text" icon="images" placeholder="Enter image URLs"
-          :error="errors.images" required />
-
-
+        <FormField v-model="imageUrls" label="Images" type="text" icon="images" placeholder="Enter image URLs"
+          :error="imagesError" @blur="imagesBlur" required />
 
         <div>
-          <FormButton text="Add Figure" size="1/2" align="end"/>
+          <FormButton text="Add Figure" size="1/2" align="end" />
         </div>
       </form>
     </div>
