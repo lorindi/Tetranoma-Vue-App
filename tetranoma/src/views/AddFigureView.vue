@@ -72,11 +72,6 @@ const formMotion = useMotion(formRef, {
   <div class="w-full h-full md:p-8 flex flex-col items-center justify-center my-14">
     <Title 
         title="Create New Figure" 
-        mobile-title="New Figure" 
-        :is-gradient="true" 
-        from="blue-600" 
-        via="purple-600"
-        to="pink-600"
       />
 
     <div class="w-full lg:max-w-4xl 
@@ -114,7 +109,7 @@ const formMotion = useMotion(formRef, {
 
 
         <div>
-          <FormButton text="Add Figure" width="1/2" align="end" />
+          <FormButton text="Add Figure" size="1/2" align="end"/>
         </div>
       </form>
     </div>
