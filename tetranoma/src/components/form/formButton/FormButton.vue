@@ -33,7 +33,6 @@ const getIcon = () => {
 }
 
 const justifyClass = computed(() => {
-    console.log("Current align value:", props.align)
     const alignMap = {
         start: "justify-center md:justify-start",
         center: "justify-center md:justify-center",
@@ -43,7 +42,6 @@ const justifyClass = computed(() => {
 })
 
 const sizeClass = computed(() => {
-    console.log("Current size value:", props.size)
     const sizeMap = {
         full: "w-full",
         "1/2": "w-full md:w-1/2",
