@@ -1,9 +1,19 @@
 <script setup>
 import NavigationLinks from '@/components/common/NavigationLinks.vue'
+import { useRoute } from "vue-router"
+import { computed } from "vue"
 
+// Get current route
+const route = useRoute()
+
+// Compute whether footer should be visible
+const showFooter = computed(() => {
+    console.log("Current route:", route.path)
+    return route.path !== "/add-figure"
+})
 </script>
 <template>
-    <footer class="flex flex-col-reverse w-full max-w-[1336px] items-start justify-center p-[10px]
+    <footer v-if="showFooter" class="flex flex-col-reverse w-full max-w-[1336px] items-start justify-center p-[10px]
     
     md:flex-row md:justify-between
     lg:flex-row lg:justify-between lg:p-[30px]
