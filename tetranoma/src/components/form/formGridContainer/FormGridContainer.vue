@@ -17,7 +17,6 @@ const props = defineProps({
 })
 
 const gridClasses = computed(() => {
-  console.log("Computing grid classes")
   const baseClasses = ["grid", "w-full"]
   
   // Mobile columns
