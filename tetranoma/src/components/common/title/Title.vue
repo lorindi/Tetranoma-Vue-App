@@ -25,6 +25,6 @@ const titleMotion = useMotion(titleRef, {
 </script>
 
 <template>
-  <h1 ref="titleRef" class="text-3xl md:text-4xl text-[#00BD7E] mb-1 md:mb-8 text-center">{{ title }}
+  <h1 ref="titleRef" class="font-semibold text-2xl sm:text-3xl md:text-4xl text-[#00BD7E] mb-1 md:mb-8 text-center">{{ title }}
   </h1>
 </template>
