@@ -4,6 +4,7 @@ import { computed } from "vue"
 const props = defineProps({
   modelValue: {
     type: [String, Number, Array],
+    default: "",
     required: true
   },
   label: {
@@ -41,21 +42,23 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(["update:modelValue"])
-
+const emit = defineEmits(["update:modelValue", "blur"])
 
 const updateValue = (event) => {
   let value = event.target.value
   
-  // Convert value based on type
   if (props.type === "number") {
     value = Number(value)
   } else if (props.type === "url") {
-    // Basic URL validation could be added here
     value = value.trim()
   }
   
   emit("update:modelValue", value)
+}
+
+const handleBlur = () => {
+  console.log("Field blur triggered")
+  emit("blur")
 }
 
 const inputClasses = computed(() => `
@@ -78,27 +81,19 @@ const inputClasses = computed(() => `
       {{ label }}
       <span v-if="required" class="text-red-500">*</span>
     </label>
-    
+
     <i :class="`pi pi-${icon} absolute left-2 xs:left-3 
               top-[52.5px] -translate-y-1/2
               text-gray-400 group-focus-within:text-blue-500 transition-colors
               text-sm xs:text-base`"></i>
 
     <template v-if="type === 'textarea'">
-      <textarea
-        :value="modelValue"
-        @input="updateValue"
-        :placeholder="placeholder"
-        :class="inputClasses"
-      ></textarea>
+      <textarea :value="modelValue" @input="updateValue" @blur="handleBlur" :placeholder="placeholder"
+        :class="inputClasses"></textarea>
     </template>
 
     <template v-else-if="type === 'select'">
-      <select
-        :value="modelValue"
-        @change="updateValue"
-        :class="inputClasses"
-      >
+      <select :value="modelValue" @change="updateValue" @blur="handleBlur" :class="inputClasses">
         <option value="">{{ placeholder }}</option>
         <option v-for="option in options" :key="option" :value="option">
           {{ option.charAt(0).toUpperCase() + option.slice(1) }}
@@ -110,14 +105,8 @@ const inputClasses = computed(() => `
     </template>
 
     <template v-else>
-      <input
-        :value="modelValue"
-        @input="updateValue"
-        :type="type"
-        :step="type === 'number' ? step : undefined"
-        :placeholder="placeholder"
-        :class="inputClasses"
-      />
+      <input :value="modelValue" @input="updateValue" @blur="handleBlur" :type="type"
+        :step="type === 'number' ? step : undefined" :placeholder="placeholder" :class="inputClasses" />
     </template>
 
     <span v-if="error" class="absolute -bottom-5 left-0 text-red-500 text-xs">{{ error }}</span>
