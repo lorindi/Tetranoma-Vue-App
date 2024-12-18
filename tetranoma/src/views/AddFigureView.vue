@@ -6,6 +6,9 @@ import { useToast } from "vue-toastification"
 import { useFiguresStore } from "@/stores/useFiguresStore"
 import { useMotion } from "@vueuse/motion"
 import "primeicons/primeicons.css"
+import FormField from "@/components/form/formField/FormField.vue"
+import Title from "@/components/common/title/Title.vue"
+
 const toast = useToast()
 const figuresStore = useFiguresStore()
 const formRef = ref(null)
@@ -71,132 +74,40 @@ const formMotion = useMotion(formRef, {
 })
 </script>
 <template>
-  <div class="w-full min-h-screen p-4 xs:p-6 sm:p-8 flex items-center justify-center">
-    <div class="w-full max-w-[95%] xs:max-w-[90%] sm:max-w-2xl lg:max-w-4xl 
-                bg-white/80 dark:bg-gray-800/90 backdrop-blur-lg rounded-2xl xs:rounded-3xl 
-                shadow-2xl p-4 xs:p-6 sm:p-8 
-                border border-gray-100 dark:border-gray-700">
+  <div class="w-full min-h-screen md:p-8 flex flex-col items-center justify-center my-14">
+    <Title title="Create New Figure" mobileTitle="New Figure" :isGradient="true" from="blue-600" via="purple-600"
+      to="pink-600" />
+    <div class="w-full lg:max-w-4xl 
+                md:bg-white/80 md:dark:bg-gray-800/90 md:backdrop-blur-lg rounded-2xl xs:rounded-3xl 
+                md:shadow-2xl p-4 xs:p-6 sm:p-8 
+                md:border md:border-gray-100 md:dark:border-gray-700">
 
-      <!-- Animated Title -->
-      <h1 ref="titleMotion.target" class="text-2xl xs:text-3xl sm:text-4xl font-black 
-                 mb-6 xs:mb-8 sm:mb-12 text-center 
-                 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 
-                 bg-clip-text text-transparent pb-2 tracking-tight">
-        <i class="pi pi-plus-circle mr-2 xs:mr-3 animate-pulse"></i>
-        <span class="hidden xs:inline">Create New Figure</span>
-        <span class="xs:hidden">New Figure</span>
-      </h1>
 
-      <!-- Animated Form -->
+
       <form ref="formRef" @submit="onSubmit" class="space-y-4 xs:space-y-6 sm:space-y-8">
 
-        <!-- Title Input -->
-        <div class="group relative">
-          <label class="px-2 text-sm xs:text-base font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Title
-          </label>
-          <i class="pi pi-pencil absolute left-2 xs:left-3 top-[50px] -translate-y-1/2 
-                    text-gray-400 group-focus-within:text-blue-500 transition-colors
-                    text-sm xs:text-base"></i>
-          <input v-model="values.title" type="text" class="w-full pl-8 xs:pl-10 pr-3 xs:pr-4 
-                   py-3 xs:py-3.5 sm:py-4 
-                   text-sm xs:text-base
-                   bg-gray-50 dark:bg-gray-900/50 rounded-lg xs:rounded-xl
-                   border border-gray-200 dark:border-gray-700
-                   focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                   dark:text-white transition-all duration-300
-                   placeholder:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900/70"
-            placeholder="Enter figure title" />
-          <span class="absolute -bottom-5 left-0 text-red-500 text-xs">{{ errors.title }}</span>
+        <FormField v-model="values.title" label="Title" type="text" icon="pencil" placeholder="Enter figure title"
+          :error="errors.title" required />
+
+        <FormField v-model="values.description" label="Description" type="textarea" icon="align-left"
+          placeholder="Describe your figure" :error="errors.description" required />
+
+        <FormField v-model="values.category" label="Category" type="select" icon="tags" placeholder="Select category"
+          :options="categories" :error="errors.category" required />
+
+        <div class="grid grid-cols-1 gap-4 w-full md:grid-cols-2">
+          <FormField v-model="values.price" label="Price" type="number" icon="dollar" placeholder="Enter price"
+            :error="errors.price" required />
+
+          <FormField v-model="values.stock" label="Stock" type="number" icon="box" placeholder="Enter stock"
+            :error="errors.stock" required />
         </div>
 
-        <!-- Description with Icon -->
-        <div class="group relative">
-          <i class="pi pi-align-left absolute left-2 xs:left-3 top-4 xs:top-6 
-                    text-gray-400 group-focus-within:text-blue-500 transition-colors
-                    text-sm xs:text-base"></i>
-          <textarea v-model="values.description" class="w-full pl-8 xs:pl-10 pr-3 xs:pr-4 
-                   py-3 xs:py-3.5 sm:py-4
-                   text-sm xs:text-base
-                   bg-gray-50 dark:bg-gray-900/50 rounded-lg xs:rounded-xl
-                   border border-gray-200 dark:border-gray-700 
-                   min-h-[100px] xs:min-h-[120px]
-                   focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                   dark:text-white transition-all duration-300
-                   placeholder:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900/70"
-            placeholder="Describe your figure"></textarea>
-          <span class="absolute -bottom-5 left-0 text-red-500 text-xs">{{ errors.description
-            }}</span>
-        </div>
+        <FormField v-model="values.images" label="Images" type="text" icon="images" placeholder="Enter image URLs"
+          :error="errors.images" required />
 
-        <!-- Category Select -->
-        <div class="group relative">
-          <i class="pi pi-tags absolute left-2 xs:left-3 top-1/2 -translate-y-1/2 
-                    text-gray-400 group-focus-within:text-blue-500 transition-colors
-                    text-sm xs:text-base"></i>
-          <select v-model="values.category" class="w-full pl-8 xs:pl-10 pr-8 xs:pr-10 
-                   py-3 xs:py-3.5 sm:py-4
-                   text-sm xs:text-base
-                   bg-gray-50 dark:bg-gray-900/50 rounded-lg xs:rounded-xl
-                   border border-gray-200 dark:border-gray-700 appearance-none
-                   focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                   dark:text-white transition-all duration-300">
-            <option value="">Select category</option>
-            <option v-for="category in categories" :key="category" :value="category">
-              {{ category.charAt(0).toUpperCase() + category.slice(1) }}
-            </option>
-          </select>
-          <i class="pi pi-chevron-down absolute right-2 xs:right-3 top-1/2 -translate-y-1/2 
-                    text-gray-400 group-focus-within:text-blue-500 transition-colors 
-                    pointer-events-none text-sm xs:text-base"></i>
-        </div>
 
-        <!-- Price and Stock Grid -->
-        <div class="grid grid-cols-1 xs:grid-cols-2 gap-4 xs:gap-6">
-          <!-- Price Input -->
-          <div class="group relative">
-            <i class="pi pi-dollar absolute left-2 xs:left-3 top-1/2 -translate-y-1/2 
-                      text-gray-400 group-focus-within:text-blue-500 transition-colors
-                      text-sm xs:text-base"></i>
-            <input v-model.number="values.price" type="number" step="0.01" class="w-full pl-8 xs:pl-10 pr-3 xs:pr-4 
-                     py-3 xs:py-3.5 sm:py-4
-                     text-sm xs:text-base
-                     bg-gray-50 dark:bg-gray-900/50 rounded-lg xs:rounded-xl
-                     border border-gray-200 dark:border-gray-700
-                     focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                     dark:text-white transition-all duration-300" placeholder="Price" />
-          </div>
 
-          <!-- Stock Input -->
-          <div class="group relative">
-            <i class="pi pi-box absolute left-2 xs:left-3 top-1/2 -translate-y-1/2 
-                      text-gray-400 group-focus-within:text-blue-500 transition-colors
-                      text-sm xs:text-base"></i>
-            <input v-model.number="values.stock" type="number" class="w-full pl-8 xs:pl-10 pr-3 xs:pr-4 
-                     py-3 xs:py-3.5 sm:py-4
-                     text-sm xs:text-base
-                     bg-gray-50 dark:bg-gray-900/50 rounded-lg xs:rounded-xl
-                     border border-gray-200 dark:border-gray-700
-                     focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                     dark:text-white transition-all duration-300" placeholder="Stock" />
-          </div>
-        </div>
-
-        <!-- Image URLs -->
-        <div class="group relative">
-          <i class="pi pi-images absolute left-2 xs:left-3 top-1/2 -translate-y-1/2 
-                    text-gray-400 group-focus-within:text-blue-500 transition-colors
-                    text-sm xs:text-base"></i>
-          <input v-model="imageUrls" type="text" class="w-full pl-8 xs:pl-10 pr-3 xs:pr-4 
-                   py-3 xs:py-3.5 sm:py-4
-                   text-sm xs:text-base
-                   bg-gray-50 dark:bg-gray-900/50 rounded-lg xs:rounded-xl
-                   border border-gray-200 dark:border-gray-700
-                   focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                   dark:text-white transition-all duration-300" placeholder="http://image1.jpg, http://image2.jpg" />
-        </div>
-
-        <!-- Submit Button -->
         <button type="submit" class="group w-full bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600
                  text-white py-3 xs:py-3.5 sm:py-4 px-4 xs:px-6
                  rounded-lg xs:rounded-xl
