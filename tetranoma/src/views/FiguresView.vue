@@ -1,7 +1,7 @@
 <script setup>
-import CategoriesList from '@/components/lists/CategoriesList.vue';
+// import CategoriesList from '@/components/lists/CategoriesList.vue';
 import FiguresList from '@/components/lists/FiguresList.vue';
-import Search from '@/components/search/Search.vue';
+import Search from '@/components/ui/search/Search.vue';
 
 
 
