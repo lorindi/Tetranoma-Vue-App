@@ -8,7 +8,7 @@ const route = useRoute()
 
 // Compute whether footer should be visible
 const showFooter = computed(() => {
-    return route.path !== "/add-figure"
+    return route.path !== "/add-figure" && route.path !== "/about"
 })
 </script>
 <template>
