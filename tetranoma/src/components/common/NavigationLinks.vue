@@ -12,6 +12,7 @@ const links = [
   { path: '/contact', label: 'Contact' },
   { path: '/figures', label: 'Figures' },
   { path: '/add-figure', label: 'Add' },
+  { path: '/faq', label: 'FAQ' },
 ]
 
 const isActiveLink = (routePath) => {
