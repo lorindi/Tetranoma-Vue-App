@@ -29,8 +29,8 @@ const features = ref([
 </script>
 
 <template>
-  <div class="flex flex-col items-center w-full max-w-[1336px] min-h-[calc(100vh-125px)] p-4 md:p-8">
-    <Title title="About Us" />
+  <div class="flex flex-col items-center w-full max-w-[1336px] min-h-[calc(90vh-125px)] p-4 md:p-8">
+    <Title title="Discover Our Story" />
 
     <div class="w-full max-w-4xl space-y-8 mt-8">
       <!-- History -->
