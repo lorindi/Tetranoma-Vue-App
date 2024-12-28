@@ -54,7 +54,7 @@ const sizeClass = computed(() => {
 
 <template>
     <div class="flex items-center w-full" :class="justifyClass">
-        <button type="submit" class="group my-4
+        <button type="submit" class="group my-4 h-[58px]
                  text-white py-3 xs:py-3.5 sm:py-4 px-4 xs:px-6
                  rounded-lg xs:rounded-xl
                  text-sm xs:text-base sm:text-lg
