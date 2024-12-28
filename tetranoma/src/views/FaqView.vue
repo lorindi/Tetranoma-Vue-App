@@ -84,20 +84,8 @@ const toggleQuestion = (categoryIndex, questionIndex) => {
 </script>
 
 <template>
-  <div class="flex flex-col items-center w-full max-w-[1336px] min-h-[calc(100vh-125px)] p-4 md:p-8">
+  <div class="flex flex-col items-center justify-center gap-[30px] w-full max-w-[1336px] min-h-screen p-4 md:p-8">
     <Title title="Frequently Asked Questions" />
-
-    <!-- Search Bar -->
-    <div class="w-full max-w-2xl mt-8 mb-12">
-      <div class="relative">
-        <i class="pi pi-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-        <input 
-          type="text" 
-          placeholder="Search for answers..."
-          class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-[#00BD7E] focus:border-transparent dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-        >
-      </div>
-    </div>
 
     <!-- FAQ Categories -->
     <div class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-8">
