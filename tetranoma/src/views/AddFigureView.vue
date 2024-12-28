@@ -90,15 +90,16 @@ const formMotion = useMotion(formRef, {
         <FormField v-model="description" label="Description" type="textarea" icon="align-left"
           placeholder="Describe your figure" :error="descriptionError" @blur="descriptionBlur" required />
 
-        <FormGridContainer :columns="2" :gap="4">
+        <FormGridContainer :columns="3" :gap="4">
           <FormField v-model="price" label="Price" type="number" icon="dollar" placeholder="Enter price" :error="priceError"
             @blur="priceBlur" required />
           <FormField v-model="stock" label="Stock" type="number" icon="box" placeholder="Enter stock" :error="stockError"
             @blur="stockBlur" required />
+            <FormField v-model="imageUrls" label="Images" type="text" icon="images" placeholder="Enter image URLs"
+            :error="imagesError" @blur="imagesBlur" required />
         </FormGridContainer>
 
-        <FormField v-model="imageUrls" label="Images" type="text" icon="images" placeholder="Enter image URLs"
-          :error="imagesError" @blur="imagesBlur" required />
+       
 
         <div>
           <FormButton text="Add Figure" size="1/2" align="end" />
