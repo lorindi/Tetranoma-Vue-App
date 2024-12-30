@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { onUnmounted, ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import Search from '@/components/ui/search/Search.vue'
 import logo from '@/assets/logo.jpg'
@@ -9,9 +9,24 @@ import ToggleButton from './ToggleButton.vue';
 
 const isOpen = ref(false)
 
+watch(isOpen, (newValue) => {
+    console.log("Mobile menu state changed:", newValue)
+    if (newValue) {
+        document.body.style.overflow = "hidden"
+    } else {
+        document.body.style.overflow = "auto"
+    }
+})
+
+
 const toggleMenu = () => {
     isOpen.value = !isOpen.value
 }
+
+onUnmounted(() => {
+    document.body.style.overflow = "auto"
+})
+
 
 </script>
 
