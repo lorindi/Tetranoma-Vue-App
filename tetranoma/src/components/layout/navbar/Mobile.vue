@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch, onUnmounted } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import Search from '@/components/ui/search/Search.vue'
 import logo from '@/assets/logo.jpg'
@@ -8,9 +8,23 @@ import ToggleButton from './ToggleButton.vue';
 
 const isOpen = ref(false)
 
+watch(isOpen, (newValue) => {
+    console.log("Mobile menu state changed:", newValue)
+    if (newValue) {
+        document.body.style.overflow = "hidden"
+    } else {
+        document.body.style.overflow = "auto"
+    }
+})
+
+
 const toggleMenu = () => {
     isOpen.value = !isOpen.value
 }
+
+onUnmounted(() => {
+    document.body.style.overflow = "auto"
+})
 </script>
 
 <template>
@@ -25,12 +39,12 @@ const toggleMenu = () => {
         <nav v-motion :initial="{ opacity: 0, translateX: -20 }" :enter="{ opacity: 1, translateX: 0 }"
             :leave="{ opacity: 0, translateX: -20 }"
             :transition="{ enter: { duration: 0.5 }, leave: { duration: 1.0 } }" v-if="isOpen"
-            class="absolute flex flex-col w-[100%] items-center justify-center pt-[100px] top-[0px] left-0 bg bg-[#fafafa] h-screen gap-[30px] py-[30px] z-20 rounded-br-lg rounded-bl-lg shadow-lg dark:bg-gray-900">
-
-            <Search size="default" />
-          
+            class="fixed flex flex-col w-[100%] items-center justify-center pt-[100px] top-[0px] left-0 bg bg-[#fafafa] h-screen gap-[30px] py-[30px] z-20 rounded-br-lg rounded-bl-lg shadow-lg dark:bg-gray-900">
 
             <NavigationLinks :toggleMenu="toggleMenu" />
+            <div class="mt-[30px]">
+                <Search size="default" />
+            </div>
         </nav>
     </div>
 
