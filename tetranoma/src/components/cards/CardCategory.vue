@@ -21,13 +21,6 @@ defineProps({
     }
 })
 
-const handleCategoryClick = () => {
-    console.log("Navigating to figures with category:", props.category)
-    router.push({
-        path: "/figures",
-        query: { category: props.category }
-    })
-}
 </script>
 <template>
      <router-link 
