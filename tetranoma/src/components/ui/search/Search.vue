@@ -59,7 +59,7 @@ const handleSearch = () => {
   emit("search", searchData.value)
 }
 
-const containerClasses = "w-full max-w-[250px] md:max-w-[550px] lg:max-w-[768px] mx-auto lg:border md:border-gray-300 lg:rounded-md md:dark:bg-gray-900 relative"
+const containerClasses = "w-full max-w-[250px] md:max-w-[550px] lg:max-w-[768px] mx-auto md:border md:border-gray-300 md:rounded-md md:dark:bg-gray-900 relative"
 const inputClasses = "flex-1 min-w-0 bg-[#FAFAFA] p-2  outline-none dark:bg-gray-900"
 const buttonClasses = 'p-1 rounded-md md:p-2 lg:p-3 xl:p-3 2xl:p-3 '
 const iconClasses = 'text-[#117277] hover:text-[#00BD7E] text-base md:text-2xl lg:text-3xl dark:hover:text-[#00BD7E]'
@@ -84,7 +84,7 @@ const iconClasses = 'text-[#117277] hover:text-[#00BD7E] text-base md:text-2xl l
       <div v-if="isAdvancedSearch"
         class="grid grid-cols-2 gap-1 p-2 rounded-md shadow-md border border-gray-300 absolute top-12 left-0 bg-[#FAFAFA] dark:bg-gray-900 z-10">
         <select v-model="searchData.category" :class="inputClasses">
-          <option value="">Select category</option>
+          <option value="">Category</option>
           <option v-for="category in categories" :key="category" :value="category">
             {{ category.charAt(0).toUpperCase() + category.slice(1) }}
           </option>
@@ -101,7 +101,7 @@ const iconClasses = 'text-[#117277] hover:text-[#00BD7E] text-base md:text-2xl l
     <!-- Desktop View (≥ 1024px) -->
     <div v-else
       class="flex px-2 gap-2 [&>*]:px-2 [&>*:not(:nth-last-child(-n+2))]:border-r [&>*:not(:nth-last-child(-n+2))]:border-gray-300 [&>*:not(:nth-last-child(-n+2))]:dark:border-gray-800">
-      <input type="text" v-model="searchData.title" :class="inputClasses" placeholder="Search by title" />
+      <input type="text" v-model="searchData.title" :class="inputClasses" placeholder="Search" />
       <select v-model="searchData.category" :class="inputClasses">
         <option value="">Category</option>
         <option v-for="category in categories" :key="category" :value="category" class="">
