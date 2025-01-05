@@ -11,6 +11,14 @@ const props = defineProps({
         type: Array,
         required: true,
         default: () => []
+    },
+    sortBy: {
+        type: String,
+        default: "createdAt"
+    },
+    sortOrder: {
+        type: String,
+        default: "desc"
     }
 });
 
@@ -30,9 +38,10 @@ const limitedFigures = computed(() => {
             :imgUrl="figure.images?.[0]"
             :title="figure.title"
             :description="figure.description"
-            :rating="figure.rating"
             :price="figure.price"
-            :type="figure.type"  
+            :type="'cardRating'" 
+            :rating="figure.rating?.averageRating"
+            :totalRatings="figure.rating?.totalRatings"
             />
     </div>
 </template>
