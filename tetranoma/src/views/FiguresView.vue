@@ -7,15 +7,23 @@ import { onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 const route = useRoute()
 const figuresStore = useFiguresStore()
+console.log('figuresStore.figures', figuresStore);
+
+
 
 onMounted(() => {
-    console.log("Component mounted, checking for category in URL")
-    const categoryFromUrl = route.query.category
-    if (categoryFromUrl) {
-        console.log("Found category in URL:", categoryFromUrl)
-        figuresStore.updateFilters({ category: categoryFromUrl })
+    console.log("FiguresView mounted, checking URL params")
+    const { category, sortBy, sortOrder } = route.query
+    const filters = {}
+    
+    if (category) filters.category = category
+    if (sortBy) filters.sortBy = sortBy
+    if (sortOrder) filters.sortOrder = sortOrder
+    
+    if (Object.keys(filters).length > 0) {
+        console.log("Applying filters from URL:", filters)
+        figuresStore.updateFilters(filters)
     } else {
-        console.log("No category in URL, fetching all figures")
         figuresStore.getFigures()
     }
 })
@@ -23,15 +31,19 @@ onMounted(() => {
 watch(
     () => route.query,
     (newQuery) => {
-        console.log("URL query changed:", newQuery)
-        if (newQuery.category) {
-            figuresStore.updateFilters({ category: newQuery.category })
+        console.log("Route query changed:", newQuery)
+        const filters = {}
+        if (newQuery.category) filters.category = newQuery.category
+        if (newQuery.sortBy) filters.sortBy = newQuery.sortBy
+        if (newQuery.sortOrder) filters.sortOrder = newQuery.sortOrder
+        
+        if (Object.keys(filters).length > 0) {
+            figuresStore.updateFilters(filters)
         }
     }
 )
 
 const handleSearch = (searchData) => {
-    console.log("Search triggered with data:", searchData)
     const cleanedFilters = Object.fromEntries(
         Object.entries(searchData).filter(([_, value]) => value !== "" && value !== null)
     )
