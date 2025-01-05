@@ -13,22 +13,55 @@ const searchData = ref({
   category: "",
   minPrice: "",
   maxPrice: "",
-  minRating: ""
+  minRating: "",
+  sortBy: "createdAt",
+  sortOrder: "desc"
 })
+
+const sortOptions = [
+  { label: "Latest", value: "createdAt-desc" },
+  { label: "Oldest", value: "createdAt-asc" },
+  { label: "Top Rated", value: "rating-desc" },
+  { label: "Lowest Rated", value: "rating-asc" },
+  { label: "Most Expensive", value: "price-desc" },
+  { label: "Cheapest", value: "price-asc" }
+]
+
+const handleSortChange = (sortString) => {
+  console.log("Handling sort change:", sortString)
+  const [sortBy, sortOrder] = sortString.split("-")
+  searchData.value.sortBy = sortBy
+  searchData.value.sortOrder = sortOrder
+  handleSearch()
+}
 onMounted(() => {
-  const categoryFromUrl = route.query.category
-  if (categoryFromUrl) {
-    searchData.value.category = categoryFromUrl
-  }
+    console.log("Search component mounted, checking URL params")
+    const { category, sortBy, sortOrder } = route.query
+    
+    if (category) {
+        console.log("Setting category from URL:", category)
+        searchData.value.category = category
+    }
+    
+    if (sortBy && sortOrder) {
+        console.log("Setting sort from URL:", sortBy, sortOrder)
+        searchData.value.sortBy = sortBy
+        searchData.value.sortOrder = sortOrder
+    }
 })
 
 watch(
-  () => route.query,
-  (newQuery) => {
-    if (newQuery.category) {
-      searchData.value.category = newQuery.category
+    () => route.query,
+    (newQuery) => {
+        console.log("Route query changed:", newQuery)
+        if (newQuery.category) {
+            searchData.value.category = newQuery.category
+        }
+        if (newQuery.sortBy && newQuery.sortOrder) {
+            searchData.value.sortBy = newQuery.sortBy
+            searchData.value.sortOrder = newQuery.sortOrder
+        }
     }
-  }
 )
 const categories = [
   "film",
@@ -91,8 +124,12 @@ const iconClasses = 'text-[#117277] hover:text-[#00BD7E] text-base md:text-2xl l
         </select>
         <input type="number" v-model="searchData.minPrice" :class="inputClasses" placeholder="Min price" />
         <input type="number" v-model="searchData.maxPrice" :class="inputClasses" placeholder="Max price" />
-        <input type="number" v-model="searchData.minRating" :class="inputClasses" placeholder="Min rating" min="0"
-          max="5" step="0.1" />
+        <select :class="inputClasses" @change="handleSortChange($event.target.value)"
+          :value="`${searchData.sortBy}-${searchData.sortOrder}`">
+          <option v-for="option in sortOptions" :key="option.value" :value="option.value">
+            {{ option.label }}
+          </option>
+        </select>
       </div>
     </div>
 
@@ -108,7 +145,12 @@ const iconClasses = 'text-[#117277] hover:text-[#00BD7E] text-base md:text-2xl l
           {{ category.charAt(0).toUpperCase() + category.slice(1) }}
         </option>
       </select>
-      <input type="number" v-model="searchData.minRating" :class="inputClasses" placeholder="Rating" />
+      <select :class="inputClasses" @change="handleSortChange($event.target.value)"
+        :value="`${searchData.sortBy}-${searchData.sortOrder}`">
+        <option v-for="option in sortOptions" :key="option.value" :value="option.value">
+          {{ option.label }}
+        </option>
+      </select>
       <input type="number" v-model="searchData.minPrice" :class="inputClasses" placeholder="Min " />
       <input type="number" v-model="searchData.maxPrice" :class="inputClasses" placeholder="Max" />
       <button :class="buttonClasses" @click="handleSearch">
