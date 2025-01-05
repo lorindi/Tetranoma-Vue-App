@@ -23,6 +23,10 @@ const props = defineProps({
     type: Number,
     default: null,
   },
+  totalRatings: {
+    type: Number,
+    default: 0
+  },
   type: {
     type: String,
     default: 'card',
@@ -30,7 +34,7 @@ const props = defineProps({
   },
 });
 
-const isRatingVisible = computed(() => props.type === 'cardRating' && props.rating !== null);
+const isRatingVisible = computed(() => props.type === 'cardRating');
 </script>
 
 <template>
@@ -45,7 +49,7 @@ const isRatingVisible = computed(() => props.type === 'cardRating' && props.rati
         <p class="text-xs sm:text-sm md:text-lg text-gray-700 mb-[3px] dark:mb-[2px] dark:text-gray-400 leading-none">{{ description.length > 28 ? description.slice(0, 28) + '...' : description }}</p>
         <div v-if="isRatingVisible" class="flex items-center">
           <span class="text-[#00BD7E] mr-1 text-sm sm:text-base md:text-lg ">★</span>
-          <span class="text-gray-700 text-sm sm:text-base md:text-lg dark:text-white">{{ rating }}</span>
+          <span class="text-gray-700 text-sm sm:text-base md:text-lg dark:text-white">{{ rating }} </span>
         </div>
       </div>
     </RouterLink>
