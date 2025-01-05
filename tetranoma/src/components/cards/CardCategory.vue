@@ -21,10 +21,20 @@ defineProps({
     }
 })
 
+const handleCategoryClick = () => {
+    console.log("Navigating to figures with category:", props.category)
+    router.push({
+        path: "/figures",
+        query: { category: props.category }
+    })
+}
 </script>
 <template>
-    <RouterLink :to="`/figures`" 
-    class="flex flex-col items-center justify-around py-[10px] px-[5px] mx-[3px] my-[10px] shadow-md bg-white rounded-lg dark:bg-gray-800 z-10
+     <router-link 
+        :to="{ 
+            path: '/figures',
+            query: { category: category }
+        }" class="flex flex-col items-center justify-around py-[10px] px-[5px] mx-[3px] my-[10px] shadow-md bg-white rounded-lg dark:bg-gray-800 z-10
     w-[90px] h-[90px]
     sm:w-[125px] sm:h-[125px] 
     md:w-[150px] md:h-[125px] md:mx-[10px] md:flex-row
@@ -46,5 +56,5 @@ defineProps({
             ">{{ title }}</h4>
             <p class="hidden w-full lg:flex lg:max-w-[200px] xl:flex 2xl:flex dark:text-gray-400">{{ desc }}</p>
         </div>
-    </RouterLink>
+    </router-link>
 </template>
