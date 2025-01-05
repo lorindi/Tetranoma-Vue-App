@@ -13,11 +13,13 @@ export const useFiguresStore = defineStore('figures', {
             itemsPerPage: 10,
         },
         filters: {
-            category: '',
-            title: '',
+            category: "",
+            title: "",
             minPrice: null,
             maxPrice: null,
             minRating: null,
+            sortBy: "createdAt",
+            sortOrder: "desc"
         },
     }),
 
@@ -37,20 +39,22 @@ export const useFiguresStore = defineStore('figures', {
             }
         },
         async getFigures(page = 1, filters = {}) {
-            console.log('Fetching figures with filters:', filters)
+            console.log("Fetching figures with filters and sort:", filters)
             this.loading = true
             try {
                 const params = {
                     page,
                     limit: this.pagination.itemsPerPage,
+                    sortBy: filters.sortBy || this.filters.sortBy,
+                    sortOrder: filters.sortOrder || this.filters.sortOrder,
                     ...filters,
                 }
-                const response = await api.get('/figures/list', { params })
-                console.log('Received figures data:', response.data)
+                const response = await api.get("/figures/list", { params })
+                console.log("Received sorted figures data:", response.data)
                 this.figures = response.data.figures
                 this.pagination = response.data.pagination
             } catch (error) {
-                console.error('Error fetching figures:', error)
+                console.error("Error fetching figures:", error)
                 this.error = error
             } finally {
                 this.loading = false
