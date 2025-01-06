@@ -38,6 +38,23 @@ export const useFiguresStore = defineStore('figures', {
                 this.loading = false
             }
         },
+        async getFigureById(id) {
+            console.log('Getting figure details for ID:', id)
+            this.loading = true
+            try {
+                const response = await api.get(`/figures/${id}`)
+                console.log('Figure details received:', response.data)
+                return response.data
+            } catch (error) {
+                console.error('Error fetching figure details:', error)
+                this.error =
+                    error.response?.data?.message ||
+                    'Грешка при зареждане на детайлите'
+                throw error
+            } finally {
+                this.loading = false
+            }
+        },
         async getFigures(page = 1, filters = {}) {
             this.loading = true
             try {
@@ -92,8 +109,6 @@ export const useFiguresStore = defineStore('figures', {
                     this.figures[figureIndex] = updatedFigure
                 }
 
-               
-                
                 return response.data
             } catch (error) {
                 console.error('Error toggling favorite:', error)
