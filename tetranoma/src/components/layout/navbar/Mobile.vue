@@ -34,7 +34,7 @@ onUnmounted(() => {
         </RouterLink>
 
         <ToggleButton :isOpen="isOpen" @toggle="toggleMenu" />
-        <div v-if="isOpen" class="fixed inset-0 bg-black bg-opacity-50 z-[4]" @click="toggleMenu"></div>
+        <div v-if="isOpen" class="fixed inset-0 bg-black bg-opacity-50 z-15" @click="toggleMenu"></div>
 
         <nav v-motion :initial="{ opacity: 0, translateX: -20 }" :enter="{ opacity: 1, translateX: 0 }"
             :leave="{ opacity: 0, translateX: -20 }"
