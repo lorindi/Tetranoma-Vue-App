@@ -1,6 +1,6 @@
 <script setup>
 import CardFigure from '../cards/CardFigure.vue';
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 import { useToast } from "vue-toastification";
 import { useAuthStore } from "@/stores/useAuthStore"
 import { storeToRefs } from "pinia"
@@ -28,7 +28,9 @@ const handleToggleFavorite = async (figureId) => {
     }
   }
 }
-
+watch(() => figuresStore.figures, (newFigures) => {
+  console.log("Figures updated:", newFigures)
+}, { deep: true })
 
 const props = defineProps({
     limit: {
