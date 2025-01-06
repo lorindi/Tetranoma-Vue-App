@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import api from '@/api/axios'
+import router from '@/router'
 
 export const useFiguresStore = defineStore('figures', {
     state: () => ({
@@ -13,19 +14,18 @@ export const useFiguresStore = defineStore('figures', {
             itemsPerPage: 10,
         },
         filters: {
-            category: "",
-            title: "",
+            category: '',
+            title: '',
             minPrice: null,
             maxPrice: null,
             minRating: null,
-            sortBy: "createdAt",
-            sortOrder: "desc"
+            sortBy: 'createdAt',
+            sortOrder: 'desc',
         },
     }),
 
     actions: {
         async createFigure(figureData) {
-            console.log('Creating figure with data:', figureData)
             this.loading = true
             try {
                 const response = await api.post('/figures/create', figureData)
@@ -39,7 +39,6 @@ export const useFiguresStore = defineStore('figures', {
             }
         },
         async getFigures(page = 1, filters = {}) {
-            console.log("Fetching figures with filters and sort:", filters)
             this.loading = true
             try {
                 const params = {
@@ -49,22 +48,63 @@ export const useFiguresStore = defineStore('figures', {
                     sortOrder: filters.sortOrder || this.filters.sortOrder,
                     ...filters,
                 }
-                const response = await api.get("/figures/list", { params })
-                console.log("Received sorted figures data:", response.data)
+                const response = await api.get('/figures/list', { params })
                 this.figures = response.data.figures
                 this.pagination = response.data.pagination
             } catch (error) {
-                console.error("Error fetching figures:", error)
+                console.error('Error fetching figures:', error)
                 this.error = error
             } finally {
                 this.loading = false
             }
         },
 
+        async toggleFavorite(figureId) {
+            try {
+                const response = await api.post(`/figures/favorite/${figureId}`)
+
+                const figureIndex = this.figures.findIndex(
+                    f => f._id === figureId,
+                )
+
+                if (figureIndex !== -1) {
+                    const updatedFigure = { ...this.figures[figureIndex] }
+
+                    if (!updatedFigure.favorites) {
+                        updatedFigure.favorites = []
+                    }
+
+                    if (response.data.isFavorite) {
+                        if (
+                            !updatedFigure.favorites.includes(
+                                response.data.userId,
+                            )
+                        ) {
+                            updatedFigure.favorites.push(response.data.userId)
+                        }
+                    } else {
+                        updatedFigure.favorites =
+                            updatedFigure.favorites.filter(
+                                id => id !== response.data.userId,
+                            )
+                    }
+
+                    this.figures = [
+                        ...this.figures.slice(0, figureIndex),
+                        updatedFigure,
+                        ...this.figures.slice(figureIndex + 1),
+                    ]
+                }
+
+                return response.data
+            } catch (error) {
+                console.error('Error toggling favorite:', error)
+                throw error
+            }
+        },
         updateFilters(newFilters) {
-          console.log("Updating filters:", newFilters)
-          this.filters = { ...this.filters, ...newFilters }
-          this.getFigures(1, this.filters)
+            this.filters = { ...this.filters, ...newFilters }
+            this.getFigures(1, this.filters)
         },
     },
 })
