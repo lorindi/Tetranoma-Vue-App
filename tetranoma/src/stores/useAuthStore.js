@@ -35,9 +35,7 @@ export const useAuthStore = defineStore("auth", {
     },
     
     async logout() {
-      // console.log("Logging out user")
       try {
-        // Send POST request to log out the user
         await api.post("/auth/logout")
         this.clearAuth()
       } catch (error) {
@@ -48,7 +46,6 @@ export const useAuthStore = defineStore("auth", {
     },
 
     clearAuth() {
-      // console.log("Clearing auth state")
       // Clear user and authentication state
       this.user = null
       this.isAuthenticated = false
@@ -58,7 +55,6 @@ export const useAuthStore = defineStore("auth", {
     },
 
     async checkAuth() {
-      console.log("Checking authentication status")
       // Check authentication status based on localStorage
       const isAuthenticated = !!localStorage.getItem("isAuthenticated")
       if (isAuthenticated) {
