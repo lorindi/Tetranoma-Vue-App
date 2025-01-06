@@ -28,6 +28,8 @@ const handleToggleFavorite = async (figureId) => {
     }
   }
 }
+
+
 watch(() => figuresStore.figures, (newFigures) => {
   console.log("Figures updated:", newFigures)
 }, { deep: true })
