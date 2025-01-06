@@ -1,7 +1,7 @@
 <script setup>
 
 import FiguresList from '@/components/lists/FiguresList.vue';
-import Search from '@/components/ui/search/Search.vue';
+import Search from '@/components/ui/Search.vue';
 import { useFiguresStore } from '@/stores/useFiguresStore';
 import { onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
