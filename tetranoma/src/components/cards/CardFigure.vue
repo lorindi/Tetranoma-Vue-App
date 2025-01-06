@@ -81,7 +81,7 @@ const isRatingVisible = computed(() => props.type === 'cardRating');
     ">
     <!-- Favorite Button -->
     <button @click="handleFavoriteClick"
-      class="absolute top-2 right-2 z-10 p-2 rounded-full bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-800 transition-colors">
+      class="absolute z-10 top-2 right-2 p-2 rounded-full bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-800 transition-colors">
       <i :class="[
         'pi',
         isFavorite ? 'pi-heart-fill text-red-500' : 'pi-heart text-gray-600 dark:text-gray-400',
@@ -91,7 +91,7 @@ const isRatingVisible = computed(() => props.type === 'cardRating');
 
 
     <img :src="imgUrl" alt="Card image"
-      class="w-full h-[50%] sm: md: lg: object-cover opacity-90 dark:h-[60%] dark:rounded-lg dark:opacity-80 dark:hover:opacity-100" />
+      class="w-full z-0 h-[50%] sm: md: lg: object-cover opacity-90 dark:h-[60%] dark:rounded-lg dark:opacity-80 dark:hover:opacity-100" />
     <div
       class="flex flex-col justify-evenly h-[50%] py-1 px-2 md:px-3 lg:px-5 dark:py-2 dark:lg:px-3 dark:justify-center dark:h-[40%]">
       <h2 class="text-sm sm:text-xl md:text-2xl font-semibold mb-[3px] dark:mb-[2px]">{{ title.length > 17 ?
