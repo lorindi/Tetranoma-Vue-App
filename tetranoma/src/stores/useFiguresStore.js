@@ -89,13 +89,11 @@ export const useFiguresStore = defineStore('figures', {
                             )
                     }
 
-                    this.figures = [
-                        ...this.figures.slice(0, figureIndex),
-                        updatedFigure,
-                        ...this.figures.slice(figureIndex + 1),
-                    ]
+                    this.figures[figureIndex] = updatedFigure
                 }
 
+               
+                
                 return response.data
             } catch (error) {
                 console.error('Error toggling favorite:', error)
