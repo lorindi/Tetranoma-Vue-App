@@ -7,12 +7,10 @@ import { onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 const route = useRoute()
 const figuresStore = useFiguresStore()
-console.log('figuresStore.figures', figuresStore);
 
 
 
 onMounted(() => {
-    console.log("FiguresView mounted, checking URL params")
     const { category, sortBy, sortOrder } = route.query
     const filters = {}
     
@@ -31,7 +29,6 @@ onMounted(() => {
 watch(
     () => route.query,
     (newQuery) => {
-        console.log("Route query changed:", newQuery)
         const filters = {}
         if (newQuery.category) filters.category = newQuery.category
         if (newQuery.sortBy) filters.sortBy = newQuery.sortBy
