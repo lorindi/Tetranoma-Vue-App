@@ -5,8 +5,21 @@ import { computed } from "vue"
 
 const route = useRoute()
 
+const excludedPaths = [
+    "/add-figure",
+    "/about",
+    "/contact",
+    "/faq",
+    "/figures",
+    "/sign-in",
+    "/sign-up",
+    "/create-account",
+    "/search-figure"
+]
+
 const showFooter = computed(() => {
-    return route.path !== "/add-figure" && route.path !== "/about" && route.path !== "/contact" && route.path !== "/faq" && route.path !== "/figures" && route.path !== "/sign-in" && route.path !== "/sign-up" && route.path !== "/create-account" && route.path !== "/search-figure"
+    const isExcluded = excludedPaths.some(path => route.path.startsWith(path))
+    return !isExcluded
 })
 </script>
 <template>
