@@ -19,7 +19,6 @@ onMounted(() => {
     if (sortOrder) filters.sortOrder = sortOrder
     
     if (Object.keys(filters).length > 0) {
-        console.log("Applying filters from URL:", filters)
         figuresStore.updateFilters(filters)
     } else {
         figuresStore.getFigures()
@@ -63,6 +62,6 @@ const handleSearch = (searchData) => {
             No figures found
         </div>
         
-        <FiguresList :type="list" :figures="figuresStore.figures" />
+        <FiguresList :figures="figuresStore.figures" />
     </div>
 </template>
