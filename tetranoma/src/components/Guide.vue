@@ -1,5 +1,4 @@
 <script setup>
-// If you need Vue.js logic, you can add it here
 </script>
 
 <template>
