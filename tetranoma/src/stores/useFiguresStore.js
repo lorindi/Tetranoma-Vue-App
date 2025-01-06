@@ -49,7 +49,7 @@ export const useFiguresStore = defineStore('figures', {
                 console.error('Error fetching figure details:', error)
                 this.error =
                     error.response?.data?.message ||
-                    'Грешка при зареждане на детайлите'
+                    "Error loading details" 
                 throw error
             } finally {
                 this.loading = false
