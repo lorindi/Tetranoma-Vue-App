@@ -3,7 +3,7 @@ import { RouterLink, RouterView } from 'vue-router'
 import Navbar from '@/components/layout/navbar/Navbar.vue'
 import Footer from '@/components/layout/footer/Footer.vue'
 import DarkMode from './components/ui/DarkMode.vue';
-// import MouseGradient from './components/MouseGradient.vue';
+// import MouseGradient from './components/effects/MouseGradient.vue';
 </script>
 
 <template>
