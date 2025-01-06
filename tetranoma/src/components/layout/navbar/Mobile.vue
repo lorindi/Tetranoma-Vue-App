@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch, onUnmounted } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
-import Search from '@/components/ui/search/Search.vue'
+import Search from '@/components/ui/Search.vue'
 import logo from '@/assets/logo.jpg'
 import NavigationLinks from '@/components/common/NavigationLinks.vue'
 import ToggleButton from './ToggleButton.vue';
