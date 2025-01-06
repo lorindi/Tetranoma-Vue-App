@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue"
+import { ref, onMounted, computed } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useFiguresStore } from "@/stores/useFiguresStore"
 import { useAuthStore } from "@/stores/useAuthStore"
@@ -16,8 +16,41 @@ const { user } = storeToRefs(authStore)
 const figure = ref(null)
 const currentUserId = user.value?._id
 const isLoading = ref(true)
+const currentImageIndex = ref(0)
 
-console.log("FigureDetailsView mounted")
+
+const handleImageClick = (index) => {
+    console.log("Switching to image:", index)
+    currentImageIndex.value = index
+    scrollToThumbnail(index)
+}
+
+const scrollToThumbnail = (index) => {
+
+    const container = document.querySelector(".thumbnails-container")
+    const thumbnail = container.children[index]
+    if (thumbnail) {
+        const scrollLeft = thumbnail.offsetLeft - container.clientWidth / 2 + thumbnail.clientWidth / 2
+        container.scrollTo({
+            left: scrollLeft,
+            behavior: "smooth"
+        })
+    }
+}
+
+
+const nextImage = () => {
+    currentImageIndex.value = (currentImageIndex.value + 1) % figure.value.images.length
+    scrollToThumbnail(currentImageIndex.value)
+}
+
+const prevImage = () => {
+    console.log("Previous image")
+    currentImageIndex.value = currentImageIndex.value === 0 
+        ? figure.value.images.length - 1 
+        : currentImageIndex.value - 1
+    scrollToThumbnail(currentImageIndex.value)
+}
 
 const handleToggleFavorite = async () => {
     try {
@@ -41,11 +74,9 @@ const handleToggleFavorite = async () => {
 }
 
 onMounted(async () => {
-    console.log("Fetching figure details for ID:", route.params.id)
     try {
         const response = await figuresStore.getFigureById(route.params.id)
         figure.value = response.figure
-        console.log("Figure details received:", figure.value)
     } catch (error) {
         console.error("Error fetching figure details:", error)
         toast.error("Error loading figure details")
@@ -73,9 +104,77 @@ onMounted(async () => {
             <div class="flex flex-col md:flex-row">
                 <!-- Image Gallery -->
                 <div class="w-full md:w-1/2 p-4">
-                    <img :src="figure.images[0]" 
-                         :alt="figure.title"
-                         class="w-full h-[300px] md:h-[400px] object-cover rounded-lg shadow-md" />
+                    <!-- Main Image Container -->
+                    <div class="relative w-full h-[400px] mb-5">
+                        <img 
+                            :src="figure.images[currentImageIndex]" 
+                            :alt="`${figure.title} - Image ${currentImageIndex + 1}`"
+                            class="w-full h-full object-cover rounded-lg shadow-md" 
+                        />
+                        
+                        <!-- Navigation Arrows -->
+                        <button 
+                            v-if="figure.images.length > 1"
+                            @click="prevImage" 
+                            class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors duration-200">
+                            <i class="pi pi-chevron-left"></i>
+                        </button>
+                        <button 
+                            v-if="figure.images.length > 1"
+                            @click="nextImage" 
+                            class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors duration-200">
+                            <i class="pi pi-chevron-right"></i>
+                        </button>
+                    </div>
+
+                    <!-- Thumbnails Grid -->
+                    <div 
+                        v-if="figure.images.length > 1"
+                        :class="[
+                            'w-full',
+                            {
+                                'grid grid-cols-2 gap-2': figure.images.length === 2,
+                                'overflow-x-auto touch-pan-x': figure.images.length > 2
+                            }
+                        ]"
+                    >
+                        <!-- Two Images Layout -->
+                        <template v-if="figure.images.length === 2">
+                            <img 
+                                v-for="(image, index) in figure.images" 
+                                :key="index"
+                                :src="image"
+                                :alt="`${figure.title} - Thumbnail ${index + 1}`"
+                                @click="handleImageClick(index)"
+                                :class="[
+                                    'w-full h-[80px] object-cover rounded-lg cursor-pointer transition-all duration-200',
+                                    currentImageIndex === index 
+                                        ? 'ring-2 ring-[#00BD7E] opacity-100' 
+                                        : 'opacity-70 hover:opacity-100'
+                                ]"
+                            />
+                        </template>
+
+                        <!-- Three or More Images Layout with Touch Scroll -->
+                        <div 
+                            v-else
+                            class="flex gap-2 h-[100px] overflow-x-auto touch-pan-x scrollbar-hide thumbnails-container"
+                        >
+                            <img 
+                                v-for="(image, index) in figure.images" 
+                                :key="index"
+                                :src="image"
+                                :alt="`${figure.title} - Thumbnail ${index + 1}`"
+                                @click="handleImageClick(index)"
+                                :class="[
+                                    'flex-none w-[80px] h-[80px] object-cover rounded-lg cursor-pointer transition-all duration-200',
+                                    currentImageIndex === index 
+                                        ? 'ring-2 ring-[#00BD7E] opacity-100' 
+                                        : 'opacity-70 hover:opacity-100'
+                                ]"
+                            />
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Main Info -->
@@ -136,3 +235,13 @@ onMounted(async () => {
         </div>
     </div>
 </template>
+
+<style>
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+</style>
