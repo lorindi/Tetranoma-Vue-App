@@ -20,33 +20,18 @@ const handleExplore = () => {
 }
 
 onMounted(async () => {
-    console.log("Fetching top rated figures for home page")
     await figuresStore.getFigures(1, {
         sortBy: "rating",
-        sortOrder: "desc",
-        limit: 4
+        sortOrder: "desc"
     })
 })
 </script>
 <template>
     <div class="flex flex-col w-full max-w-[1336px] lg:my-[70px] items-center">
-        <HeaderWithLink 
-            title="Top Rated" 
-            linkText="Explore" 
-            @click="handleExplore"
-        />
+        <HeaderWithLink title="Top Rated" linkText="Explore" @click="handleExplore" />
         <div v-if="figuresStore.loading" class="text-center py-4">
             Loading...
         </div>
-        <FiguresList 
-            v-else
-            :figures="figuresStore.figures"
-            :limit="4"
-            sortBy="rating"
-            sortOrder="desc"
-        />
+        <FiguresList v-else :figures="figuresStore.figures" sortBy="rating" sortOrder="desc" :limit="4" />
     </div>
-
-
-
 </template>
