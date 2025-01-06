@@ -3,10 +3,8 @@ import NavigationLinks from '@/components/common/NavigationLinks.vue'
 import { useRoute } from "vue-router"
 import { computed } from "vue"
 
-// Get current route
 const route = useRoute()
 
-// Compute whether footer should be visible
 const showFooter = computed(() => {
     return route.path !== "/add-figure" && route.path !== "/about" && route.path !== "/contact" && route.path !== "/faq" && route.path !== "/figures" && route.path !== "/sign-in" && route.path !== "/sign-up" && route.path !== "/create-account" && route.path !== "/search-figure"
 })
