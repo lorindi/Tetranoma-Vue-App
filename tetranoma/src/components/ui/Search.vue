@@ -28,23 +28,19 @@ const sortOptions = [
 ]
 
 const handleSortChange = (sortString) => {
-  console.log("Handling sort change:", sortString)
   const [sortBy, sortOrder] = sortString.split("-")
   searchData.value.sortBy = sortBy
   searchData.value.sortOrder = sortOrder
   handleSearch()
 }
 onMounted(() => {
-    console.log("Search component mounted, checking URL params")
     const { category, sortBy, sortOrder } = route.query
     
     if (category) {
-        console.log("Setting category from URL:", category)
         searchData.value.category = category
     }
     
     if (sortBy && sortOrder) {
-        console.log("Setting sort from URL:", sortBy, sortOrder)
         searchData.value.sortBy = sortBy
         searchData.value.sortOrder = sortOrder
     }
@@ -53,7 +49,6 @@ onMounted(() => {
 watch(
     () => route.query,
     (newQuery) => {
-        console.log("Route query changed:", newQuery)
         if (newQuery.category) {
             searchData.value.category = newQuery.category
         }
