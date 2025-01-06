@@ -10,6 +10,7 @@ import HomeView from '@/views/home/HomeView.vue'
 import SearchByCategoryView from '@/views/SearchByCategoryView.vue'
 import SignInView from '@/views/SignInView.vue'
 import FaqView from '@/views/FaqView.vue'
+import FigureDetailsView from '@/views/FigureDetailsView.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,7 +40,7 @@ const router = createRouter({
         {
             path: "/figures/:id",
             name: "figure-details",
-            component: () => import("@/views/FigureDetailsView.vue")
+            component: FigureDetailsView,
         },
         {
             path: '/search-figure',
