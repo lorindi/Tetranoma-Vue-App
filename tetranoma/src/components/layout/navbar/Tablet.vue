@@ -31,14 +31,14 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div class="flex w-full h-full items-center justify-between px-[10px] relative z">
-        <RouterLink to="/" class="z-10">
+    <div class="flex w-full h-full items-center justify-between px-[10px] relative z-15">
+        <RouterLink to="/" class="z-20">
             <img :src="logo" alt="" class="rounded-full p-[10px] w-[125px] " />
         </RouterLink>
 
         <ToggleButton :isOpen="isOpen" @toggle="toggleMenu" />
 
-        <div v-if="isOpen" class="fixed inset-0 bg-black bg-opacity-50 z-[4]" @click="toggleMenu"></div>
+        <div v-if="isOpen" class="fixed inset-0 bg-black bg-opacity-50 z-15" @click="toggleMenu"></div>
 
         <nav v-motion 
             :initial="{ opacity: 0, translateY: -20 }" 
