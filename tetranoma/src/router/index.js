@@ -37,6 +37,11 @@ const router = createRouter({
             component: FiguresView,
         },
         {
+            path: "/figures/:id",
+            name: "figure-details",
+            component: () => import("@/views/FigureDetailsView.vue")
+        },
+        {
             path: '/search-figure',
             name: 'search-figure',
             component: SearchByCategoryView,
