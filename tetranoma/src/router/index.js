@@ -12,6 +12,7 @@ import SignInView from '@/views/SignInView.vue'
 import FaqView from '@/views/FaqView.vue'
 import FigureDetailsView from '@/views/FigureDetailsView.vue'
 import CheckoutView from '@/views/CheckoutView.vue'
+import ProfileView from '@/views/ProfileView.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -74,7 +75,13 @@ const router = createRouter({
             name: 'checkout',
             component: CheckoutView,
             meta: { requiresAuth: true }
-        }
+        },
+        {
+            path: "/profile",
+            name: "profile",
+            component: ProfileView,
+            meta: { requiresAuth: true }
+          }
     ],
 })
 
