@@ -15,6 +15,15 @@ const cartSidebarRef = ref(null)
         </RouterLink>
         <div class="flex items-center gap-[35px] text-lg">
             <NavigationLinks />
+        </div>
+
+        <div class="flex items-center gap-[35px] text-lg">
+            <RouterLink to="/favorites" class="hover:text-[#117277] tracking-wide text-lg">
+                <i class="pi pi-heart mr-2"></i>
+            </RouterLink>
+            <RouterLink to="/figures" class="hover:text-[#117277] tracking-wide text-lg">
+                <i class="pi pi-shopping-bag mr-2"></i>
+            </RouterLink>
             <CartSidebar ref="cartSidebarRef" />
         </div>
     </div>
