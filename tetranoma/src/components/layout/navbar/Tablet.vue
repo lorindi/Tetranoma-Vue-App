@@ -1,18 +1,15 @@
 <script setup>
 import { onUnmounted, ref, watch } from 'vue'
-import { RouterLink, useRoute } from 'vue-router'
 import Search from '@/components/ui/Search.vue'
-import logo from '@/assets/logo.jpg'
 import NavigationLinks from '@/components/common/NavigationLinks.vue'
 import ToggleButton from './ToggleButton.vue';
-import CartSidebar from '@/components/CartSidebar.vue'
+import NaviIcons from './NaviIcons.vue'
+import Logo from './Logo.vue';
 
 
-const cartSidebarRef = ref(null)
 const isOpen = ref(false)
 
 watch(isOpen, (newValue) => {
-    console.log("Mobile menu state changed:", newValue)
     if (newValue) {
         document.body.style.overflow = "hidden"
     } else {
@@ -34,19 +31,9 @@ onUnmounted(() => {
 
 <template>
     <div class="flex w-full h-full items-center justify-between px-[10px] relative z-15">
-        <RouterLink to="/" class="z-20">
-            <img :src="logo" alt="" class="rounded-full p-[10px] w-[125px] " />
-        </RouterLink>
+        <Logo />
 
-        <div class="flex items-center gap-[35px] text-lg z-15">
-            <RouterLink to="/favorites" class="hover:text-[#117277] tracking-wide text-lg">
-                <i class="pi pi-heart mr-2"></i>
-            </RouterLink>
-            <RouterLink to="/figures" class="hover:text-[#117277] tracking-wide text-lg">
-                <i class="pi pi-shopping-bag mr-2"></i>
-            </RouterLink>
-            <CartSidebar ref="cartSidebarRef" />
-        </div>
+        <NaviIcons />
 
         <div class="flex items-center gap-4 z-20">
             <ToggleButton :isOpen="isOpen" @toggle="toggleMenu" />
