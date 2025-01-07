@@ -5,13 +5,13 @@ import { useToast } from "vue-toastification"
 import { useAuthStore } from "@/stores/useAuthStore"
 import { storeToRefs } from "pinia"
 import { useFiguresStore } from "@/stores/useFiguresStore"
-
+import { useRoute } from "vue-router"
 // Stores & Utils
 const toast = useToast()
 const authStore = useAuthStore()
 const figuresStore = useFiguresStore()
 const { user } = storeToRefs(authStore)
-
+const route = useRoute()
 // Props
 const props = defineProps({
   limit: {
@@ -29,9 +29,14 @@ const props = defineProps({
   sortOrder: {
     type: String,
     default: "desc"
+  },  showFavorites: {
+    type: Boolean,
+    default: true
   }
 })
-
+const shouldShowFavorites = computed(() => {
+  return props.showFavorites && route.path !== "/profile" && route.path !== "/"
+})
 // Computed
 const currentUserId = computed(() => user.value?._id)
 
@@ -89,9 +94,9 @@ watch(() => figuresStore.figures, (newFigures) => {
 </script>
 
 <template>
-  <div class="grid grid-cols-2 w-[95%] justify-items-center my-[15px] max-w-[1336px] xl:grid xl:grid-cols-4">
+  <div class="grid grid-cols-2 w-[100%] justify-items-center my-[15px] max-w-[1336px] xl:grid xl:grid-cols-4">
     <CardFigure 
-      v-for="figure in limitedFigures" 
+    v-for="figure in limitedFigures" 
       :key="figure._id"
       :link="figure._id"
       :imgUrl="figure.images?.[0]"
@@ -101,8 +106,9 @@ watch(() => figuresStore.figures, (newFigures) => {
       :type="'cardRating'"
       :rating="figure.rating?.averageRating"
       :totalRatings="figure.rating?.totalRatings"
-      :isFavorite="figure.favorites?.includes(currentUserId)"
+      :isFavorite="shouldShowFavorites ? figure.favorites?.includes(currentUserId) : false"
       :favoritesCount="figure.favorites?.length || 0"
+      :showFavoriteButton="shouldShowFavorites"
       @toggleFavorite="() => handleToggleFavorite(figure._id)"
     />
   </div>
