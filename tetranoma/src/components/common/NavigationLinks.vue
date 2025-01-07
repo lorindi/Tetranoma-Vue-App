@@ -10,7 +10,6 @@ const { isAuthenticated } = storeToRefs(authStore)
 const links = [
   { path: '/about', label: 'About' },
   { path: '/contact', label: 'Contact' },
-  { path: '/figures', label: 'Figures' },
   { path: '/add-figure', label: 'Add' },
   { path: '/faq', label: 'FAQ' },
 ]
