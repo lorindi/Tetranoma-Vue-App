@@ -8,6 +8,16 @@ export const useAuthStore = defineStore("auth", {
   }),
   
   actions: {
+    async updateProfile(userData) {
+      try {
+        const response = await api.put("/users/profile", userData)
+        this.user = response.data
+        return response.data
+      } catch (error) {
+        console.error("Error updating profile:", error)
+        throw error
+      }
+    },
     async createAccount(userData) {
       try {
         const response = await api.post("/auth/create-account", userData)
