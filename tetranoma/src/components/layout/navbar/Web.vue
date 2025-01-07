@@ -2,7 +2,10 @@
 import { RouterLink, useRoute } from 'vue-router'
 import logo from '@/assets/logo.jpg'
 import NavigationLinks from '@/components/common/NavigationLinks.vue'
+import { ref } from 'vue';
+import CartSidebar from '@/components/CartSidebar.vue';
 
+const cartSidebarRef = ref(null)
 </script>
 
 <template>
@@ -10,8 +13,9 @@ import NavigationLinks from '@/components/common/NavigationLinks.vue'
         <RouterLink to="/" class="">
             <img :src="logo" alt="" class="rounded-full p-[10px] w-[125px] " />
         </RouterLink>
-        <div class="flex gap-[50px] text-lg">
+        <div class="flex items-center gap-[35px] text-lg">
             <NavigationLinks />
+            <CartSidebar ref="cartSidebarRef" />
         </div>
     </div>
 </template>
