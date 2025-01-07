@@ -10,7 +10,7 @@ console.log("NavIcons component initialized")
 
 <template>
     <div class="flex items-center gap-[10px] md:gap-[30px] text-lg">
-        <RouterLink to="/favorites" class="hover:text-[#117277] tracking-wide text-lg">
+        <RouterLink to="/profile" class="hover:text-[#117277] tracking-wide text-lg">
             <i class="pi pi-heart mr-2"></i>
         </RouterLink>
         <RouterLink to="/figures" class="hover:text-[#117277] tracking-wide text-lg">
