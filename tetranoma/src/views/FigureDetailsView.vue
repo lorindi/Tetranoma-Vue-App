@@ -5,6 +5,7 @@ import { useFiguresStore } from "@/stores/useFiguresStore"
 import { useAuthStore } from "@/stores/useAuthStore"
 import { storeToRefs } from "pinia"
 import { useToast } from "vue-toastification"
+import { useCartStore } from "@/stores/useCartStore"
 
 const route = useRoute()
 const router = useRouter()
@@ -19,6 +20,9 @@ const currentUserId = computed(() => user.value?._id)
 const isLoading = ref(true)
 const currentImageIndex = ref(0)
 
+
+const cartStore = useCartStore()
+const quantity = ref(1)
 // Computed properties
 const isFavorited = computed(() => {
     return figure.value?.favorites?.includes(currentUserId.value)
@@ -58,8 +62,8 @@ const useImageHandling = () => {
 
     const prevImage = () => {
         if (!hasMultipleImages.value) return
-        currentImageIndex.value = currentImageIndex.value === 0 
-            ? totalImages.value - 1 
+        currentImageIndex.value = currentImageIndex.value === 0
+            ? totalImages.value - 1
             : currentImageIndex.value - 1
         scrollToThumbnail(currentImageIndex.value)
     }
@@ -78,14 +82,14 @@ const useFavorites = () => {
             }
 
             await figuresStore.toggleFavorite(figure.value._id)
-            
+
             figure.value = {
                 ...figure.value,
                 favorites: isFavorited.value
                     ? figure.value.favorites.filter(id => id !== currentUserId.value)
                     : [...(figure.value.favorites || []), currentUserId.value]
             }
-            
+
             toast.success("Favorite status updated successfully")
         } catch (error) {
             console.error("Error in toggleFavorite:", error)
@@ -94,6 +98,20 @@ const useFavorites = () => {
     }
 
     return { handleToggleFavorite }
+}
+const handleAddToCart = async () => {
+    console.log("Adding to cart:", figure.value._id)
+    if (!currentUserId.value) {
+        toast.warning("Please sign in to add to cart")
+        router.push("/sign-in")
+        return
+    }
+
+    try {
+        await cartStore.addToCart(figure.value._id, quantity.value)
+    } catch (error) {
+        console.error("Error adding to cart:", error)
+    }
 }
 
 // Initialize composables
@@ -137,73 +155,52 @@ onMounted(async () => {
                 <div class="w-full md:w-1/2 p-4">
                     <!-- Main Image Container -->
                     <div class="relative w-full h-[400px] mb-5">
-                        <img 
-                            :src="figure.images[currentImageIndex]" 
+                        <img :src="figure.images[currentImageIndex]"
                             :alt="`${figure.title} - Image ${currentImageIndex + 1}`"
-                            class="w-full h-full object-cover rounded-lg shadow-md" 
-                        />
-                        
+                            class="w-full h-full object-cover rounded-lg shadow-md" />
+
                         <!-- Navigation Arrows -->
-                        <button 
-                            v-if="hasMultipleImages"
-                            @click="prevImage" 
+                        <button v-if="hasMultipleImages" @click="prevImage"
                             class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors duration-200">
                             <i class="pi pi-chevron-left"></i>
                         </button>
-                        <button 
-                            v-if="hasMultipleImages"
-                            @click="nextImage" 
+                        <button v-if="hasMultipleImages" @click="nextImage"
                             class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors duration-200">
                             <i class="pi pi-chevron-right"></i>
                         </button>
                     </div>
 
                     <!-- Thumbnails Grid -->
-                    <div 
-                        v-if="hasMultipleImages"
-                        :class="[
-                            'w-full',
-                            {
-                                'grid grid-cols-2 gap-2': totalImages === 2,
-                                'overflow-x-auto touch-pan-x': totalImages > 2
-                            }
-                        ]"
-                    >
+                    <div v-if="hasMultipleImages" :class="[
+                        'w-full',
+                        {
+                            'grid grid-cols-2 gap-2': totalImages === 2,
+                            'overflow-x-auto touch-pan-x': totalImages > 2
+                        }
+                    ]">
                         <!-- Two Images Layout -->
                         <template v-if="totalImages === 2">
-                            <img 
-                                v-for="(image, index) in figure.images" 
-                                :key="index"
-                                :src="image"
-                                :alt="`${figure.title} - Thumbnail ${index + 1}`"
-                                @click="handleImageClick(index)"
+                            <img v-for="(image, index) in figure.images" :key="index" :src="image"
+                                :alt="`${figure.title} - Thumbnail ${index + 1}`" @click="handleImageClick(index)"
                                 :class="[
                                     'w-full h-[80px] object-cover rounded-lg cursor-pointer transition-all duration-200',
-                                    currentImageIndex === index 
-                                        ? 'ring-2 ring-[#00BD7E] opacity-100' 
+                                    currentImageIndex === index
+                                        ? 'ring-2 ring-[#00BD7E] opacity-100'
                                         : 'opacity-70 hover:opacity-100'
-                                ]"
-                            />
+                                ]" />
                         </template>
 
                         <!-- Three or More Images Layout with Touch Scroll -->
-                        <div 
-                            v-else
-                            class="flex gap-2 h-[100px] overflow-x-auto touch-pan-x scrollbar-hide thumbnails-container"
-                        >
-                            <img 
-                                v-for="(image, index) in figure.images" 
-                                :key="index"
-                                :src="image"
-                                :alt="`${figure.title} - Thumbnail ${index + 1}`"
-                                @click="handleImageClick(index)"
+                        <div v-else
+                            class="flex gap-2 h-[100px] overflow-x-auto touch-pan-x scrollbar-hide thumbnails-container">
+                            <img v-for="(image, index) in figure.images" :key="index" :src="image"
+                                :alt="`${figure.title} - Thumbnail ${index + 1}`" @click="handleImageClick(index)"
                                 :class="[
                                     'flex-none w-[80px] h-[80px] object-cover rounded-lg cursor-pointer transition-all duration-200',
-                                    currentImageIndex === index 
-                                        ? 'ring-2 ring-[#00BD7E] opacity-100' 
+                                    currentImageIndex === index
+                                        ? 'ring-2 ring-[#00BD7E] opacity-100'
                                         : 'opacity-70 hover:opacity-100'
-                                ]"
-                            />
+                                ]" />
                         </div>
                     </div>
                 </div>
@@ -214,10 +211,8 @@ onMounted(async () => {
                         <h1 class="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white">
                             {{ figure.title }}
                         </h1>
-                        <button 
-                            @click="handleToggleFavorite"
-                            class="px-2 pt-2 pb-1 rounded-full bg-white/80 dark:bg-gray-700/80 hover:bg-white dark:hover:bg-gray-700 transition-colors shadow-md"
-                        >
+                        <button @click="handleToggleFavorite"
+                            class="px-2 pt-2 pb-1 rounded-full bg-white/80 dark:bg-gray-700/80 hover:bg-white dark:hover:bg-gray-700 transition-colors shadow-md">
                             <i :class="[
                                 'pi',
                                 isFavorited ? 'pi-heart-fill text-[#00BD7E]' : 'pi-heart text-gray-600 dark:text-gray-400',
@@ -225,7 +220,7 @@ onMounted(async () => {
                             ]"></i>
                         </button>
                     </div>
-
+                
                     <!-- Rating -->
                     <div class="flex items-center space-x-2">
                         <span class="text-[#00BD7E] text-xl">★</span>
@@ -255,6 +250,18 @@ onMounted(async () => {
                             In Stock: {{ figure.stock }} pcs
                         </span>
                     </div>
+
+                    <div class="flex items-center gap-4 mt-4">
+                        <input type="number" v-model="quantity" min="1" :max="figure.stock"
+                            class="w-20 p-2 border rounded" />
+                        <button @click="handleAddToCart"
+                            class="px-4 py-2 bg-[#00BD7E] text-white rounded-lg hover:bg-[#00a06a] transition-colors"
+                            :disabled="cartStore.loading">
+                            <i class="pi pi-shopping-cart mr-2"></i>
+                            Add to Cart
+                        </button>
+                    </div>
+
                 </div>
             </div>
 
@@ -273,6 +280,7 @@ onMounted(async () => {
 .scrollbar-hide::-webkit-scrollbar {
     display: none;
 }
+
 .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
