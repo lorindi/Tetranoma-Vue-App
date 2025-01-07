@@ -81,10 +81,10 @@ const isRatingVisible = computed(() => props.type === 'cardRating');
     ">
     <!-- Favorite Button -->
     <button @click="handleFavoriteClick"
-      class="absolute z-10 top-2 right-2 p-2 rounded-full bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-800 transition-colors">
+      class="absolute z-10 top-2 right-2 px-2 pt-2 pb-1 rounded-full bg-white/80 dark:bg-gray-900 hover:bg-white dark:hover:bg-gray-800 transition-colors">
       <i :class="[
         'pi',
-        isFavorite ? 'pi-heart-fill text-red-500' : 'pi-heart text-gray-600 dark:text-gray-400',
+        isFavorite ? 'pi-heart-fill text-[#00BD7E]' : 'pi-heart text-gray-600 dark:text-gray-400',
         'text-xl'
       ]"></i>
     </button>
