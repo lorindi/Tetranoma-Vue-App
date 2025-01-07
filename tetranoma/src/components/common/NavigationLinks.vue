@@ -8,9 +8,9 @@ const authStore = useAuthStore()
 const { isAuthenticated } = storeToRefs(authStore)
 
 const links = [
+  { path: '/add-figure', label: 'Add' },
   { path: '/about', label: 'About' },
   { path: '/contact', label: 'Contact' },
-  { path: '/add-figure', label: 'Add' },
   { path: '/faq', label: 'FAQ' },
 ]
 
