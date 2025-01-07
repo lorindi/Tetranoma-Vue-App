@@ -28,7 +28,7 @@ onMounted(async () => {
 </script>
 <template>
     <div class="flex flex-col w-full max-w-[1336px] lg:my-[70px] items-center">
-        <HeaderWithLink title="Top Rated" linkText="Explore" @click="handleExplore" />
+        <HeaderWithLink title="Top Rated" link="/figures" linkText="Explore" @click="handleExplore" />
         <div v-if="figuresStore.loading" class="text-center py-4">
             Loading...
         </div>
