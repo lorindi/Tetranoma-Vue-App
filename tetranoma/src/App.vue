@@ -11,7 +11,7 @@ import DarkMode from './components/ui/DarkMode.vue';
         <!-- <MouseGradient />    -->
         <DarkMode />
         <Navbar />
-        <RouterView class="w-full h-full flex justify-center max-w-[1336px]" />
+        <RouterView class="w-full h-full my-15 flex justify-start max-w-[1336px]" />
         <Footer />
     </div>
 </template>
