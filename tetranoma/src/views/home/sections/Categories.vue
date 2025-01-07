@@ -2,7 +2,7 @@
 
 import { RouterLink } from 'vue-router';
 import CategoriesList from '@/components/lists/CategoriesList.vue';
-import HeaderWithLink from '@/components/HeaderWithLink.vue';
+import HeaderWithLink from '@/components/common/HeaderWithLink.vue';
 </script>
 
 <template>
