@@ -37,6 +37,12 @@ onUnmounted(() => {
             <img :src="logo" alt="" class="rounded-full p-[10px] w-[125px] " />
         </RouterLink>
         <div class="flex items-center gap-4 z-30">
+            <RouterLink to="/favorites" class="hover:text-[#117277] tracking-wide text-lg">
+                <i class="pi pi-heart mr-2"></i>
+            </RouterLink>
+            <RouterLink to="/figures" class="hover:text-[#117277] tracking-wide text-lg">
+                <i class="pi pi-shopping-bag mr-2"></i>
+            </RouterLink>
             <CartSidebar ref="cartSidebarRef" />
             <ToggleButton :isOpen="isOpen" @toggle="toggleMenu" />
         </div>
