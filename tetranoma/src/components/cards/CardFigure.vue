@@ -50,6 +50,9 @@ const props = defineProps({
   favoritesCount: {
     type: Number,
     default: 0
+  }, showFavoriteButton: {
+    type: Boolean,
+    default: true
   }
 });
 
@@ -80,7 +83,7 @@ const isRatingVisible = computed(() => props.type === 'cardRating');
     lg:w-[300px] lg:h-[360px] lg:my-[15px]
     ">
     <!-- Favorite Button -->
-    <button @click="handleFavoriteClick"
+    <button v-if="showFavoriteButton" @click="handleFavoriteClick"
       class="absolute z-10 top-2 right-2 px-2 pt-2 pb-1 rounded-full bg-white/80 dark:bg-gray-900 hover:bg-white dark:hover:bg-gray-800 transition-colors">
       <i :class="[
         'pi',
