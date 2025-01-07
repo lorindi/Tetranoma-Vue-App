@@ -5,7 +5,6 @@ import CartSidebar from "@/components/CartSidebar.vue"
 
 const cartSidebarRef = ref(null)
 
-console.log("NavIcons component initialized")
 </script>
 
 <template>
