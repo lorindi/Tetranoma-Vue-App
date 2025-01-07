@@ -55,6 +55,34 @@ export const useFiguresStore = defineStore('figures', {
                 this.loading = false
             }
         },
+        async getFavorites() {
+            console.log("Getting user favorites")
+            this.loading = true
+            try {
+              const response = await api.get("/figures/favorites")
+              console.log("Favorites loaded:", response.data)
+              return response.data
+            } catch (error) {
+              console.error("Error fetching favorites:", error)
+              throw error
+            } finally {
+              this.loading = false
+            }
+          },
+          async getMyFigures() {
+            console.log("Getting user figures")
+            this.loading = true
+            try {
+              const response = await api.get("/figures/my-figures")
+              console.log("My figures loaded:", response.data)
+              return response.data.figures
+            } catch (error) {
+              console.error("Error fetching my figures:", error)
+              throw error
+            } finally {
+              this.loading = false
+            }
+          },
         async getFigures(page = 1, filters = {}) {
             this.loading = true
             try {
