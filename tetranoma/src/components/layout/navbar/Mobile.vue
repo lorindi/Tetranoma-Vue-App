@@ -5,7 +5,9 @@ import Search from '@/components/ui/Search.vue'
 import logo from '@/assets/logo.jpg'
 import NavigationLinks from '@/components/common/NavigationLinks.vue'
 import ToggleButton from './ToggleButton.vue';
+import CartSidebar from '@/components/CartSidebar.vue'
 
+const cartSidebarRef = ref(null)
 const isOpen = ref(false)
 
 watch(isOpen, (newValue) => {
@@ -25,6 +27,8 @@ const toggleMenu = () => {
 onUnmounted(() => {
     document.body.style.overflow = "auto"
 })
+
+
 </script>
 
 <template>
@@ -32,8 +36,10 @@ onUnmounted(() => {
         <RouterLink to="/" class="z-30">
             <img :src="logo" alt="" class="rounded-full p-[10px] w-[125px] " />
         </RouterLink>
-
-        <ToggleButton :isOpen="isOpen" @toggle="toggleMenu" />
+        <div class="flex items-center gap-4 z-30">
+            <CartSidebar ref="cartSidebarRef" />
+            <ToggleButton :isOpen="isOpen" @toggle="toggleMenu" />
+        </div>
         <div v-if="isOpen" class="fixed inset-0 bg-black bg-opacity-50 z-15" @click="toggleMenu"></div>
 
         <nav v-motion :initial="{ opacity: 0, translateX: -20 }" :enter="{ opacity: 1, translateX: 0 }"
