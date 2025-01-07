@@ -4,7 +4,7 @@ import { useForm, useField } from "vee-validate"
 import * as yup from "yup"
 import emailjs from "@emailjs/browser"
 import { useToast } from "vue-toastification"
-import Title from "@/components/common/title/Title.vue"
+import Title from "@/components/common/Title.vue"
 
 console.log("ContactView component mounted")
 
