@@ -5,10 +5,10 @@ import { RouterLink } from "vue-router"
 
 <template>
     <RouterLink to="/" class="z-30">
-        <div class="flex items-center justify-center w-[125px] h-[125px] p-[10px]">
+        <div class="flex flex-col items-center justify-center w-[125px] h-[125px]">
             <svg 
                 viewBox="0 0 24 24" 
-                class="w-full h-full"
+                class="w-[90%] h-[90%] mb-[-22.5px]"
             >
                 <path 
                     d="M12 2L2 19h20L12 2zm0 3l7.5 13h-15L12 5z" 
@@ -19,6 +19,7 @@ import { RouterLink } from "vue-router"
                     fill="#1a4548"
                 />
             </svg>
+            <p class="text-[16px] font-bold text-gray-500 dark:text-[#117277]">TETRANOMA</p>
         </div>
     </RouterLink>
 </template>
