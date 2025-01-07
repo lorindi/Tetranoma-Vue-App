@@ -1,6 +1,6 @@
 <script setup>
 import FiguresList from "@/components/lists/FiguresList.vue"
-import HeaderWithLink from "@/components/HeaderWithLink.vue"
+import HeaderWithLink from "@/components/common/HeaderWithLink.vue"
 import { useFiguresStore } from "@/stores/useFiguresStore"
 import { onMounted } from "vue"
 import { useRouter } from "vue-router"
