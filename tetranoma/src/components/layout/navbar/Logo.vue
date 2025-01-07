@@ -19,7 +19,7 @@ import { RouterLink } from "vue-router"
                     fill="#1a4548"
                 />
             </svg>
-            <p class="text-[16px] font-bold text-gray-500 dark:text-[#117277]">TETRANOMA</p>
+            <p class="text-[16px] font-semibold text-gray-500 dark:text-gray-400">TETRANOMA</p>
         </div>
     </RouterLink>
 </template>
