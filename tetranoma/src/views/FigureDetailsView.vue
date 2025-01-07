@@ -37,7 +37,6 @@ const hasMultipleImages = computed(() => totalImages.value > 1)
 // Image handling composable
 const useImageHandling = () => {
     const handleImageClick = (index) => {
-        console.log("Switching to image:", index)
         currentImageIndex.value = index
         scrollToThumbnail(index)
     }
@@ -253,7 +252,7 @@ onMounted(async () => {
 
                     <div class="flex items-center gap-4 mt-4">
                         <input type="number" v-model="quantity" min="1" :max="figure.stock"
-                            class="w-20 p-2 border rounded" />
+                            class="w-20 p-2 border rounded dark:bg-gray-800" />
                         <button @click="handleAddToCart"
                             class="px-4 py-2 bg-[#00BD7E] text-white rounded-lg hover:bg-[#00a06a] transition-colors"
                             :disabled="cartStore.loading">
