@@ -5,7 +5,6 @@ import MostPreferredFigures from '@/views/home/sections/MostPreferredFigures.vue
 // import Guide from '@/components/Guide.vue';
 import FigureJoySection from '@/views/home/sections/FigureJoySection.vue';
 
-console.log("HomeView component mounted")
 </script>
 
 <template>
