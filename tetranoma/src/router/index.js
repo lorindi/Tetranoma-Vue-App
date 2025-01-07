@@ -76,20 +76,14 @@ router.beforeEach(async (to, from, next) => {
     const isAuthenticated = await authStore.checkAuth()
 
     if (to.meta.requiresAuth && !isAuthenticated) {
-        console.log('Unauthorized access attempt - redirecting to sign-in')
         next({ name: 'sign-in' })
         return
     }
 
     if (to.meta.requiresGuest && isAuthenticated) {
-        console.log(
-            'Authenticated user trying to access guest route - redirecting to home',
-        )
         next({ name: 'home' })
         return
     }
-
-    console.log('Navigation allowed to proceed')
     next()
 })
 
