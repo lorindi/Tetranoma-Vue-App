@@ -13,72 +13,103 @@ const figuresStore = useFiguresStore()
 const authStore = useAuthStore()
 const { user } = storeToRefs(authStore)
 
+// State
 const figure = ref(null)
-const currentUserId = user.value?._id
+const currentUserId = computed(() => user.value?._id)
 const isLoading = ref(true)
 const currentImageIndex = ref(0)
 
+// Computed properties
+const isFavorited = computed(() => {
+    return figure.value?.favorites?.includes(currentUserId.value)
+})
 
-const handleImageClick = (index) => {
-    console.log("Switching to image:", index)
-    currentImageIndex.value = index
-    scrollToThumbnail(index)
-}
+const totalImages = computed(() => {
+    return figure.value?.images?.length || 0
+})
 
-const scrollToThumbnail = (index) => {
+const hasMultipleImages = computed(() => totalImages.value > 1)
 
-    const container = document.querySelector(".thumbnails-container")
-    const thumbnail = container.children[index]
-    if (thumbnail) {
-        const scrollLeft = thumbnail.offsetLeft - container.clientWidth / 2 + thumbnail.clientWidth / 2
-        container.scrollTo({
-            left: scrollLeft,
-            behavior: "smooth"
-        })
+// Image handling composable
+const useImageHandling = () => {
+    const handleImageClick = (index) => {
+        console.log("Switching to image:", index)
+        currentImageIndex.value = index
+        scrollToThumbnail(index)
     }
-}
 
-
-const nextImage = () => {
-    currentImageIndex.value = (currentImageIndex.value + 1) % figure.value.images.length
-    scrollToThumbnail(currentImageIndex.value)
-}
-
-const prevImage = () => {
-    console.log("Previous image")
-    currentImageIndex.value = currentImageIndex.value === 0 
-        ? figure.value.images.length - 1 
-        : currentImageIndex.value - 1
-    scrollToThumbnail(currentImageIndex.value)
-}
-
-const handleToggleFavorite = async () => {
-    try {
-        if (!currentUserId) {
-            toast.warning("Please sign in to add to favorites")
-            router.push("/sign-in")
-            return
+    const scrollToThumbnail = (index) => {
+        const container = document.querySelector(".thumbnails-container")
+        const thumbnail = container?.children[index]
+        if (thumbnail) {
+            const scrollLeft = thumbnail.offsetLeft - container.clientWidth / 2 + thumbnail.clientWidth / 2
+            container.scrollTo({
+                left: scrollLeft,
+                behavior: "smooth"
+            })
         }
-        await figuresStore.toggleFavorite(figure.value._id)
-        figure.value = {
-            ...figure.value,
-            favorites: figure.value.favorites?.includes(currentUserId)
-                ? figure.value.favorites.filter(id => id !== currentUserId)
-                : [...(figure.value.favorites || []), currentUserId]
-        }
-        toast.success("Successfully updated favorites")
-    } catch (error) {
-        console.error("Error toggling favorite:", error)
-        toast.error("Error updating favorites")
     }
+
+    const nextImage = () => {
+        if (!hasMultipleImages.value) return
+        currentImageIndex.value = (currentImageIndex.value + 1) % totalImages.value
+        scrollToThumbnail(currentImageIndex.value)
+    }
+
+    const prevImage = () => {
+        if (!hasMultipleImages.value) return
+        currentImageIndex.value = currentImageIndex.value === 0 
+            ? totalImages.value - 1 
+            : currentImageIndex.value - 1
+        scrollToThumbnail(currentImageIndex.value)
+    }
+
+    return { handleImageClick, scrollToThumbnail, nextImage, prevImage }
 }
 
+// Favorites handling composable
+const useFavorites = () => {
+    const handleToggleFavorite = async () => {
+        try {
+            if (!currentUserId.value) {
+                toast.warning("Please sign in to add to favorites")
+                router.push("/sign-in")
+                return
+            }
+
+            await figuresStore.toggleFavorite(figure.value._id)
+            
+            figure.value = {
+                ...figure.value,
+                favorites: isFavorited.value
+                    ? figure.value.favorites.filter(id => id !== currentUserId.value)
+                    : [...(figure.value.favorites || []), currentUserId.value]
+            }
+            
+            toast.success("Favorite status updated successfully")
+        } catch (error) {
+            console.error("Error in toggleFavorite:", error)
+            toast.error("Error updating favorites")
+        }
+    }
+
+    return { handleToggleFavorite }
+}
+
+// Initialize composables
+const { handleImageClick, nextImage, prevImage } = useImageHandling()
+const { handleToggleFavorite } = useFavorites()
+
+// Fetch figure data
 onMounted(async () => {
+    console.log("Fetching figure details")
     try {
         const response = await figuresStore.getFigureById(route.params.id)
+        if (!response?.figure) {
+            throw new Error("Figure data not found")
+        }
         figure.value = response.figure
     } catch (error) {
-        console.error("Error fetching figure details:", error)
         toast.error("Error loading figure details")
     } finally {
         isLoading.value = false
@@ -114,13 +145,13 @@ onMounted(async () => {
                         
                         <!-- Navigation Arrows -->
                         <button 
-                            v-if="figure.images.length > 1"
+                            v-if="hasMultipleImages"
                             @click="prevImage" 
                             class="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors duration-200">
                             <i class="pi pi-chevron-left"></i>
                         </button>
                         <button 
-                            v-if="figure.images.length > 1"
+                            v-if="hasMultipleImages"
                             @click="nextImage" 
                             class="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors duration-200">
                             <i class="pi pi-chevron-right"></i>
@@ -129,17 +160,17 @@ onMounted(async () => {
 
                     <!-- Thumbnails Grid -->
                     <div 
-                        v-if="figure.images.length > 1"
+                        v-if="hasMultipleImages"
                         :class="[
                             'w-full',
                             {
-                                'grid grid-cols-2 gap-2': figure.images.length === 2,
-                                'overflow-x-auto touch-pan-x': figure.images.length > 2
+                                'grid grid-cols-2 gap-2': totalImages === 2,
+                                'overflow-x-auto touch-pan-x': totalImages > 2
                             }
                         ]"
                     >
                         <!-- Two Images Layout -->
-                        <template v-if="figure.images.length === 2">
+                        <template v-if="totalImages === 2">
                             <img 
                                 v-for="(image, index) in figure.images" 
                                 :key="index"
@@ -183,11 +214,13 @@ onMounted(async () => {
                         <h1 class="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white">
                             {{ figure.title }}
                         </h1>
-                        <button @click="handleToggleFavorite"
-                            class="p-2 rounded-full bg-white/80 dark:bg-gray-700/80 hover:bg-white dark:hover:bg-gray-700 transition-colors shadow-md">
+                        <button 
+                            @click="handleToggleFavorite"
+                            class="px-2 pt-2 pb-1 rounded-full bg-white/80 dark:bg-gray-700/80 hover:bg-white dark:hover:bg-gray-700 transition-colors shadow-md"
+                        >
                             <i :class="[
                                 'pi',
-                                figure.favorites?.includes(currentUserId) ? 'pi-heart-fill text-red-500' : 'pi-heart text-gray-600 dark:text-gray-400',
+                                isFavorited ? 'pi-heart-fill text-[#00BD7E]' : 'pi-heart text-gray-600 dark:text-gray-400',
                                 'text-xl'
                             ]"></i>
                         </button>
