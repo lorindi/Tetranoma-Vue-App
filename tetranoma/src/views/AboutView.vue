@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue"
-import Title from "@/components/common/title/Title.vue"
+import Title from "@/components/common/Title.vue"
 
 console.log("AboutView component mounted")
 
