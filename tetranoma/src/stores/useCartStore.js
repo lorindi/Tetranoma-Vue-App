@@ -12,14 +12,12 @@ export const useCartStore = defineStore('cart', {
 
     actions: {
         async addToCart(figureId, quantity) {
-            console.log('Adding to cart:', figureId, quantity)
             this.loading = true
             try {
                 const response = await api.post('/cart/add', {
                     figureId,
                     quantity,
                 })
-                console.log('Added to cart successfully:', response.data)
                 this.items = response.data.order.items
                 this.totalPrice = response.data.order.totalPrice
                 useToast().success('Added to cart successfully!')
@@ -38,7 +36,6 @@ export const useCartStore = defineStore('cart', {
             this.loading = true
             try {
                 const response = await api.get('/cart')
-                console.log('Cart retrieved:', response.data)
                 if (response.data.cart) {
                     this.items = response.data.cart.items
                     this.totalPrice = response.data.cart.totalPrice
@@ -53,11 +50,9 @@ export const useCartStore = defineStore('cart', {
         },
 
         async checkout(paymentData) {
-            console.log("Starting checkout process with data:", paymentData);
             this.loading = true;
             try {
                 const response = await api.post("/cart/checkout", paymentData);
-                console.log("Checkout response:", response.data);
                 this.items = [];
                 this.totalPrice = 0;
                 useToast().success("Order completed successfully!");
