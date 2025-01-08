@@ -77,7 +77,7 @@ const isRatingVisible = computed(() => props.type === 'cardRating');
 </script>
 
 <template>
-  <RouterLink :to="`/figures/${link}`" class="relative flex flex-col bg-white shadow-md rounded-lg overflow-hidden h-[200px] w-[140px] my-[10px] dark:bg-gray-900 dark:shadow-gray-900 z-5
+  <RouterLink :to="`/figures/${link}`" class="relative flex flex-col bg-white shadow-md rounded-lg overflow-hidden h-[200px] w-[140px] my-[10px] dark:bg-gray-800 dark:shadow-black-500 z-5
     sm:w-[250px] sm:h-[300px] 
     md:w-[300px] md:h-[350px] 
     lg:w-[300px] lg:h-[360px] lg:my-[15px]
