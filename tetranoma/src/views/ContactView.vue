@@ -6,7 +6,6 @@ import emailjs from "@emailjs/browser"
 import { useToast } from "vue-toastification"
 import Title from "@/components/common/Title.vue"
 
-console.log("ContactView component mounted")
 
 const toast = useToast()
 const isLoading = ref(false)
