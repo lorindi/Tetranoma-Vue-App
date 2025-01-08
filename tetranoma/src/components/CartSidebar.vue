@@ -85,7 +85,11 @@ defineExpose({ toggleCart })
           <div v-else class="space-y-4">
             <div v-for="item in cartStore.items" :key="item?.product?._id"
               class="flex gap-4 p-2 border rounded dark:border-gray-700">
-              <img :src="item?.product?.images[0]" :alt="item?.product?.title" class="w-20 h-20 object-cover rounded" />
+              <img 
+          :src="item?.product?.images?.[0] || '/placeholder-image.jpg'" 
+          :alt="item?.product?.title || 'Product'"
+          class="w-20 h-20 object-cover rounded" 
+        />
               <div class="flex-1">
                 <h3 class="font-semibold">{{ item?.product?.title }}</h3>
                 <p class="text-sm text-gray-600 dark:text-gray-400">
