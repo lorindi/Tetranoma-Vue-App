@@ -93,7 +93,7 @@ const handleDeleteProfile = async () => {
 </script>
 
 <template>
-    <div class="flex flex-col w-full max-w-[1336px] min-h-screen p-4 mt-[30px] md:p-8">
+    <div class="flex flex-col w-full max-w-[1336px] min-h-[80vh] p-4 mt-[30px] md:p-8">
         <!-- Profile Header -->
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
             <div class="flex flex-col md:flex-row items-center gap-6">
@@ -123,7 +123,7 @@ const handleDeleteProfile = async () => {
         </div>
 
         <!-- Tabs Navigation -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg mb-8">
+        <div class="bg-white dark:bg-gray-800 rounded-xl rounded-b-none shadow-lg mb-8">
             <div class="flex overflow-x-auto">
                 <button v-for="tab in tabs" :key="tab.id" @click="activeTab = tab.id" :class="[
                     'flex-1 px-4 py-3 text-center transition-colors',
@@ -138,7 +138,7 @@ const handleDeleteProfile = async () => {
         </div>
 
         <!-- Tab Content -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+        <div class="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6 dark:shadow-none">
             <!-- Favorites Tab -->
             <div v-if="activeTab === 'favorites'" class="space-y-6">
                 <h2 class="text-xl font-semibold mb-4">Favorite Figures</h2>
