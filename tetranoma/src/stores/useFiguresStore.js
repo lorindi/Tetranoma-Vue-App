@@ -38,6 +38,23 @@ export const useFiguresStore = defineStore('figures', {
                 this.loading = false
             }
         },
+        async updateFigure(id, figureData) {
+            console.log('Updating figure:', id, figureData)
+            this.loading = true
+            try {
+                const response = await api.put(
+                    `/figures/update/${id}`,
+                    figureData,
+                )
+                console.log('Figure updated successfully:', response.data)
+                return response.data
+            } catch (error) {
+                console.error('Error updating figure:', error)
+                throw error
+            } finally {
+                this.loading = false
+            }
+        },
         async getFigureById(id) {
             console.log('Getting figure details for ID:', id)
             this.loading = true
@@ -48,41 +65,40 @@ export const useFiguresStore = defineStore('figures', {
             } catch (error) {
                 console.error('Error fetching figure details:', error)
                 this.error =
-                    error.response?.data?.message ||
-                    "Error loading details" 
+                    error.response?.data?.message || 'Error loading details'
                 throw error
             } finally {
                 this.loading = false
             }
         },
         async getFavorites() {
-            console.log("Getting user favorites")
+            console.log('Getting user favorites')
             this.loading = true
             try {
-              const response = await api.get("/figures/favorites")
-              console.log("Favorites loaded:", response.data)
-              return response.data
+                const response = await api.get('/figures/favorites')
+                console.log('Favorites loaded:', response.data)
+                return response.data
             } catch (error) {
-              console.error("Error fetching favorites:", error)
-              throw error
+                console.error('Error fetching favorites:', error)
+                throw error
             } finally {
-              this.loading = false
+                this.loading = false
             }
-          },
-          async getMyFigures() {
-            console.log("Getting user figures")
+        },
+        async getMyFigures() {
+            console.log('Getting user figures')
             this.loading = true
             try {
-              const response = await api.get("/figures/my-figures")
-              console.log("My figures loaded:", response.data)
-              return response.data.figures
+                const response = await api.get('/figures/my-figures')
+                console.log('My figures loaded:', response.data)
+                return response.data.figures
             } catch (error) {
-              console.error("Error fetching my figures:", error)
-              throw error
+                console.error('Error fetching my figures:', error)
+                throw error
             } finally {
-              this.loading = false
+                this.loading = false
             }
-          },
+        },
         async getFigures(page = 1, filters = {}) {
             this.loading = true
             try {
