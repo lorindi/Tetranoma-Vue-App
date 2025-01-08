@@ -2,7 +2,6 @@
 import { ref } from "vue"
 import Title from "@/components/common/Title.vue"
 
-console.log("AboutView component mounted")
 
 const features = ref([
   {
