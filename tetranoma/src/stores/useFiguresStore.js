@@ -163,5 +163,16 @@ export const useFiguresStore = defineStore('figures', {
             this.filters = { ...this.filters, ...newFilters }
             this.getFigures(1, this.filters)
         },
+        async deleteFigure(figureId) {
+            console.log("Deleting figure:", figureId)
+            try {
+                await api.delete(`/figures/delete/${figureId}`)
+                this.figures = this.figures.filter(figure => figure._id !== figureId)
+                return true
+            } catch (error) {
+                console.error("Error deleting figure:", error)
+                throw error
+            }
+        }
     },
 })
