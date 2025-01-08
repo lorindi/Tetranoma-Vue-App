@@ -233,7 +233,7 @@ const handleDeleteProfile = async () => {
                     <!-- Delete Profile Button -->
                     <div class="border-t pt-6 mt-6">
                         <button @click="handleDeleteProfile"
-                            class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
+                            class="px-4 py-2 bg-[#00BD7E] text-white rounded-lg hover:bg-[#00a06a]">
                             <i class="pi pi-trash mr-2"></i>
                             Delete Profile
                         </button>
