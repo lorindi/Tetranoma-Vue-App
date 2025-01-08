@@ -84,14 +84,22 @@ defineEmits(["toggleFavorite", "deleteFigure", "updateQuantity", "addToCart"])
     </div>
 
     <div class="flex items-center gap-4 mt-4">
-      <input type="number" v-model="quantity" min="1" :max="figure.stock"
-        class="w-20 p-2 border rounded dark:bg-gray-800" @input="$emit('updateQuantity', $event.target.value)" />
-      <button @click="$emit('addToCart')"
-        class="px-4 py-2 bg-[#00BD7E] text-white rounded-lg hover:bg-[#00a06a] transition-colors"
-        :disabled="cartStore.loading">
-        <i class="pi pi-shopping-cart mr-2"></i>
-        Add to Cart
-      </button>
-    </div>
+    <input 
+      type="number" 
+      :value="quantity"
+      min="1" 
+      :max="figure.stock"
+      class="w-20 p-2 border rounded dark:bg-gray-800" 
+      @input="$emit('updateQuantity', $event.target.value)" 
+    />
+    <button 
+      @click="$emit('addToCart')"
+      class="px-4 py-2 bg-[#00BD7E] text-white rounded-lg hover:bg-[#00a06a] transition-colors"
+      :disabled="cartStore.loading"
+    >
+      <i class="pi pi-shopping-cart mr-2"></i>
+      Add to Cart
+    </button>
+  </div>
   </div>
 </template>
