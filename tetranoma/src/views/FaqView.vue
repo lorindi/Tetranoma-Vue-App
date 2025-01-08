@@ -2,7 +2,6 @@
 import { ref } from "vue"
 import Title from "@/components/common/Title.vue"
 
-console.log("FaqView component mounted")
 
 const categories = ref([
   {
@@ -77,7 +76,6 @@ const categories = ref([
 ])
 
 const toggleQuestion = (categoryIndex, questionIndex) => {
-  console.log("Toggling question:", categoryIndex, questionIndex)
   categories.value[categoryIndex].questions[questionIndex].isOpen = 
     !categories.value[categoryIndex].questions[questionIndex].isOpen
 }
