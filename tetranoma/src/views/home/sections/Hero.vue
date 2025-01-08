@@ -19,10 +19,10 @@ import HomeCover from '/img/homeCover.jpg'
                 xl:items-start
                 2xl:items-start
             ">
-                <h1 class="text-3xl tracking-wide text-center
-                lg:text-5xl lg:text-start
-                xl:text-5xl xl:text-start
-                2xl:text-5xl 2xl:text-start
+                <h1 class="text-2xl tracking-wide text-center font-bold text-gray-800 dark:text-gray-300
+                lg:text-3xl lg:text-start
+                xl:text-3xl xl:text-start
+                2xl:text-4xl 2xl:text-start
                 ">Discover the World of 3D Printing</h1>
                 <p class="text-base text-gray-700 tracking-wide w-[95%] text-start dark:text-gray-400
                 md:text-lg
