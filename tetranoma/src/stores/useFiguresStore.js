@@ -29,7 +29,6 @@ export const useFiguresStore = defineStore('figures', {
             this.loading = true
             try {
                 const response = await api.post('/figures/create', figureData)
-                console.log('Figure created successfully:', response.data)
                 return response.data
             } catch (error) {
                 console.error('Error creating figure:', error)
@@ -39,14 +38,12 @@ export const useFiguresStore = defineStore('figures', {
             }
         },
         async updateFigure(id, figureData) {
-            console.log('Updating figure:', id, figureData)
             this.loading = true
             try {
                 const response = await api.put(
                     `/figures/update/${id}`,
                     figureData,
                 )
-                console.log('Figure updated successfully:', response.data)
                 return response.data
             } catch (error) {
                 console.error('Error updating figure:', error)
@@ -60,7 +57,6 @@ export const useFiguresStore = defineStore('figures', {
             this.loading = true
             try {
                 const response = await api.get(`/figures/${id}`)
-                console.log('Figure details received:', response.data)
                 return response.data
             } catch (error) {
                 console.error('Error fetching figure details:', error)
@@ -72,11 +68,9 @@ export const useFiguresStore = defineStore('figures', {
             }
         },
         async getFavorites() {
-            console.log('Getting user favorites')
             this.loading = true
             try {
                 const response = await api.get('/figures/favorites')
-                console.log('Favorites loaded:', response.data)
                 return response.data
             } catch (error) {
                 console.error('Error fetching favorites:', error)
@@ -86,11 +80,9 @@ export const useFiguresStore = defineStore('figures', {
             }
         },
         async getMyFigures() {
-            console.log('Getting user figures')
             this.loading = true
             try {
                 const response = await api.get('/figures/my-figures')
-                console.log('My figures loaded:', response.data)
                 return response.data.figures
             } catch (error) {
                 console.error('Error fetching my figures:', error)
@@ -164,7 +156,6 @@ export const useFiguresStore = defineStore('figures', {
             this.getFigures(1, this.filters)
         },
         async deleteFigure(figureId) {
-            console.log("Deleting figure:", figureId)
             try {
                 await api.delete(`/figures/delete/${figureId}`)
                 this.figures = this.figures.filter(figure => figure._id !== figureId)
