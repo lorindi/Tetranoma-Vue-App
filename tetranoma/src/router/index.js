@@ -13,6 +13,7 @@ import FaqView from '@/views/FaqView.vue'
 import FigureDetailsView from '@/views/FigureDetailsView.vue'
 import CheckoutView from '@/views/CheckoutView.vue'
 import ProfileView from '@/views/ProfileView.vue'
+import UpdateFigureView from '@/views/UpdateFigureView.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -54,6 +55,12 @@ const router = createRouter({
             name: 'add-figure',
             component: AddFigureView,
             meta: { requiresAuth: true },
+        },
+        {
+            path: "/update-figure/:id",
+            name: "update-figure",
+            component: UpdateFigureView,
+            meta: { requiresAuth: true }
         },
         {
             path: '/about',
