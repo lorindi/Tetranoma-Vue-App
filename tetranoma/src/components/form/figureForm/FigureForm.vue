@@ -35,7 +35,6 @@ const categories = [
 ]
 const imageUrls = ref("")
 
-console.log("Initial form data:", props.initialData)
 
 const schema = yup.object({
   title: yup.string().required("Title is required").min(1, "Title must be at least 1 character"),
@@ -68,14 +67,12 @@ const { value: stock, errorMessage: stockError, handleBlur: stockBlur } = useFie
 const { value: images, errorMessage: imagesError, handleBlur: imagesBlur } = useField("images")
 
 onMounted(() => {
-  console.log("Form mounted with data:", props.initialData)
   if (props.initialData.images?.length) {
     imageUrls.value = props.initialData.images.join(", ")
   }
 })
 
 const onSubmit = handleSubmit((values) => {
-  console.log("Form submitted with values:", values)
   const formData = {
     title: values.title,
     description: values.description,
@@ -84,7 +81,6 @@ const onSubmit = handleSubmit((values) => {
     stock: Number(values.stock),
     images: values.images.split(",").map(url => url.trim()).filter(url => url)
   }
-  console.log("Processed form data:", formData)
   emit("submit", formData)
 })
 
