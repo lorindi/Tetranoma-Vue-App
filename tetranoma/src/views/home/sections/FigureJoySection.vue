@@ -16,7 +16,7 @@ import homeCover from '/img/3dPrintingCover.jpg'
         <!-- Right section - content -->
         <div class="flex flex-col flex-1 lg:text-left lg:gap-[15px] lg:text-xl lg:px-[15px]">
 
-            <h2 class="font-semibold text-lg text-center text-[#00BD7E] lg:text-4xl mb-[20px]">Why 3D Figures Are Perfect
+            <h2 class="font-semibold text-lg text-center text-gray-800 lg:text-4xl mb-[20px] dark:text-gray-300">Why 3D Figures Are Perfect
                 for Your Home</h2>
             <p class="text-gray-800 dark:text-gray-400">
                 3D figures add personality and charm to any room. Whether it`s a favorite character or a custom-made
