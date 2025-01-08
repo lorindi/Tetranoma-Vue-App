@@ -32,10 +32,10 @@ import HomeCover from '/img/homeCover.jpg'
                 "> Discover a world of 3D printed figures, from ready-made designs to fully custom creations. Whether
                     you're looking for unique models or want to bring your own ideas to life, we've got you covered.</p>
             </div>
-            <!-- <Search type="default" /> -->
+       
             <RouterLink to="/"
-                class="relative inline-block p-[2px] rounded-lg bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:from-[#00AEDD] hover:to-[#00BD7E]">
-                <span class="block bg-[#FAFAFA] text-gray-800 font-bold py-3 px-4 rounded-lg text-base dark:bg-gray-800 dark:text-white">
+                class="relative inline-block p-[3px] rounded-[10px] bg-gradient-to-r bg-[#00BD7E] hover:from-[#00AEDD] hover:to-[#00BD7E]">
+                <span class="block bg-[#FAFAFA] text-gray-800 font-bold py-3 px-4 rounded-[8px] text-base dark:bg-gray-800 dark:text-white">
                     View 3D Figures
                 </span>
             </RouterLink>
