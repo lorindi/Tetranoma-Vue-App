@@ -43,12 +43,21 @@ const schema = yup.object({
   category: yup.string().required("Category is required").oneOf(categories, "Invalid category"),
   price: yup.number().required("Price is required").positive("Price must be positive"),
   stock: yup.number().required("Stock is required").min(0, "Stock cannot be negative"),
-  images: yup.array().min(1, "At least one image is required")
+  images: yup.string()
+    .required("At least one image URL is required")
+    .test("urls", "Invalid URL format", function (value) {
+      if (!value) return false
+      const urls = value.split(",").map(url => url.trim())
+      return urls.every(url => url.match(/^(http|https):\/\/[^ "]+$/))
+    })
 })
 
 const { handleSubmit } = useForm({
   validationSchema: schema,
-  initialValues: props.initialData
+  initialValues: {
+    ...props.initialData,
+    images: props.initialData.images?.join(", ") || ""
+  }
 })
 
 const { value: title, errorMessage: titleError, handleBlur: titleBlur } = useField("title")
@@ -68,13 +77,14 @@ onMounted(() => {
 const onSubmit = handleSubmit((values) => {
   console.log("Form submitted with values:", values)
   const formData = {
-    title: title.value,
-    description: description.value,
-    category: category.value,
-    price: Number(price.value),
-    stock: Number(stock.value),
-    images: imageUrls.value.split(",").map(url => url.trim())
+    title: values.title,
+    description: values.description,
+    category: values.category,
+    price: Number(values.price),
+    stock: Number(values.stock),
+    images: values.images.split(",").map(url => url.trim()).filter(url => url)
   }
+  console.log("Processed form data:", formData)
   emit("submit", formData)
 })
 
@@ -105,8 +115,8 @@ const formMotion = useMotion(formRef, {
         @blur="priceBlur" required />
       <FormField v-model="stock" label="Stock" type="number" icon="box" placeholder="Enter stock" :error="stockError"
         @blur="stockBlur" required />
-      <FormField v-model="imageUrls" label="Images" type="text" icon="images" placeholder="Enter image URLs"
-        :error="imagesError" @blur="imagesBlur" required />
+      <FormField v-model="images" label="Images" type="text" icon="images"
+        placeholder="Enter image URLs (comma-separated)" :error="imagesError" @blur="imagesBlur" required />
     </FormGridContainer>
 
     <div>
