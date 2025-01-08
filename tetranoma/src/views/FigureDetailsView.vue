@@ -132,6 +132,8 @@ onMounted(async () => {
         isLoading.value = false
     }
 })
+
+
 </script>
 
 <template>
@@ -210,6 +212,11 @@ onMounted(async () => {
                         <h1 class="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white">
                             {{ figure.title }}
                         </h1>
+                        <button v-if="currentUserId === figure.userId" @click="router.push(`/update-figure/${figure._id}`)"
+                            class="px-2 pt-2 pb-1 rounded-full bg-white/80 dark:bg-gray-700/80 hover:bg-white dark:hover:bg-gray-700 transition-colors shadow-md"
+                            title="Edit Figure">
+                            <i class="pi pi-pencil text-[#00BD7E] text-xl"></i>
+                        </button>
                         <button @click="handleToggleFavorite"
                             class="px-2 pt-2 pb-1 rounded-full bg-white/80 dark:bg-gray-700/80 hover:bg-white dark:hover:bg-gray-700 transition-colors shadow-md">
                             <i :class="[
@@ -219,7 +226,7 @@ onMounted(async () => {
                             ]"></i>
                         </button>
                     </div>
-                
+
                     <!-- Rating -->
                     <div class="flex items-center space-x-2">
                         <span class="text-[#00BD7E] text-xl">★</span>
