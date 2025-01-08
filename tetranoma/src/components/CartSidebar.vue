@@ -99,7 +99,7 @@ defineExpose({ toggleCart })
                   {{ (item?.price || 0) * (item?.quantity || 0) }} BGN
                 </p>
               </div>
-              <button @click="removeFromCart(item._id)" class="self-start p-1 text-red-500 hover:text-red-700">
+              <button @click="removeFromCart(item._id)" class="self-start p-1 text-[#00BD7E] hover:text-[#00a06a]">
                 <i class="pi pi-trash"></i>
               </button>
             </div>
