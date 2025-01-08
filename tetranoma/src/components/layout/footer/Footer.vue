@@ -14,7 +14,8 @@ const excludedPaths = [
     "/sign-in",
     "/sign-up",
     "/create-account",
-    "/search-figure"
+    "/search-figure",
+    "/profile"
 ]
 
 const showFooter = computed(() => {
