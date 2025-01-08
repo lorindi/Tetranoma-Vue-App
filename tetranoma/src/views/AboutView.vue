@@ -28,7 +28,7 @@ const features = ref([
 </script>
 
 <template>
-  <div class="flex flex-col items-center w-full max-w-[1336px] min-h-screen p-4 md:p-8">
+  <div class="flex flex-col items-center justify-center w-full max-w-[1336px] min-h-screen p-4 md:p-8">
     <Title title="Discover Our Story" />
 
     <div class="w-full max-w-4xl space-y-8 mt-8">
