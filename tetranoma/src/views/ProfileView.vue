@@ -7,7 +7,6 @@ import FiguresList from "@/components/lists/FiguresList.vue"
 import { useToast } from "vue-toastification"
 import { useRouter } from "vue-router"
 
-console.log("ProfileView component mounted")
 
 const router = useRouter()
 const toast = useToast()
@@ -33,7 +32,6 @@ const tabs = [
 ]
 
 onMounted(async () => {
-    console.log("Fetching user data")
     try {
         // Load profile information
         const profileResponse = await authStore.getProfile()
