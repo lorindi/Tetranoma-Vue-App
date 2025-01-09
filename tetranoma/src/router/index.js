@@ -14,6 +14,11 @@ import FigureDetailsView from '@/views/SingleView/FigureDetailsView.vue'
 import CheckoutView from '@/views/CheckoutView.vue'
 import ProfileView from '@/views/ProfileView.vue'
 import UpdateFigureView from '@/views/UpdateFigureView.vue'
+import AdminLayout from '@/components/admin/AdminLayout.vue'
+import AdminDashboard from '@/components/admin/AdminDashboard.vue'
+import AdminUsers from '@/components/admin/AdminUsers.vue'
+import AdminFigures from '@/components/admin/AdminFigures.vue'
+import AdminOrders from '@/components/admin/AdminOrders.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -41,8 +46,8 @@ const router = createRouter({
             component: FiguresView,
         },
         {
-            path: "/figures/:id",
-            name: "figure-details",
+            path: '/figures/:id',
+            name: 'figure-details',
             component: FigureDetailsView,
         },
         {
@@ -57,10 +62,10 @@ const router = createRouter({
             meta: { requiresAuth: true },
         },
         {
-            path: "/update-figure/:id",
-            name: "update-figure",
+            path: '/update-figure/:id',
+            name: 'update-figure',
             component: UpdateFigureView,
-            meta: { requiresAuth: true }
+            meta: { requiresAuth: true },
         },
         {
             path: '/about',
@@ -81,31 +86,61 @@ const router = createRouter({
             path: '/checkout',
             name: 'checkout',
             component: CheckoutView,
-            meta: { requiresAuth: true }
+            meta: { requiresAuth: true },
         },
         {
-            path: "/profile",
-            name: "profile",
+            path: '/profile',
+            name: 'profile',
             component: ProfileView,
-            meta: { requiresAuth: true }
-          }
+            meta: { requiresAuth: true },
+        },
+        {
+            path: '/admin',
+            component: AdminLayout
+            ,
+            meta: { requiresAuth: true, requiresAdmin: true },
+            children: [
+                {
+                    path: '',
+                    name: 'admin-dashboard',
+                    component: AdminDashboard,
+                },
+                {
+                    path: 'users',
+                    name: 'admin-users',
+                    component: AdminUsers,
+                },
+                {
+                    path: 'orders',
+                    name: 'admin-orders',
+                    component: AdminOrders,
+                },
+                {
+                    path: 'figures',
+                    name: 'admin-figures',
+                    component: AdminFigures,
+                },
+            ],
+        },
     ],
 })
 
 router.beforeEach(async (to, from, next) => {
     const authStore = useAuthStore()
     const isAuthenticated = await authStore.checkAuth()
+    const isAdmin = authStore.user?.role === 'admin'
+
+    if (to.meta.requiresAdmin && !isAdmin) {
+        console.log('Access denied: Admin rights required')
+        next({ name: 'home' })
+        return
+    }
 
     if (to.meta.requiresAuth && !isAuthenticated) {
         next({ name: 'sign-in' })
         return
     }
 
-    if (to.meta.requiresGuest && isAuthenticated) {
-        next({ name: 'home' })
-        return
-    }
     next()
 })
-
 export default router
