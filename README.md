@@ -3,6 +3,8 @@
 ## Overview
 Tetranoma is a modern e-commerce platform specialized in 3D printed figures, built with Vue.js 3 and Tailwind CSS. The platform offers a comprehensive solution for buying, selling, and managing 3D printed figures.
 
+Live Demo: [https://tetranoma.vercel.app/](https://tetranoma.vercel.app/)
+
 ## Features
 
 ### User Features
