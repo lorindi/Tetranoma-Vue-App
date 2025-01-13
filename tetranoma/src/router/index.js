@@ -15,9 +15,9 @@ import CheckoutView from '@/views/CheckoutView.vue'
 import ProfileView from '@/views/ProfileView.vue'
 import UpdateFigureView from '@/views/UpdateFigureView.vue'
 import AdminLayout from '@/components/admin/AdminLayout.vue'
-import AdminDashboard from '@/components/admin/AdminDashboard.vue'
+import AdminDashboard from '@/components/admin/dashboard/AdminDashboard.vue'
 import AdminUsers from '@/components/admin/AdminUsers.vue'
-import AdminFigures from '@/components/admin/AdminFigures.vue'
+import AdminFigures from '@/components/admin/AdminFigures.vue' 
 import AdminOrders from '@/components/admin/AdminOrders.vue'
 
 const router = createRouter({
