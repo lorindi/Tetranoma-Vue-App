@@ -25,6 +25,7 @@
     "primeicons": "^7.0.0",
     "primevue": "^4.2.5",
     "swiper": "^11.1.14",
+    "tailwind-scrollbar": "^3.1.0",
     "vee-validate": "^4.14.7",
     "vue": "^3.5.12",
     "vue-chartjs": "^5.3.2",
