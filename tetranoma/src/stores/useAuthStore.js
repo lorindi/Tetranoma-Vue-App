@@ -58,6 +58,7 @@ export const useAuthStore = defineStore("auth", {
 
     async signOut() {
       try {
+        await api.post("/auth/logout")
         this.clearAuth()
       } catch (error) {
         console.error("Sign out error:", error)
