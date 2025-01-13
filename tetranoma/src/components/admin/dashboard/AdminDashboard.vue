@@ -1,6 +1,8 @@
 <script setup>
 import { ref, onMounted, computed } from "vue"
 import { useAdminStore } from "@/stores/useAdminStore"
+import StatCard from "./stats/StatCard.vue"
+import ChartCard from "./charts/ChartCard.vue"
 import { Line, Pie, Bar } from "vue-chartjs"
 import {
   Chart as ChartJS,
@@ -12,7 +14,8 @@ import {
   Tooltip,
   Legend,
   ArcElement,
-  BarElement
+  BarElement,
+  Filler
 } from "chart.js"
 
 ChartJS.register(
@@ -24,11 +27,11 @@ ChartJS.register(
   Tooltip,
   Legend,
   ArcElement,
-  BarElement
+  BarElement,
+  Filler
 )
 
 const adminStore = useAdminStore()
-console.log("Initializing AdminDashboard")
 
 // Statistics
 const stats = ref({
@@ -37,6 +40,52 @@ const stats = ref({
   totalOrders: 0,
   revenue: 0
 })
+
+// Computed values
+const statCards = computed(() => [
+  {
+    title: "Total Users",
+    value: stats.value.totalUsers,
+    icon: "pi-users"
+  },
+  {
+    title: "Total Figures",
+    value: stats.value.totalFigures,
+    icon: "pi-box"
+  },
+  {
+    title: "Total Orders",
+    value: stats.value.totalOrders,
+    icon: "pi-shopping-cart"
+  },
+  {
+    title: "Total Revenue",
+    value: `${stats.value.revenue?.[0]?.total?.toFixed(2) || 0} BGN`,
+    icon: "pi-money-bill"
+  }
+])
+
+const chartConfigs = computed(() => ({
+  revenue: {
+    title: "Monthly Revenue",
+    component: Line,
+    data: revenueData.value,
+    options: lineOptions,
+    colspan: "col-span-2"
+  },
+  orders: {
+    title: "Orders by Status",
+    component: Pie,
+    data: ordersByStatusData.value,
+    options: pieOptions
+  },
+  users: {
+    title: "Top Users by Orders",
+    component: Bar,
+    data: userActivityData.value,
+    options: barOptions
+  }
+}))
 
 // Chart data
 const ordersByStatusData = computed(() => ({
@@ -72,7 +121,7 @@ const revenueData = computed(() => ({
 const userActivityData = computed(() => ({
   labels: adminStore.users.slice(0, 5).map(u => u.name),
   datasets: [{
-    label: "Orders",
+    label: "Orders Count",
     data: adminStore.users.slice(0, 5).map(u => u.activity?.ordersCount || 0),
     backgroundColor: "#00BD7E"
   }]
@@ -81,14 +130,14 @@ const userActivityData = computed(() => ({
 // Helper functions
 const calculateMonthlyRevenue = () => {
   const monthlyRevenue = new Array(12).fill(0)
-  
+
   adminStore.orders.forEach(order => {
     if (order.status === "paid") {
       const month = new Date(order.createdAt).getMonth()
       monthlyRevenue[month] += order.totalPrice
     }
   })
-  
+
   return monthlyRevenue
 }
 
@@ -119,14 +168,13 @@ const barOptions = {
 }
 
 onMounted(async () => {
-  console.log("Loading dashboard data")
   try {
     await Promise.all([
       adminStore.getDashboardStats(),
       adminStore.getAllOrders(),
       adminStore.getAllUsersWithActivity()
     ])
-    
+
     stats.value = adminStore.stats
   } catch (error) {
     console.error("Error loading dashboard data:", error)
@@ -138,72 +186,13 @@ onMounted(async () => {
   <div class="p-6 space-y-6">
     <!-- Statistics -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-gray-500 dark:text-gray-400">Total Users</p>
-            <h3 class="text-2xl font-bold">{{ stats.totalUsers }}</h3>
-          </div>
-          <i class="pi pi-users text-3xl text-[#00BD7E]"></i>
-        </div>
-      </div>
-
-      <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-gray-500 dark:text-gray-400">Total Figures</p>
-            <h3 class="text-2xl font-bold">{{ stats.totalFigures }}</h3>
-          </div>
-          <i class="pi pi-box text-3xl text-[#00BD7E]"></i>
-        </div>
-      </div>
-
-      <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-gray-500 dark:text-gray-400">Total Orders</p>
-            <h3 class="text-2xl font-bold">{{ stats.totalOrders }}</h3>
-          </div>
-          <i class="pi pi-shopping-cart text-3xl text-[#00BD7E]"></i>
-        </div>
-      </div>
-
-      <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-gray-500 dark:text-gray-400">Total Revenue</p>
-            <h3 class="text-2xl font-bold">{{ stats.revenue?.[0]?.total?.toFixed(2) || 0 }} BGN</h3>
-          </div>
-          <i class="pi pi-money-bill text-3xl text-[#00BD7E]"></i>
-        </div>
-      </div>
+      <StatCard v-for="card in statCards" :key="card.title" v-bind="card" />
     </div>
 
     <!-- Charts -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <!-- Monthly Revenue -->
-      <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
-        <h3 class="text-xl font-semibold mb-4">Monthly Revenue</h3>
-        <div class="h-[300px]">
-          <Line :data="revenueData" :options="lineOptions" />
-        </div>
-      </div>
-
-      <!-- Orders by Status -->
-      <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
-        <h3 class="text-xl font-semibold mb-4">Orders by Status</h3>
-        <div class="h-[300px]">
-          <Pie :data="ordersByStatusData" :options="pieOptions" />
-        </div>
-      </div>
-
-      <!-- Top Users by Activity -->
-      <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg col-span-1 lg:col-span-2">
-        <h3 class="text-xl font-semibold mb-4">Top Users by Orders</h3>
-        <div class="h-[300px]">
-          <Bar :data="userActivityData" :options="barOptions" />
-        </div>
-      </div>
+      <ChartCard v-for="(config, key) in chartConfigs" :key="key" :title="config.title"
+        :chart-component="config.component" :data="config.data" :options="config.options" :colspan="config.colspan" />
     </div>
   </div>
 </template>
