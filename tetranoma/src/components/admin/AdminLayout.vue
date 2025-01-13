@@ -40,7 +40,6 @@ const navigation = ref([
 ])
 
 const handleLogout = async () => {
-  console.log("Handling admin logout")
   try {
     await authStore.signOut()
     toast.success("Successfully logged out")
