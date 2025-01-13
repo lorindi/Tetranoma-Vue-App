@@ -22,7 +22,6 @@ defineProps({
   }
 })
 
-console.log("Initializing ChartCard component")
 </script>
 
 <template>
