@@ -71,6 +71,7 @@ const handleSaveProfile = async () => {
 const handleLogout = async () => {
     try {
         await authStore.signOut()
+        toast.success("Successfully logged out")
         router.push("/sign-in")
     } catch (error) {
         console.error("Error logging out:", error)
