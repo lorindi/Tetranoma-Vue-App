@@ -14,7 +14,6 @@ defineProps({
   }
 })
 
-console.log("Initializing StatCard component")
 </script>
 
 <template>
