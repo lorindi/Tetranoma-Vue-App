@@ -71,7 +71,6 @@ const chartConfigs = computed(() => ({
     component: Line,
     data: revenueData.value,
     options: lineOptions,
-    colspan: "col-span-2"
   },
   orders: {
     title: "Orders by Status",
@@ -83,7 +82,9 @@ const chartConfigs = computed(() => ({
     title: "Top Users by Orders",
     component: Bar,
     data: userActivityData.value,
-    options: barOptions
+    options: barOptions,
+    colspan: "col-span-2"
+
   }
 }))
 
@@ -183,14 +184,14 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="p-6 space-y-6">
+  <div class="flex flex-col space-y-6 w-full">
     <!-- Statistics -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
       <StatCard v-for="card in statCards" :key="card.title" v-bind="card" />
     </div>
 
     <!-- Charts -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="grid grid-cols-2 lg:grid-cols-2 gap-6">
       <ChartCard v-for="(config, key) in chartConfigs" :key="key" :title="config.title"
         :chart-component="config.component" :data="config.data" :options="config.options" :colspan="config.colspan" />
     </div>
