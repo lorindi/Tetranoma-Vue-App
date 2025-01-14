@@ -6,7 +6,6 @@ import { useToast } from "vue-toastification"
 const adminStore = useAdminStore()
 const toast = useToast()
 
-console.log("Initializing AdminUsers component")
 
 // State
 const filters = ref({
@@ -26,7 +25,6 @@ const newUser = ref({
 
 // Computed
 const filteredUsers = computed(() => {
-  console.log("Filtering users")
   return adminStore.users
 })
 
@@ -37,7 +35,6 @@ const roleOptions = [
 
 // Methods
 const handleSearch = async () => {
-  console.log("Searching users with filters:", filters.value)
   try {
     await adminStore.getAllUsersWithActivity(filters.value)
   } catch (error) {
@@ -46,7 +43,6 @@ const handleSearch = async () => {
 }
 
 const handleCreateUser = async () => {
-  console.log("Creating new user")
   try {
     await adminStore.createUser(newUser.value)
     showCreateModal.value = false
@@ -58,13 +54,11 @@ const handleCreateUser = async () => {
 }
 
 const handleEditUser = (user) => {
-  console.log("Opening edit modal for user:", user.email)
   selectedUser.value = { ...user }
   showEditModal.value = true
 }
 
 const handleUpdateUser = async () => {
-  console.log("Updating user:", selectedUser.value.email)
   try {
     await adminStore.updateUser(selectedUser.value._id, selectedUser.value)
     showEditModal.value = false
@@ -75,7 +69,6 @@ const handleUpdateUser = async () => {
 }
 
 const handleDeleteUser = async (userId) => {
-  console.log("Deleting user:", userId)
   if (confirm("Are you sure you want to delete this user?")) {
     try {
       await adminStore.deleteUser(userId)
@@ -87,7 +80,6 @@ const handleDeleteUser = async (userId) => {
 }
 
 const handleRoleChange = async (userId, newRole) => {
-  console.log("Changing user role:", { userId, newRole })
   try {
     await adminStore.updateUserRole(userId, newRole)
   } catch (error) {
@@ -96,7 +88,6 @@ const handleRoleChange = async (userId, newRole) => {
 }
 
 onMounted(async () => {
-  console.log("Loading users data")
   try {
     await adminStore.getAllUsersWithActivity()
   } catch (error) {
