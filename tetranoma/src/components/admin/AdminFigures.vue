@@ -141,9 +141,9 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="p-6 space-y-6">
+  <div class="space-y-6">
     <!-- Filters -->
-    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+    <div class="bg-white dark:bg-gray-800 p-2 md:p-6 rounded-xl shadow-lg">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div>
           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -186,18 +186,19 @@ onMounted(async () => {
 
       <div class="mt-4 flex justify-between">
         <button @click="showCreateModal = true"
-                class="px-4 py-2 bg-[#00BD7E] text-white rounded-lg hover:bg-[#00a06a]">
+                class="px-4 py-2 bg-[#00BD7E] text-sm md:text-base text-white rounded-lg hover:bg-[#00a06a]">
           <i class="pi pi-plus mr-2"></i>
           New Figure
         </button>
         
         <div class="flex gap-4">
           <button @click="filters = {category: '', search: '', minPrice: '', maxPrice: ''}"
-                  class="px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
+                  class="px-4 py-2 text-sm md:text-base text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
             Clear Filters
           </button>
+          
           <button @click="handleSearch"
-                  class="px-4 py-2 bg-[#00BD7E] text-white rounded-lg hover:bg-[#00a06a]">
+                  class="px-4 py-2 bg-[#00BD7E] text-sm md:text-base text-white rounded-lg hover:bg-[#00a06a]">
             Apply Filters
           </button>
         </div>
