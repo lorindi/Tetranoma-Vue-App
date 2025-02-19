@@ -60,20 +60,20 @@ const onSubmit = handleSubmit(async (values) => {
                 <div class="mb-4">
                     <label for="name" class="block text-gray-700 font-medium mb-2 dark:text-white">Name</label>
                     <input type="name" id="name" placeholder="Enter your name" v-model="name" @blur="nameBlur"
-                        class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#42BB8B] focus:border-transparent dark:bg-gray-800 dark:text-white dark:border-gray-600" />
+                        class="w-full p-2 border bg-[#FAFAFA] border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#42BB8B] focus:border-transparent dark:bg-gray-800 dark:text-white dark:border-gray-600" />
                     <span v-if="nameError" class="text-red-500 text-sm mt-1">{{ nameError }}</span>
                 </div>
                 <div class="mb-4">
                     <label for="email" class="block text-gray-700 font-medium mb-2 dark:text-white">Email</label>
                     <input type="email" id="email" placeholder="Enter your email" v-model="email" @blur="emailBlur"
-                        class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#42BB8B] focus:border-transparent dark:bg-gray-800 dark:text-white dark:border-gray-600" />
+                        class="w-full p-2 border bg-[#FAFAFA] border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#42BB8B] focus:border-transparent dark:bg-gray-800 dark:text-white dark:border-gray-600" />
                     <span v-if="emailError" class="text-red-500 text-sm mt-1">{{ emailError }}</span>
                 </div>
                 <div class="mb-6">
                     <label for="password" class="block text-gray-700 font-medium mb-2 dark:text-white">Password</label>
                     <input type="password" id="password" placeholder="Enter your password" v-model="password"
                         @blur="passwordBlur"
-                        class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#42BB8B] focus:border-transparent dark:bg-gray-800 dark:text-white dark:border-gray-600" />
+                        class="w-full p-2 border bg-[#FAFAFA] border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#42BB8B] focus:border-transparent dark:bg-gray-800 dark:text-white dark:border-gray-600" />
                     <span v-if="passwordError" class="text-red-500 text-sm mt-1">{{ passwordError }}</span>
                 </div>
                 <div class="mb-6">
@@ -81,7 +81,7 @@ const onSubmit = handleSubmit(async (values) => {
                         Password</label>
                     <input type="password" id="repeatPassword" placeholder="Enter your password" v-model="repeatPassword"
                         @blur="repeatPasswordBlur"
-                        class="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#42BB8B] focus:border-transparent dark:bg-gray-800 dark:text-white dark:border-gray-600" />
+                        class="w-full p-2 border bg-[#FAFAFA] border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#42BB8B] focus:border-transparent dark:bg-gray-800 dark:text-white dark:border-gray-600" />
                     <span v-if="repeatPasswordError" class="text-red-500 text-sm mt-1">{{ repeatPasswordError }}</span>
                 </div>
                 <button type="submit"
