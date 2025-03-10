@@ -6,6 +6,24 @@ const props = defineProps({
     type: String,
     default: "default",
     validator: (value) => ["primary", "transparent"].includes(value)
+  },
+  size: {
+    type: String,
+    default: "base",
+    validator: (value) => ["small", "medium", "large"].includes(value)
+  }
+});
+
+const sizeText = computed(() => {
+  switch (props.size) {
+    case "small":
+      return "text-sm md:text-base lg:text-md xl:text-lg 2xl:text-xl";
+    case "medium":
+      return "text-base md:text-md lg:text-lg xl:text-xl 2xl:text-2xl";
+    case "large":
+      return "text-md md:text-lg lg:text-xl xl:text-2xl 2xl:text-2xl";
+    default:
+      return "text-base md:text-base lg:text-md xl:text-lg 2xl:text-xl";
   }
 });
 
@@ -24,5 +42,7 @@ const colorText = computed(() => {
 </script>
 
 <template>
-<p class="text-base lg:text-lg " :class="[colorText]"><slot></slot></p>
+  <p class="font-medium tracking-wide text-center lg:text-left w-full max-w-[600px]" :class="[colorText, sizeText]">
+    <slot></slot>
+  </p>
 </template>

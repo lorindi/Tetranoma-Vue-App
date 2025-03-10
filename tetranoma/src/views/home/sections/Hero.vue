@@ -1,6 +1,7 @@
 <script setup>
 import { RouterLink } from 'vue-router';
 import HomeCover from '/img/homeCover.jpg'
+import Paragraph from '@/components/ui/Paragraph.vue';
 </script>
 
 <template>
@@ -24,13 +25,11 @@ import HomeCover from '/img/homeCover.jpg'
                 xl:text-3xl xl:text-start
                 2xl:text-4xl 2xl:text-start
                 ">Discover the World of 3D Printing</h1>
-                <p class="text-base text-gray-700 tracking-wide w-[95%] text-start dark:text-gray-400
-                md:text-lg
-                lg:text-2xl lg:text-start
-                xl:text-2xl xl:text-start
-                2xl:text-2xl 2xl:text-start
-                "> Discover a world of 3D printed figures, from ready-made designs to fully custom creations. Whether
-                    you're looking for unique models or want to bring your own ideas to life, we've got you covered.</p>
+      
+                <Paragraph color="transparent" size="large">
+                    Discover a world of 3D printed figures, from ready-made designs to fully custom creations. Whether
+                    you're looking for unique models or want to bring your own ideas to life, we've got you covered.
+                </Paragraph>
             </div>
        
             <RouterLink to="/figures"
