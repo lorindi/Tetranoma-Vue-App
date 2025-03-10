@@ -4,12 +4,12 @@ const props = defineProps({
 
   color: {
     type: String,
-    default: "default",
+    default: "primary",
     validator: (value) => ["primary", "transparent"].includes(value)
   },
   size: {
     type: String,
-    default: "base",
+    default: "small",
     validator: (value) => ["small", "medium", "large"].includes(value)
   },
   customClass: {

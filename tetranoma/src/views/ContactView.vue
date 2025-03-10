@@ -5,6 +5,7 @@ import * as yup from "yup"
 import emailjs from "@emailjs/browser"
 import { useToast } from "vue-toastification"
 import Title from "@/components/common/Title.vue"
+import Paragraph from "@/components/ui/Paragraph.vue"
 
 
 const toast = useToast()
@@ -71,7 +72,7 @@ const onSubmit = handleSubmit(async (values) => {
             </div>
             <div>
               <h3 class="font-semibold">Address</h3>
-              <p class="text-gray-600 dark:text-gray-400">123 3D Print Street, Sofia, Bulgaria</p>
+              <Paragraph color="transparent" align="left" size="small">123 3D Print Street, Sofia, Bulgaria</Paragraph>
             </div>
           </div>
 
@@ -81,7 +82,7 @@ const onSubmit = handleSubmit(async (values) => {
             </div>
             <div>
               <h3 class="font-semibold">Phone</h3>
-              <p class="text-gray-600 dark:text-gray-400">+359 888 123 456</p>
+              <Paragraph color="transparent" align="left" size="small">+359 888 123 456</Paragraph>
             </div>
           </div>
 
@@ -91,7 +92,7 @@ const onSubmit = handleSubmit(async (values) => {
             </div>
             <div>
               <h3 class="font-semibold">Email</h3>
-              <p class="text-gray-600 dark:text-gray-400">contact@tetranoma.com</p>
+              <Paragraph color="transparent" align="left" size="small">contact@tetranoma.com</Paragraph>
             </div>
           </div>
         </div>

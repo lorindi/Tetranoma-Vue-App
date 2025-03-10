@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from "vue"
 import Title from "@/components/common/Title.vue"
+import Paragraph from "@/components/ui/Paragraph.vue"
 
 
 const categories = ref([
@@ -117,7 +118,7 @@ const toggleQuestion = (categoryIndex, questionIndex) => {
               v-show="item.isOpen"
               class="px-6 py-4 text-gray-600 dark:text-gray-300 border-t border-gray-100 dark:border-gray-700"
             >
-              <p class="leading-relaxed">{{ item.answer }}</p>
+              <Paragraph color="primary" align="left">{{ item.answer }}</Paragraph>
             </div>
           </div>
         </div>
@@ -127,7 +128,7 @@ const toggleQuestion = (categoryIndex, questionIndex) => {
     <!-- Contact Section -->
     <div class="w-full max-w-4xl mt-16 text-center">
       <h2 class="text-2xl font-semibold text-[#00BD7E] mb-4">Still Have Questions?</h2>
-      <p class="text-gray-600 dark:text-gray-300 mb-6">Our team is here to help you with any questions you might have.</p>
+      <Paragraph color="transparent" align="center" size="small" customClass="mb-6">Our team is here to help you with any questions you might have.</Paragraph>
       <router-link 
         to="/contact" 
         class="inline-flex items-center px-6 py-3 bg-[#00BD7E] text-white rounded-lg hover:bg-[#00BD7E]/90 transition-colors"

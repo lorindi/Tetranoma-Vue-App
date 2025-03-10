@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from "vue"
 import Title from "@/components/common/Title.vue"
+import Paragraph from "@/components/ui/Paragraph.vue";
 
 
 const features = ref([
@@ -35,9 +36,9 @@ const features = ref([
       <!-- History -->
       <section class="bg-white p-6 rounded-xl shadow-md dark:bg-gray-800">
         <h2 class="text-2xl font-semibold text-[#00BD7E] mb-4">Our History</h2>
-        <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        <Paragraph color="primary" align="left">
           Tetranoma was founded by a group of 3D printing enthusiasts united by their passion for creating unique and quality figures. Our mission is to make 3D printing accessible to anyone who wants to own unique and personalized figures.
-        </p>
+        </Paragraph>
       </section>
 
       <!-- Features -->
@@ -48,16 +49,17 @@ const features = ref([
             <i :class="`pi ${feature.icon} text-[#00BD7E] text-2xl mr-3`"></i>
             <h3 class="text-xl font-semibold">{{ feature.title }}</h3>
           </div>
-          <p class="text-gray-700 dark:text-gray-300">{{ feature.description }}</p>
+          <Paragraph color="primary" align="left">{{ feature.description }}</Paragraph>
         </div>
       </div>
 
       <!-- Vision -->
       <section class="bg-white p-6 rounded-xl shadow-md dark:bg-gray-800">
         <h2 class="text-2xl font-semibold text-[#00BD7E] mb-4">Our Vision</h2>
-        <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+        <Paragraph color="primary" align="left">
           We strive to be the leading platform for 3D printed figures, offering innovative solutions and superior quality. We believe in the power of personalization and the ability for everyone to own unique items that reflect their individuality.
-        </p>
+        </Paragraph>
+     
       </section>
     </div>
   </div>
