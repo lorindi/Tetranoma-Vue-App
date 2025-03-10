@@ -1,5 +1,13 @@
 <script setup>
+import Paragraph from '@/components/ui/Paragraph.vue';
 import homeCover from '/img/3dPrintingCover.jpg'
+
+const benefits = [
+  "Each 3D figure is unique, adding a personal touch to your décor.",
+  "They inspire creativity and spark conversations, making your home feel more lively.",
+  "Perfect for any space - from your living room to your office."
+];
+
 </script>
 
 <template>
@@ -26,30 +34,22 @@ import homeCover from '/img/3dPrintingCover.jpg'
           Why 3D Figures Are Perfect for Your Home
         </h2>
 
-        <div class="space-y-6">
-          <p class="text-gray-800 dark:text-gray-300 leading-relaxed">
+        <div class="flex flex-col gap-[15px]">
+          <Paragraph color="primary">
             3D figures add personality and charm to any room. Whether it's a favorite character or a custom-made
             piece, they bring a sense of joy and creativity to your living space.
-          </p>
+          </Paragraph>
 
-          <div class="hidden lg:block space-y-4">
-            <div class="flex items-center gap-3">
+          <ul class="hidden lg:block space-y-4">
+            <li v-for="(benefit, index) in benefits" :key="index" class="flex items-center gap-3">
               <div class="w-2 h-2 rounded-full bg-[#00BD7E]"></div>
-              <p class="text-gray-700 dark:text-gray-400">Each 3D figure is unique, adding a personal touch to your décor.</p>
-            </div>
-            <div class="flex items-center gap-3">
-              <div class="w-2 h-2 rounded-full bg-[#00BD7E]"></div>
-              <p class="text-gray-700 dark:text-gray-400">They inspire creativity and spark conversations, making your home feel more lively.</p>
-            </div>
-            <div class="flex items-center gap-3">
-              <div class="w-2 h-2 rounded-full bg-[#00BD7E]"></div>
-              <p class="text-gray-700 dark:text-gray-400">Perfect for any space - from your living room to your office.</p>
-            </div>
-          </div>
+              <Paragraph color="transparent">{{ benefit }}</Paragraph>
+            </li>
+          </ul>
 
-          <p class="text-gray-700 dark:text-gray-300 font-medium">
+          <Paragraph color="primary">
             Bring happiness and style into your home with these fun and creative pieces today!
-          </p>
+          </Paragraph>
         </div>
       </div>
     </div>
