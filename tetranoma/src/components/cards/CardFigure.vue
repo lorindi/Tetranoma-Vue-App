@@ -5,6 +5,7 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import { storeToRefs } from "pinia";
 import { useToast } from "vue-toastification";
 import { useRouter } from "vue-router";
+import Paragraph from '../ui/Paragraph.vue';
 
 const router = useRouter();
 const toast = useToast();
@@ -99,8 +100,11 @@ const isRatingVisible = computed(() => props.type === 'cardRating');
       class="flex flex-col justify-evenly h-[50%] py-1 px-2 md:px-3 lg:px-5 dark:py-2 dark:lg:px-3 dark:justify-center dark:h-[40%]">
       <h2 class="text-sm sm:text-xl md:text-2xl font-semibold mb-[3px] dark:mb-[2px]">{{ title.length > 17 ?
         title.slice(0, 17) + '.' : title }}</h2>
-      <p class="text-xs sm:text-sm md:text-lg text-gray-700 mb-[3px] dark:mb-[2px] dark:text-gray-400 leading-none">{{
-        description.length > 28 ? description.slice(0, 28) + '.' : description }}</p>
+
+      <Paragraph color="transparent" size="small" align="left" customClass="text-xs sm:text-sm md:text-lg leading-none ">{{
+        description.length > 28 ? description.slice(0, 28) + '.' : description }}</Paragraph>
+      <!-- <p class="text-xs sm:text-sm md:text-lg text-gray-700 mb-[3px] dark:mb-[2px] dark:text-gray-400 leading-none">{{
+        description.length > 28 ? description.slice(0, 28) + '.' : description }}</p> -->
       <div v-if="isRatingVisible" class="flex items-center">
         <span class="text-[#00BD7E] mr-1 text-sm sm:text-base md:text-lg ">★</span>
         <span class="text-gray-700 text-sm sm:text-base md:text-lg dark:text-white">{{ rating }} </span>

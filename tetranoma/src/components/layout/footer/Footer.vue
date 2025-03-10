@@ -2,6 +2,7 @@
 import NavigationLinks from '@/components/common/NavigationLinks.vue'
 import { useRoute } from "vue-router"
 import { computed } from "vue"
+import Paragraph from '@/components/ui/Paragraph.vue'
 
 const route = useRoute()
 
@@ -25,37 +26,34 @@ const showFooter = computed(() => {
 })
 </script>
 <template>
-    <footer v-if="showFooter" class="flex flex-col-reverse w-full max-w-[1336px] items-start justify-center p-[10px]
-    
-    md:flex-row md:justify-between
-    lg:flex-row lg:justify-between lg:p-[30px]
-    xl:flex-row xl:justify-between xl:p-[30px]
-    2xl:flex-row 2xl:justify-between 2xl:p-[30px]
+    <footer v-if="showFooter" class="flex w-full max-w-[1336px] items-start p-[10px]
+    xs:flex-col-reverse xs:justify-center xs:items-center
+    sm:flex-row sm:justify-between sm:items-start
+    md:flex-row md:justify-between md:items-start
+    lg:flex-row lg:justify-between lg:items-start lg:p-[30px]
+    xl:flex-row xl:justify-between xl:items-start xl:p-[30px]
+    2xl:flex-row 2xl:justify-between 2xl:items-start 2xl:p-[30px]
     ">
 
         <div class="flex flex-col gap-[30px] 
         ">
             <div class="">
-                <h2 class="text-3xl text-[#8865BD]">Tetranoma</h2>
-                <p class="text-gray-600 mt-2 text-center md:text-left text-sm
-            lg:text-base
-            xl:text-base
-            2xl:text-lg">
+                <h2 class="text-center sm:text-left text-3xl text-[#8865BD]">Tetranoma</h2>
+                <Paragraph color="transparent" size="small" align="left">
                     Your one-stop solution for 3D printed figures.
-                </p>
+                </Paragraph>
+
+
             </div>
 
             <div class="">
-                <p class="text-sm
-                    lg:text-base
-                    xl:text-base
-                    2xl:text-lg
-            ">Privacy Policy | Terms of Service | FAQ</p>
-                <p class="text-sm
-                    lg:text-base
-                    xl:text-base
-                    2xl:text-lg
-            ">&copy; 2024 Tetranoma. All rights reserved.</p>
+                <Paragraph color="transparent" size="small" align="left">
+                    Privacy Policy | Terms of Service | FAQ
+                </Paragraph>
+                <Paragraph color="transparent" size="small" align="left">
+                    &copy; 2024 Tetranoma. All rights reserved.
+                </Paragraph>
+
             </div>
         </div>
 

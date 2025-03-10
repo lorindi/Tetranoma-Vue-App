@@ -1,5 +1,6 @@
 <script setup>
 import { RouterLink } from 'vue-router';
+import Paragraph from '../ui/Paragraph.vue';
 defineProps({
     category: {
         type: String,
@@ -34,10 +35,9 @@ defineProps({
     ">
         <i :class="`pi ${icon} text-[#00BD7E] text-2xl bg-white p-0 rounded-md  dark:bg-gray-800
         sm:text-3xl
-        md:text-2xl md:text-white md:bg-[#00BD7E] md:p-3
+        md:text-3xl md:text-white md:bg-[#00BD7E] dark:text-[#00BD7E] md:p-3
         lg:dark:text-[#00BD7E] 
-        xl:
-        2xl:
+   
         
         `"></i>
         <div class="flex flex-col items-center lg:items-start">
@@ -46,7 +46,7 @@ defineProps({
             md:text-base
             lg:font-semibold
             ">{{ title }}</h4>
-            <p class="hidden w-full lg:flex lg:max-w-[200px] xl:flex 2xl:flex dark:text-gray-400">{{ desc }}</p>
+            <Paragraph customClass="hidden lg:flex" color="transparent" size="small">{{ desc }}</Paragraph>
         </div>
     </router-link>
 </template>

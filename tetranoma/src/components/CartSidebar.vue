@@ -3,6 +3,7 @@ import { ref, onMounted } from "vue"
 import { useCartStore } from "@/stores/useCartStore"
 import { useRouter } from "vue-router"
 import { useToast } from "vue-toastification"
+import Paragraph from "./ui/Paragraph.vue"
 
 const router = useRouter()
 const toast = useToast()
@@ -75,7 +76,7 @@ defineExpose({ toggleCart })
         <!-- Cart Items -->
         <div class="flex-1 overflow-y-auto p-4">
           <div v-if="cartStore.loading" class="flex justify-center items-center h-full">
-            <p>Loading...</p>
+            <Paragraph color="primary" size="large">Loading...</Paragraph>
           </div>
 
           <div v-else-if="!cartStore.items.length" class="flex justify-center items-center h-full">
