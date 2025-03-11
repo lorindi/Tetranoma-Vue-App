@@ -2,7 +2,7 @@
 import { useToast } from "vue-toastification"
 import { useFiguresStore } from "@/stores/useFiguresStore"
 import { useRouter } from "vue-router"
-import Title from "@/components/common/Title.vue"
+import Title from "@/components/ui/Title.vue"
 import FigureForm from "@/components/form/figureForm/FigureForm.vue"
 
 const router = useRouter()
@@ -24,7 +24,7 @@ const handleSubmit = async (formData) => {
 
 <template>
   <div class="w-full min-h-[calc(100vh-125px)] md:p-8 flex flex-col items-center justify-center">
-    <Title title="Create New Figure" />
+    <Title>Create New Figure</Title>
 
     <div
       class="w-full lg:max-w-4xl md:bg-white/80 md:dark:bg-gray-800/90 md:backdrop-blur-lg rounded-2xl xs:rounded-3xl md:shadow-2xl p-4 xs:p-6 sm:p-8 md:border md:border-gray-100 md:dark:border-gray-700">

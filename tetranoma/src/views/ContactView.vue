@@ -4,9 +4,35 @@ import { useForm, useField } from "vee-validate"
 import * as yup from "yup"
 import emailjs from "@emailjs/browser"
 import { useToast } from "vue-toastification"
-import Title from "@/components/common/Title.vue"
+import Title from "@/components/ui/Title.vue"
 import Paragraph from "@/components/ui/Paragraph.vue"
+import FormField from "@/components/form/formField/FormField.vue"
+import FormButton from "@/components/form/formButton/FormButton.vue"
+import FormGridContainer from "@/components/form/formGridContainer/FormGridContainer.vue"
 
+const contactInfo = ref([
+  {
+    icon: "map-marker",
+    title: "Address",
+    content: "123 3D Print Street, Sofia, Bulgaria"
+  },
+  {
+    icon: "phone",
+    title: "Phone",
+    content: "+359 888 123 456"
+  },
+  {
+    icon: "envelope",
+    title: "Email",
+    content: "contact@tetranoma.com"
+  }
+])
+
+const socialMedia = ref([
+  { icon: "facebook", url: "#" },
+  { icon: "twitter", url: "#" },
+  { icon: "instagram", url: "#" }
+])
 
 const toast = useToast()
 const isLoading = ref(false)
@@ -28,20 +54,19 @@ const { value: subject, errorMessage: subjectError } = useField("subject")
 const { value: message, errorMessage: messageError } = useField("message")
 
 const onSubmit = handleSubmit(async (values) => {
-  console.log("Attempting to send email with values:", values)
   isLoading.value = true
 
   try {
     const response = await emailjs.send(
-      "YOUR_SERVICE_ID", // Replace with your EmailJS service ID
-      "YOUR_TEMPLATE_ID", // Replace with your EmailJS template ID
+      "YOUR_SERVICE_ID", // EmailJS service ID
+      "YOUR_TEMPLATE_ID", // EmailJS template ID
       {
         from_name: values.name,
         from_email: values.email,
         subject: values.subject,
         message: values.message,
       },
-      "YOUR_PUBLIC_KEY" // Replace with your EmailJS public key
+      "YOUR_PUBLIC_KEY" // EmailJS public key
     )
 
     console.log("Email sent successfully:", response)
@@ -57,124 +82,61 @@ const onSubmit = handleSubmit(async (values) => {
 </script>
 
 <template>
-  <div class="flex flex-col items-center w-full max-w-[1336px] min-h-[calc(100vh-125px)] p-4 md:p-8">
+  <main class="flex flex-col items-center w-full max-w-[1336px] min-h-[calc(100vh-125px)] p-4 md:p-8">
     <Title title="Get in Touch" />
 
-    <div class="w-full max-w-4xl mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+    <section class="w-full max-w-4xl mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
       <!-- Contact Information -->
-      <div class="space-y-6 p-6 bg-white rounded-xl shadow-md dark:bg-gray-800">
-        <h2 class="text-2xl font-semibold text-[#00BD7E]">Contact Information</h2>
-        
-        <div class="space-y-4">
-          <div class="flex items-center space-x-4">
-            <div class="w-10 h-10 bg-[#00BD7E]/10 rounded-full flex items-center justify-center">
-              <i class="pi pi-map-marker text-[#00BD7E]"></i>
-            </div>
-            <div>
-              <h3 class="font-semibold">Address</h3>
-              <Paragraph color="transparent" align="left" size="small">123 3D Print Street, Sofia, Bulgaria</Paragraph>
-            </div>
-          </div>
+      <article class="space-y-6 p-6 bg-white rounded-xl shadow-md dark:bg-gray-800">
+        <Title type="subsubtitle" color="primary" align="left">Contact Information</Title>
 
-          <div class="flex items-center space-x-4">
-            <div class="w-10 h-10 bg-[#00BD7E]/10 rounded-full flex items-center justify-center">
-              <i class="pi pi-phone text-[#00BD7E]"></i>
-            </div>
+        <ul class="space-y-4">
+          <li v-for="item in contactInfo" :key="item.title" class="flex items-center space-x-4">
+            <figure class="w-10 h-10 bg-[#00BD7E]/10 rounded-full flex items-center justify-center">
+              <i :class="`pi pi-${item.icon} text-[#00BD7E]`"></i>
+            </figure>
             <div>
-              <h3 class="font-semibold">Phone</h3>
-              <Paragraph color="transparent" align="left" size="small">+359 888 123 456</Paragraph>
+              <Title type="minortitle" align="left" color="gray">{{ item.title }}</Title>
+              <Paragraph color="transparent" align="left" size="small">{{ item.content }}</Paragraph>
             </div>
-          </div>
-
-          <div class="flex items-center space-x-4">
-            <div class="w-10 h-10 bg-[#00BD7E]/10 rounded-full flex items-center justify-center">
-              <i class="pi pi-envelope text-[#00BD7E]"></i>
-            </div>
-            <div>
-              <h3 class="font-semibold">Email</h3>
-              <Paragraph color="transparent" align="left" size="small">contact@tetranoma.com</Paragraph>
-            </div>
-          </div>
-        </div>
+          </li>
+        </ul>
 
         <!-- Social Media Links -->
-        <div class="pt-6 border-t border-gray-200 dark:border-gray-700">
-          <h3 class="font-semibold mb-4">Follow Us</h3>
-          <div class="flex space-x-4">
-            <a href="#" class="w-10 h-10 bg-[#00BD7E]/10 rounded-full flex items-center justify-center hover:bg-[#00BD7E]/20 transition-colors">
-              <i class="pi pi-facebook text-[#00BD7E]"></i>
+        <footer class="pt-6 border-t border-gray-200 dark:border-gray-700">
+          <Title type="subsubtitle" color="primary" align="left">Follow Us</Title>
+          <nav class="flex space-x-4">
+            <a v-for="social in socialMedia" :key="social.icon" :href="social.url"
+              class="w-10 h-10 bg-[#00BD7E]/10 rounded-full flex items-center justify-center hover:bg-[#00BD7E]/20 transition-colors"
+              aria-label="`Follow us on ${social.icon}`">
+              <i :class="`pi pi-${social.icon} text-[#00BD7E]`"></i>
             </a>
-            <a href="#" class="w-10 h-10 bg-[#00BD7E]/10 rounded-full flex items-center justify-center hover:bg-[#00BD7E]/20 transition-colors">
-              <i class="pi pi-twitter text-[#00BD7E]"></i>
-            </a>
-            <a href="#" class="w-10 h-10 bg-[#00BD7E]/10 rounded-full flex items-center justify-center hover:bg-[#00BD7E]/20 transition-colors">
-              <i class="pi pi-instagram text-[#00BD7E]"></i>
-            </a>
-          </div>
-        </div>
-      </div>
+          </nav>
+        </footer>
+      </article>
 
       <!-- Contact Form -->
       <form @submit.prevent="onSubmit" class="space-y-6 p-6 bg-white rounded-xl shadow-md dark:bg-gray-800">
-        <h2 class="text-2xl font-semibold text-[#00BD7E]">Send us a Message</h2>
+        
+        <Title type="subsubtitle" color="primary" align="left">Send us a Message</Title>
 
-        <div class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Name</label>
-            <input 
-              v-model="name"
-              type="text"
-              class="w-full px-4 py-2 border bg-[#FAFAFA] border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00BD7E] focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-white"
-              placeholder="Your name"
-            />
-            <span v-if="nameError" class="text-red-500 text-sm mt-1">{{ nameError }}</span>
-          </div>
+        <FormGridContainer :columns="2" :gap="2">
+          <FormField v-model="name" label="Name" type="text" placeholder="Your name" icon="user" :error="nameError"
+            :required="true" @blur="() => { }" />
+          <FormField v-model="subject" label="Subject" type="text" placeholder="Message subject" icon="tag"
+            :error="subjectError" :required="true" @blur="() => { }" />
+        </FormGridContainer>
 
-          <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
-            <input 
-              v-model="email"
-              type="email"
-              class="w-full px-4 py-2 border bg-[#FAFAFA] border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00BD7E] focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-white"
-              placeholder="your@email.com"
-            />
-            <span v-if="emailError" class="text-red-500 text-sm mt-1">{{ emailError }}</span>
-          </div>
+        <FormField v-model="email" label="Email" type="text" placeholder="your@email.com" icon="envelope"
+          :error="emailError" :required="true" @blur="() => { }" />
+        <FormField v-model="message" label="Message" type="textarea" placeholder="Your message" icon="comment"
+          :error="messageError" :required="true" @blur="() => { }" />
 
-          <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Subject</label>
-            <input 
-              v-model="subject"
-              type="text"
-              class="w-full px-4 py-2 border bg-[#FAFAFA] border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00BD7E] focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-white"
-              placeholder="Message subject"
-            />
-            <span v-if="subjectError" class="text-red-500 text-sm mt-1">{{ subjectError }}</span>
-          </div>
+        <FormButton :text="isLoading ? 'Sending...' : 'Send Message'" icon="send" type="submit" size="full" />
 
-          <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Message</label>
-            <textarea 
-              v-model="message"
-              rows="4"
-              class="w-full px-4 py-2 border bg-[#FAFAFA] border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00BD7E] focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-white"
-              placeholder="Your message"
-            ></textarea>
-            <span v-if="messageError" class="text-red-500 text-sm mt-1">{{ messageError }}</span>
-          </div>
-        </div>
-
-        <button 
-          type="submit"
-          :disabled="isLoading"
-          class="w-full bg-[#00BD7E] text-white py-2 px-4 rounded-lg hover:bg-[#00BD7E]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <span v-if="isLoading">Sending...</span>
-          <span v-else>Send Message</span>
-        </button>
       </form>
-    </div>
-  </div>
+    </section>
+  </main>
 </template>
 <!-- 
 "YOUR_SERVICE_ID" // EmailJS service ID

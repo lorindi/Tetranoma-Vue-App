@@ -1,8 +1,7 @@
 <script setup>
 import { ref } from "vue"
-import Title from "@/components/common/Title.vue"
+import Title from "@/components/ui/Title.vue"
 import Paragraph from "@/components/ui/Paragraph.vue"
-
 
 const categories = ref([
   {
@@ -77,6 +76,7 @@ const categories = ref([
 ])
 
 const toggleQuestion = (categoryIndex, questionIndex) => {
+  console.log("Toggling question:", categoryIndex, questionIndex)
   categories.value[categoryIndex].questions[questionIndex].isOpen = 
     !categories.value[categoryIndex].questions[questionIndex].isOpen
 }
@@ -84,51 +84,60 @@ const toggleQuestion = (categoryIndex, questionIndex) => {
 
 <template>
   <div class="flex flex-col items-center justify-center gap-[30px] w-full max-w-[1336px] min-h-screen p-4 md:p-8">
-    <Title title="Frequently Asked Questions" />
+    <Title>Frequently Asked Questions</Title>
 
     <!-- FAQ Categories -->
-    <div class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-8">
-      <div v-for="(category, categoryIndex) in categories" 
-           :key="categoryIndex"
-           class="space-y-4"
+    <section class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-8">
+      <article 
+        v-for="(category, categoryIndex) in categories" 
+        :key="categoryIndex"
+        class="space-y-4"
       >
         <!-- Category Header -->
-        <div class="flex items-center space-x-3">
-          <div class="w-10 h-10 bg-[#00BD7E]/10 rounded-full flex items-center justify-center">
+        <header class="flex items-center space-x-3">
+          <figure class="w-10 h-10 bg-[#00BD7E]/10 rounded-full flex items-center justify-center">
             <i :class="`pi ${category.icon} text-[#00BD7E]`"></i>
-          </div>
-          <h2 class="text-xl font-semibold text-gray-800 dark:text-white">{{ category.title }}</h2>
-        </div>
+          </figure>
+          <Title type="minortitle" align="left" color="gray">{{ category.title }}</Title>
+        </header>
 
         <!-- Questions -->
-        <div class="space-y-3">
-          <div v-for="(item, questionIndex) in category.questions" 
-               :key="questionIndex"
-               class="bg-white rounded-xl shadow-md overflow-hidden dark:bg-gray-800"
+        <dl class="space-y-3">
+          <div 
+            v-for="(item, questionIndex) in category.questions" 
+            :key="questionIndex"
+            class="bg-white rounded-xl shadow-md overflow-hidden dark:bg-gray-800"
           >
-            <button 
-              @click="toggleQuestion(categoryIndex, questionIndex)"
-              class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-            >
-              <span class="font-medium">{{ item.question }}</span>
-              <i :class="`pi ${item.isOpen ? 'pi-chevron-up' : 'pi-chevron-down'} text-[#00BD7E] transition-transform`"></i>
-            </button>
+            <dt>
+              <button 
+                @click="toggleQuestion(categoryIndex, questionIndex)"
+                class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                :aria-expanded="item.isOpen"
+                :aria-controls="`faq-answer-${categoryIndex}-${questionIndex}`"
+              >
+                <span class="font-medium">{{ item.question }}</span>
+                <i :class="`pi ${item.isOpen ? 'pi-chevron-up' : 'pi-chevron-down'} text-[#00BD7E] transition-transform`"></i>
+              </button>
+            </dt>
             
-            <div 
+            <dd 
               v-show="item.isOpen"
+              :id="`faq-answer-${categoryIndex}-${questionIndex}`"
               class="px-6 py-4 text-gray-600 dark:text-gray-300 border-t border-gray-100 dark:border-gray-700"
             >
               <Paragraph color="primary" align="left">{{ item.answer }}</Paragraph>
-            </div>
+            </dd>
           </div>
-        </div>
-      </div>
-    </div>
+        </dl>
+      </article>
+    </section>
 
     <!-- Contact Section -->
-    <div class="w-full max-w-4xl mt-16 text-center">
-      <h2 class="text-2xl font-semibold text-[#00BD7E] mb-4">Still Have Questions?</h2>
-      <Paragraph color="transparent" align="center" size="small" customClass="mb-6">Our team is here to help you with any questions you might have.</Paragraph>
+    <aside class="w-full max-w-4xl mt-16 text-center">
+      <Title type="subtitle" align="center">Still Have Questions?</Title>
+      <Paragraph color="transparent" align="center" size="small" customClass="mb-6">
+        Our team is here to help you with any questions you might have.
+      </Paragraph>
       <router-link 
         to="/contact" 
         class="inline-flex items-center px-6 py-3 bg-[#00BD7E] text-white rounded-lg hover:bg-[#00BD7E]/90 transition-colors"
@@ -136,7 +145,7 @@ const toggleQuestion = (categoryIndex, questionIndex) => {
         <i class="pi pi-envelope mr-2"></i>
         Contact Us
       </router-link>
-    </div>
+    </aside>
   </div>
 </template>
 
