@@ -1,4 +1,6 @@
 <script setup>
+import Title from '@/components/ui/Title.vue';
+
 defineProps({
   title: {
     type: String,
@@ -25,10 +27,12 @@ defineProps({
 </script>
 
 <template>
-  <div :class="['bg-white dark:bg-gray-800 p-2 md:p-6 rounded-xl shadow-lg', colspan]">
-    <h3 class="text-xl font-semibold mb-4">{{ title }}</h3>
-    <div class="h-[300px]">
+  <section :class="['bg-white dark:bg-gray-800 p-2 md:p-6 rounded-xl shadow-lg', colspan]">
+    <header>
+      <Title type="minortitle" align="left" color="light">{{ title }}</Title>
+    </header>
+    <figure class="h-[300px]">
       <component :is="chartComponent" :data="data" :options="options" />
-    </div>
-  </div>
+    </figure>
+  </section>
 </template>
