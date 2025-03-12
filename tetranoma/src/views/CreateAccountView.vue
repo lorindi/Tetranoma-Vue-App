@@ -73,14 +73,16 @@ const onSubmit = handleSubmit(async (values) => {
                     <label for="password" class="block text-gray-700 font-medium mb-2 dark:text-white">Password</label>
                     <input type="password" id="password" placeholder="Enter your password" v-model="password"
                         @blur="passwordBlur"
+                       autocomplete="new-password"
                         class="w-full p-2 border bg-[#FAFAFA] border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#42BB8B] focus:border-transparent dark:bg-gray-800 dark:text-white dark:border-gray-600" />
                     <span v-if="passwordError" class="text-red-500 text-sm mt-1">{{ passwordError }}</span>
                 </div>
                 <div class="mb-6">
                     <label for="repeatPassword" class="block text-gray-700 font-medium mb-2 dark:text-white">Repeat
                         Password</label>
-                    <input type="password" id="repeatPassword" placeholder="Enter your password" v-model="repeatPassword"
+                    <input type="password" id="repeatPassword" placeholder="Enter your password" v-model="repeatPassword" 
                         @blur="repeatPasswordBlur"
+                        autocomplete="new-password"
                         class="w-full p-2 border bg-[#FAFAFA] border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#42BB8B] focus:border-transparent dark:bg-gray-800 dark:text-white dark:border-gray-600" />
                     <span v-if="repeatPasswordError" class="text-red-500 text-sm mt-1">{{ repeatPasswordError }}</span>
                 </div>
