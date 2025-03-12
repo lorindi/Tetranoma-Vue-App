@@ -19,6 +19,8 @@ import AdminDashboard from '@/components/admin/dashboard/AdminDashboard.vue'
 import AdminUsers from '@/components/admin/AdminUsers.vue'
 import AdminFigures from '@/components/admin/AdminFigures.vue' 
 import AdminOrders from '@/components/admin/AdminOrders.vue'
+// import TableExample from '@/components/ui/TableExample.vue'
+import Table from '@/components/ui/Table.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -27,6 +29,11 @@ const router = createRouter({
             path: '/',
             name: 'home',
             component: HomeView,
+        },
+        {
+            path: '/table',
+            name: 'table',
+            component: Table,
         },
         {
             path: '/sign-in',

@@ -23,7 +23,7 @@
     "leaflet": "^1.9.4",
     "pinia": "^2.2.8",
     "primeicons": "^7.0.0",
-    "primevue": "^4.2.5",
+    "primevue": "^4.3.1",
     "swiper": "^11.1.14",
     "tailwind-scrollbar": "^3.1.0",
     "vee-validate": "^4.14.7",
