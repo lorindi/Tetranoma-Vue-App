@@ -23,8 +23,8 @@ defineProps({
   <article class="bg-white dark:bg-gray-800 p-4 lg:p-6 rounded-xl shadow-lg">
     <header class="flex items-center justify-between">
       <div>
-        <Paragraph color="gray" align="left" size="small">{{ title }}</Paragraph>
-        <Title type="minortitle" align="left" color="light">{{ value }}</Title>
+        <Paragraph color="transparent" align="left" size="small">{{ title }}</Paragraph>
+        <Title type="minortitle" align="left" color="gray">{{ value }}</Title>
       </div>
       <figure class="flex items-center justify-center">
         <i :class="['pi', icon, 'text-[#00BD7E] !text-xl lg:!text-2xl']" aria-hidden="true"></i>
