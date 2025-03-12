@@ -1,209 +1,214 @@
 <script setup>
-import { ref, onMounted, computed } from "vue"
-import { useAdminStore } from "@/stores/useAdminStore"
-import { useToast } from "vue-toastification"
+import { ref, onMounted, computed } from "vue";
+import { useAdminStore } from "@/stores/useAdminStore";
+import { useToast } from "vue-toastification";
+import Table from "@/components/ui/Table.vue";
+import TableFilter from "@/components/ui/TableFilter.vue";
 
-const adminStore = useAdminStore()
-const toast = useToast()
-
+const adminStore = useAdminStore();
+const toast = useToast();
 
 // State
 const filters = ref({
   role: "",
   search: ""
-})
+});
 
-const showCreateModal = ref(false)
-const showEditModal = ref(false)
-const selectedUser = ref(null)
+// Filter options
+const filterOptions = [
+  {
+    key: "role",
+    label: "Role",
+    type: "select",
+    options: [
+      { label: "All roles", value: "" },
+      { label: "User", value: "user" },
+      { label: "Admin", value: "admin" }
+    ]
+  },
+  {
+    key: "search",
+    label: "Search",
+    type: "text",
+    placeholder: "Search by name or email..."
+  }
+];
+
+// Table columns
+const columns = ref([
+  { 
+    field: "user", 
+    header: "User",
+    template: (data) => {
+      return `
+        <div class="flex items-center">
+          <div class="w-10 h-10 rounded-full bg-[#00BD7E]/10 flex items-center justify-center">
+            ${data.avatar ? 
+              `<img src="${data.avatar}" alt="${data.name}" class="w-full h-full object-cover rounded-full" />` : 
+              '<i class="pi pi-user text-[#00BD7E]"></i>'}
+          </div>
+          <div class="ml-4">
+            <div class="font-medium text-gray-900 dark:text-white">${data.name}</div>
+            <div class="text-sm text-gray-500 dark:text-gray-400">${data.email}</div>
+          </div>
+        </div>
+      `;
+    }
+  },
+  { 
+    field: "activity", 
+    header: "Activity",
+    template: (data) => {
+      return `
+        <div class="text-sm">
+          <div>Orders: ${data.activity?.ordersCount || 0}</div>
+          <div>Figures: ${data.activity?.figuresCount || 0}</div>
+          <div>Total Spent: ${data.activity?.totalSpent?.toFixed(2) || 0} BGN</div>
+        </div>
+      `;
+    }
+  }
+]);
+
+const showCreateModal = ref(false);
+const showEditModal = ref(false);
+const selectedUser = ref(null);
 const newUser = ref({
   name: "",
   email: "",
   password: "",
   role: "user"
-})
+});
 
-// Computed
-const filteredUsers = computed(() => {
-  return adminStore.users
-})
-
+// Role options
 const roleOptions = [
   { label: "User", value: "user" },
   { label: "Admin", value: "admin" }
-]
+];
 
 // Methods
 const handleSearch = async () => {
+  console.log("Searching with filters:", filters.value);
   try {
-    await adminStore.getAllUsersWithActivity(filters.value)
+    await adminStore.getAllUsersWithActivity(filters.value);
   } catch (error) {
-    console.error("Search error:", error)
+    console.error("Search error:", error);
+    toast.error("Error searching users");
   }
-}
+};
+
+const resetFilters = () => {
+  console.log("Resetting filters");
+  filters.value = {
+    role: "",
+    search: ""
+  };
+  handleSearch();
+};
 
 const handleCreateUser = async () => {
+  console.log("Creating new user");
   try {
-    await adminStore.createUser(newUser.value)
-    showCreateModal.value = false
-    await adminStore.getAllUsersWithActivity()
-    newUser.value = { name: "", email: "", password: "", role: "user" }
+    await adminStore.createUser(newUser.value);
+    showCreateModal.value = false;
+    await adminStore.getAllUsersWithActivity();
+    newUser.value = { name: "", email: "", password: "", role: "user" };
+    toast.success("User created successfully");
   } catch (error) {
-    console.error("Create user error:", error)
+    console.error("Create user error:", error);
+    toast.error("Error creating user");
   }
-}
+};
 
 const handleEditUser = (user) => {
-  selectedUser.value = { ...user }
-  showEditModal.value = true
-}
+  console.log("Editing user:", user.name);
+  selectedUser.value = { ...user };
+  showEditModal.value = true;
+};
 
 const handleUpdateUser = async () => {
+  console.log("Updating user:", selectedUser.value.name);
   try {
-    await adminStore.updateUser(selectedUser.value._id, selectedUser.value)
-    showEditModal.value = false
-    await adminStore.getAllUsersWithActivity()
+    await adminStore.updateUser(selectedUser.value._id, selectedUser.value);
+    showEditModal.value = false;
+    await adminStore.getAllUsersWithActivity();
+    toast.success("User updated successfully");
   } catch (error) {
-    console.error("Update user error:", error)
+    console.error("Update user error:", error);
+    toast.error("Error updating user");
   }
-}
+};
 
-const handleDeleteUser = async (userId) => {
+const handleDeleteUser = async (user) => {
+  console.log("Deleting user:", user.name);
   if (confirm("Are you sure you want to delete this user?")) {
     try {
-      await adminStore.deleteUser(userId)
-      await adminStore.getAllUsersWithActivity()
+      await adminStore.deleteUser(user._id);
+      await adminStore.getAllUsersWithActivity();
+      toast.success("User deleted successfully");
     } catch (error) {
-      console.error("Delete user error:", error)
+      console.error("Delete user error:", error);
+      toast.error("Error deleting user");
     }
   }
-}
+};
 
-const handleRoleChange = async (userId, newRole) => {
+const handleRoleChange = async (user, newRole) => {
+  console.log("Changing role for user:", user.name, "to:", newRole);
   try {
-    await adminStore.updateUserRole(userId, newRole)
+    await adminStore.updateUserRole(user._id, newRole);
+    toast.success("Role updated successfully");
   } catch (error) {
-    console.error("Role change error:", error)
+    console.error("Role change error:", error);
+    toast.error("Error updating role");
   }
-}
+};
 
 onMounted(async () => {
+  console.log("Loading users data");
   try {
-    await adminStore.getAllUsersWithActivity()
+    await adminStore.getAllUsersWithActivity();
   } catch (error) {
-    console.error("Error loading users:", error)
-    toast.error("Error loading users")
+    console.error("Error loading users:", error);
+    toast.error("Error loading users");
   }
-})
+});
 </script>
 
 <template>
-  <div class="p-6 space-y-6">
-    <!-- Filters and Search -->
-    <div class="flex flex-col md:flex-row gap-4 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-lg">
-      <div class="flex-1">
-        <input
-          v-model="filters.search"
-          type="text"
-          placeholder="Search by name or email..."
-          class="w-full px-4 py-2 rounded-lg border dark:bg-gray-700 dark:border-gray-600"
-          @input="handleSearch"
-        />
-      </div>
-      <div class="w-full md:w-48">
+  <div class="space-y-6">
+    <!-- Filters -->
+    <TableFilter 
+      :filters="filters" 
+      :filterOptions="filterOptions"
+      @filter="handleSearch"
+      @reset="resetFilters"
+      @create="showCreateModal = true"
+    >
+      <template #createButton>New User</template>
+    </TableFilter>
+
+    <!-- Users Table -->
+    <Table 
+      :data="adminStore.users" 
+      :columns="columns"
+      tableClass="bg-white dark:bg-gray-800"
+      @edit="handleEditUser"
+      @delete="handleDeleteUser"
+    >
+      <!-- Custom role column -->
+      <template #column-role="{ data }">
         <select
-          v-model="filters.role"
-          class="w-full px-4 py-2 rounded-lg border dark:bg-gray-700 dark:border-gray-600"
-          @change="handleSearch"
+          :value="data.role"
+          @change="handleRoleChange(data, $event.target.value)"
+          class="px-3 py-1 rounded-lg border dark:bg-gray-700 dark:border-gray-600"
         >
-          <option value="">All roles</option>
           <option v-for="option in roleOptions" :key="option.value" :value="option.value">
             {{ option.label }}
           </option>
         </select>
-      </div>
-      <button
-        @click="showCreateModal = true"
-        class="px-6 py-2 bg-[#00BD7E] text-white rounded-lg hover:bg-[#00BD7E]/90 transition-colors"
-      >
-        <i class="pi pi-plus mr-2"></i>
-        New User
-      </button>
-    </div>
-
-    <!-- Users Table -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
-      <div class="overflow-x-auto">
-        <table class="w-full">
-          <thead class="bg-gray-50 dark:bg-gray-700">
-            <tr>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                User
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                Activity
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                Role
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
-            <tr v-for="user in filteredUsers" :key="user._id" class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-              <td class="px-6 py-4">
-                <div class="flex items-center">
-                  <div class="w-10 h-10 rounded-full bg-[#00BD7E]/10 flex items-center justify-center">
-                    <img v-if="user.avatar" :src="user.avatar" :alt="user.name" class="w-full h-full object-cover rounded-full" />
-                    <i v-else class="pi pi-user text-[#00BD7E]"></i>
-                  </div>
-                  <div class="ml-4">
-                    <div class="font-medium text-gray-900 dark:text-white">{{ user.name }}</div>
-                    <div class="text-sm text-gray-500 dark:text-gray-400">{{ user.email }}</div>
-                  </div>
-                </div>
-              </td>
-              <td class="px-6 py-4">
-                <div class="text-sm">
-                  <div>Orders: {{ user.activity?.ordersCount || 0 }}</div>
-                  <div>Figures: {{ user.activity?.figuresCount || 0 }}</div>
-                  <div>Total Spent: {{ user.activity?.totalSpent?.toFixed(2) || 0 }} BGN</div>
-                </div>
-              </td>
-              <td class="px-6 py-4">
-                <select
-                  :value="user.role"
-                  @change="handleRoleChange(user._id, $event.target.value)"
-                  class="px-3 py-1 rounded-lg border dark:bg-gray-700 dark:border-gray-600"
-                >
-                  <option v-for="option in roleOptions" :key="option.value" :value="option.value">
-                    {{ option.label }}
-                  </option>
-                </select>
-              </td>
-              <td class="px-6 py-4">
-                <div class="flex gap-2">
-                  <button
-                    @click="handleEditUser(user)"
-                    class="p-2 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
-                  >
-                    <i class="pi pi-pencil"></i>
-                  </button>
-                  <button
-                    @click="handleDeleteUser(user._id)"
-                    class="p-2 text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
-                  >
-                    <i class="pi pi-trash"></i>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+      </template>
+    </Table>
 
     <!-- Create User Modal -->
     <div v-if="showCreateModal" class="fixed inset-0 bg-black/50 flex items-center justify-center">
