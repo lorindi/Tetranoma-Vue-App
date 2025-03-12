@@ -22,10 +22,18 @@ const props = defineProps({
   submitButtonText: {
     type: String,
     default: "Submit"
+  },
+  cancelButtonText: {
+    type: String,
+    default: "Cancel"
+  },
+  showCancelButton: {
+    type: Boolean,
+    default: true
   }
 })
 
-const emit = defineEmits(["submit"])
+const emit = defineEmits(["submit", "cancel"])
 
 const formRef = ref(null)
 const categories = [
@@ -70,6 +78,7 @@ onMounted(() => {
   if (props.initialData.images?.length) {
     imageUrls.value = props.initialData.images.join(", ")
   }
+  console.log("FigureForm component mounted with initial data:", props.initialData)
 })
 
 const onSubmit = handleSubmit((values) => {
@@ -81,8 +90,14 @@ const onSubmit = handleSubmit((values) => {
     stock: Number(values.stock),
     images: values.images.split(",").map(url => url.trim()).filter(url => url)
   }
+  console.log("Form submitted with values:", formData)
   emit("submit", formData)
 })
+
+const onCancel = () => {
+  console.log("Form cancelled")
+  emit("cancel")
+}
 
 const formMotion = useMotion(formRef, {
   initial: { opacity: 0, scale: 0.95 },
@@ -115,8 +130,17 @@ const formMotion = useMotion(formRef, {
         placeholder="Enter image URLs (comma-separated)" :error="imagesError" @blur="imagesBlur" required />
     </FormGridContainer>
 
-    <div>
-      <FormButton :text="submitButtonText" size="1/2" align="end" />
+    <div class="flex justify-end gap-2">
+      <FormButton 
+        v-if="showCancelButton" 
+        :text="cancelButtonText" 
+        size="full" 
+        align="center" 
+        variant="secondary" 
+        type="button"
+        @click="onCancel" 
+      />
+      <FormButton :text="submitButtonText" size="full" align="center" type="submit" />
     </div>
   </form>
 </template>
