@@ -29,11 +29,11 @@ const props = defineProps({
   },
   submitButtonText: {
     type: String,
-    default: "Запази"
+    default: "Save"
   },
   cancelButtonText: {
     type: String,
-    default: "Отказ"
+    default: "Cancel"
   },
   columns: {
     type: Number,
