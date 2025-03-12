@@ -13,6 +13,10 @@ const props = defineProps({
   mobileColumns: {
     type: Number,
     default: 1
+  },
+  tabletColumns: {
+    type: Number,
+    default: null
   }
 })
 
@@ -27,11 +31,22 @@ const gridClasses = computed(() => {
     default: baseClasses.push("grid-cols-1");
   }
   
+  // Tablet columns (if provided)
+  if (props.tabletColumns) {
+    switch(props.tabletColumns) {
+      case 1: baseClasses.push("sm:grid-cols-1"); break;
+      case 2: baseClasses.push("sm:grid-cols-2"); break;
+      case 3: baseClasses.push("sm:grid-cols-3"); break;
+      default: baseClasses.push("sm:grid-cols-2");
+    }
+  }
+  
   // Desktop columns
   switch(props.columns) {
     case 1: baseClasses.push("md:grid-cols-1"); break;
     case 2: baseClasses.push("md:grid-cols-2"); break;
     case 3: baseClasses.push("md:grid-cols-3"); break;
+    case 4: baseClasses.push("md:grid-cols-4"); break;
     default: baseClasses.push("md:grid-cols-1");
   }
   
