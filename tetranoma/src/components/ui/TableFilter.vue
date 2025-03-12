@@ -44,7 +44,7 @@ const handleCreate = () => {
   emit("create");
 };
 
-// Преобразуване на опциите за FormField
+//Converting options for FormField
 const getIconForType = (type) => {
   switch(type) {
     case 'select': return 'list';
@@ -57,13 +57,13 @@ const getIconForType = (type) => {
 
 <template>
   <div class="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-xl shadow-lg">
-    <!-- Заглавие и описание, ако са предоставени -->
+    <!-- Title and description, if provided -->
     <div v-if="title || description" class="mb-4">
       <Title v-if="title" type="subsubtitle" color="dark">{{ title }}</Title>
       <Paragraph v-if="description" size="small" color="transparent">{{ description }}</Paragraph>
     </div>
 
-    <!-- Филтри с FormGridContainer и FormField -->
+    <!-- Filters with FormGridContainer and FormField -->
     <FormGridContainer :columns="4" :gap="4" :mobileColumns="1">
       <div v-for="(option, index) in filterOptions" :key="index">
         <FormField
@@ -77,7 +77,7 @@ const getIconForType = (type) => {
       </div>
     </FormGridContainer>
 
-    <!-- Бутони за действия -->
+    <!-- Buttons for actions -->
     <div class="mt-6 flex justify-between items-center">
   <div>
     <FormButton 
