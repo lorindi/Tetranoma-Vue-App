@@ -68,6 +68,7 @@ const onSubmit = handleSubmit(async (values) => {
               id="password" 
               placeholder="Enter your password"
               @blur="passwordBlur"
+              autocomplete="current-password"
               class="w-full p-2 bg-[#FAFAFA] border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#42BB8B] focus:border-transparent dark:bg-gray-800 dark:text-white dark:border-gray-600"
             />
             <span v-if="passwordError" class="text-red-500 text-sm mt-1">{{ passwordError }}</span>
