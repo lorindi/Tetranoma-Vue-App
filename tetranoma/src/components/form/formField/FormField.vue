@@ -73,6 +73,11 @@ const inputClasses = computed(() => `
   ${props.type === "select" ? "appearance-none pr-8 xs:pr-10" : ""}
   ${props.type === "textarea" ? "min-h-[100px] xs:min-h-[120px]" : ""}
 `)
+
+// Проверка дали опциите са обекти или низове
+const isObjectOptions = computed(() => {
+  return props.options.length > 0 && typeof props.options[0] === 'object' && props.options[0] !== null;
+})
 </script>
 
 <template>
@@ -95,9 +100,18 @@ const inputClasses = computed(() => `
     <template v-else-if="type === 'select'">
       <select :value="modelValue" @change="updateValue" @blur="handleBlur" :class="inputClasses">
         <option value="">{{ placeholder }}</option>
-        <option v-for="option in options" :key="option" :value="option">
-          {{ option.charAt(0).toUpperCase() + option.slice(1) }}
-        </option>
+        <!-- Обработка на опции като обекти -->
+        <template v-if="isObjectOptions">
+          <option v-for="option in options" :key="option.value" :value="option.value">
+            {{ option.label }}
+          </option>
+        </template>
+        <!-- Обработка на опции като низове -->
+        <template v-else>
+          <option v-for="option in options" :key="option" :value="option">
+            {{ option.charAt(0).toUpperCase() + option.slice(1) }}
+          </option>
+        </template>
       </select>
       <i class="pi pi-chevron-down absolute right-2 xs:right-3 top-[52.5px] -translate-y-1/2 
                 text-gray-400 group-focus-within:text-blue-500 transition-colors 
