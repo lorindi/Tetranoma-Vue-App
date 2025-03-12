@@ -23,22 +23,8 @@ const stripeElements = ref(null)
 const clientSecret = ref("")
 const paymentId = ref("")
 
-const stripePublishableKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY
-const stripePromise = loadStripe(stripePublishableKey)
-const stripeElementsOptions = ref({
-  clientSecret: "",
-  appearance: {
-    theme: "stripe",
-    variables: {
-      colorPrimary: "#00BD7E",
-    },
-  },
-})
-
-const paymentMethods = [
-  { value: "stripe", label: "Credit Card (Stripe)" },
-  { value: "bank transfer", label: "Bank Transfer" }
-]
+const stripePublishableKey = ref("")
+const stripePromise = ref(null)
 
 onMounted(async () => {
   console.log("[Checkout] Initializing component")
@@ -50,10 +36,26 @@ onMounted(async () => {
   }
   
   console.log("[Checkout] Loading Stripe")
-  stripeLoaded.value = true
+  try {
+    stripePublishableKey.value = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY
+    if (!stripePublishableKey.value?.startsWith("pk_")) {
+      throw new Error("Invalid Stripe publishable key format")
+    }
+    
+    stripePromise.value = await loadStripe(stripePublishableKey.value)
+    if (!stripePromise.value) {
+      throw new Error("Failed to initialize Stripe")
+    }
+    
+    stripeLoaded.value = true
+    console.log("[Stripe] Initialized successfully")
+  } catch (error) {
+    console.error("[Stripe] Initialization error:", error)
+    toast.error("Payment system unavailable. Please try again later.")
+    stripeLoaded.value = false
+  }
 })
 
-// Watch for payment method changes
 watch(paymentMethod, (newValue) => {
   console.log("[Checkout] Payment method changed to:", newValue)
   if (newValue === "stripe" && !clientSecret.value) {
@@ -77,6 +79,8 @@ const createPaymentIntent = async () => {
       })
     })
     
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+    
     const data = await response.json()
     console.log("[Payment] Intent created:", data)
     
@@ -84,12 +88,13 @@ const createPaymentIntent = async () => {
       clientSecret.value = data.clientSecret
       paymentId.value = data.paymentId
       stripeElementsOptions.value.clientSecret = data.clientSecret
+      console.log("[Payment] Stripe elements updated with client secret")
       return true
     }
     throw new Error("Client secret not received")
   } catch (error) {
     console.error("[Payment] Error creating intent:", error)
-    toast.error("Error initializing payment")
+    toast.error("Error initializing payment: " + error.message)
     return false
   }
 }
@@ -120,7 +125,7 @@ const handleCheckout = async () => {
     router.push("/")
   } catch (error) {
     console.error("[Checkout] Error:", error)
-    toast.error("Error processing order")
+    toast.error("Error processing order: " + error.message)
   } finally {
     isProcessing.value = false
   }
@@ -131,9 +136,17 @@ const handleStripePayment = async () => {
   isProcessing.value = true
   
   try {
-    const stripe = await stripePromise
+    if (!stripePromise.value) {
+      throw new Error("Stripe not initialized")
+    }
+    
+    const stripe = await stripePromise.value
     console.log("[Stripe] Instance loaded:", !!stripe)
     
+    if (!stripeElements.value) {
+      throw new Error("Stripe elements not loaded")
+    }
+
     const { error, paymentIntent } = await stripe.confirmPayment({
       elements: stripeElements.value,
       confirmParams: { return_url: `${window.location.origin}/payment-success` },
@@ -150,7 +163,7 @@ const handleStripePayment = async () => {
     
     if (paymentIntent?.status === "succeeded") {
       console.log("[Stripe] Payment succeeded, confirming...")
-      await fetch("/api/stripe/confirm-payment", {
+      const confirmResponse = await fetch("/api/stripe/confirm-payment", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -158,6 +171,10 @@ const handleStripePayment = async () => {
         },
         body: JSON.stringify({ paymentIntentId: paymentIntent.id })
       })
+      
+      if (!confirmResponse.ok) {
+        throw new Error("Payment confirmation failed")
+      }
       
       await cartStore.checkout({
         paymentMethod: "stripe",
@@ -170,20 +187,38 @@ const handleStripePayment = async () => {
     }
   } catch (error) {
     console.error("[Stripe] Processing error:", error)
-    toast.error("Payment processing failed")
+    toast.error("Payment processing failed: " + error.message)
   } finally {
     isProcessing.value = false
   }
 }
 
 const showStripeForm = computed(() => {
-  return paymentMethod.value === "stripe" && clientSecret.value && stripeLoaded.value
+  return paymentMethod.value === "stripe" && 
+         clientSecret.value && 
+         stripeLoaded.value &&
+         stripePromise.value
 })
 
 const onStripeElementsReady = (elements) => {
   console.log("[Stripe] Elements ready")
   stripeElements.value = elements
 }
+
+const stripeElementsOptions = ref({
+  clientSecret: "",
+  appearance: {
+    theme: "stripe",
+    variables: {
+      colorPrimary: "#00BD7E",
+    },
+  },
+})
+
+const paymentMethods = [
+  { value: "stripe", label: "Credit Card (Stripe)" },
+  { value: "bank transfer", label: "Bank Transfer" }
+]
 </script>
 
 <template>
