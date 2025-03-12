@@ -213,7 +213,7 @@ const onRowSelect = (event) => {
       <!-- Expanded content slot -->
       <template #expansion="slotProps">
         <slot name="expansion" :data="slotProps.data">
-          <div class="p-3 bg-gray-800">
+          <div class="p-3 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
             <h5>Details for {{ slotProps.data.name || slotProps.data.title }}</h5>
             <p>Additional information here...</p>
             <pre>{{ JSON.stringify(slotProps.data, null, 2) }}</pre>
@@ -224,7 +224,7 @@ const onRowSelect = (event) => {
       <!-- Empty state -->
       <template #empty>
         <slot name="empty">
-          <div class="p-4 text-center text-gray-500 dark:text-gray-400">
+          <div class="p-4 text-center bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
             No records found
           </div>
         </slot>
@@ -233,7 +233,7 @@ const onRowSelect = (event) => {
       <!-- Loading state -->
       <template #loading>
         <slot name="loading">
-          <div class="p-4 text-center text-gray-500 dark:text-gray-400">
+          <div class="p-4 text-center bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
             Loading data...
           </div>
         </slot>
@@ -277,11 +277,11 @@ const onRowSelect = (event) => {
 
 /* Styles for table header */
 .p-datatable .p-datatable-thead > tr > th {
-  @apply bg-gray-700;
+  @apply bg-gray-600;
 }
 
 /* Styles for expanded row */
 .p-datatable .p-datatable-tbody > tr.p-datatable-row-expansion > td {
-  @apply bg-gray-800;
+  @apply bg-white dark:bg-gray-800;
 }
 </style>
