@@ -29,7 +29,7 @@ defineProps({
 <template>
   <section :class="['bg-white dark:bg-gray-800 p-2 md:p-6 rounded-xl shadow-lg', colspan]">
     <header>
-      <Title type="minortitle" align="left" color="light">{{ title }}</Title>
+      <Title type="minortitle" align="left" color="gray">{{ title }}</Title>
     </header>
     <figure class="h-[300px]">
       <component :is="chartComponent" :data="data" :options="options" />
