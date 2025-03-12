@@ -194,7 +194,7 @@ onMounted(async () => {
     <Table 
       :data="adminStore.orders" 
       :columns="columns"
-      tableClass="bg-white dark:bg-gray-800"
+      tableClass="text-gray-800 dark:text-white bg-white dark:bg-gray-800"
       :actions="false"
     >
       <!-- Custom status column -->
