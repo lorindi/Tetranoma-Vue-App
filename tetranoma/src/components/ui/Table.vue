@@ -1,27 +1,52 @@
 <script setup>
-import { ref } from "vue";
+import { ref, defineEmits } from "vue";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 
-// Dummy data
-const tableData = ref([
-  { id: 1, name: "John Doe", age: 30 },
-  { id: 2, name: "Jane Smith", age: 25 },
-  { id: 3, name: "Sam Brown", age: 40 },
-]);
+const props = defineProps({
+  // Table data
+  data: {
+    type: Array,
+    required: true
+  },
+  // Column definitions
+  columns: {
+    type: Array,
+    required: true
+  },
+  // Enable row expansion
+  expandable: {
+    type: Boolean,
+    default: false
+  },
+  // Enable actions column
+  actions: {
+    type: Boolean,
+    default: true
+  },
+  // Enable row selection
+  selectable: {
+    type: Boolean,
+    default: false
+  },
+  // Table style
+  tableClass: {
+    type: String,
+    default: "bg-gray-700"
+  },
+  // Loading state
+  loading: {
+    type: Boolean,
+    default: false
+  }
+});
 
-// Columns definition
-const columns = ref([
-  { field: "id", header: "ID" },
-  { field: "name", header: "Name" },
-  { field: "age", header: "Age" },
-]);
+const emit = defineEmits(["edit", "delete", "create", "row-toggle", "status-change", "row-select"]);
 
 // Row expansion logic
 const expandedRows = ref([]);
-
 
 const toggleRow = (rowData) => {
   const index = expandedRows.value.findIndex(d => d.id === rowData.id);
@@ -32,6 +57,7 @@ const toggleRow = (rowData) => {
     expandedRows.value.push(rowData);
     console.log("Row expanded:", rowData.id);
   }
+  emit("row-toggle", rowData, expandedRows.value);
 };
 
 const isExpanded = (rowData) => {
@@ -44,14 +70,12 @@ const itemToDelete = ref(null);
 
 const createNew = () => {
   console.log("Creating new item");
-  // Add logic for creating a new record here
-  // For example, opening a dialog or redirecting to a form
+  emit("create");
 };
 
 const editItem = (item) => {
   console.log("Editing item:", item);
-  // Add logic for editing a record here
-  // For example, opening a dialog with an edit form
+  emit("edit", item);
 };
 
 const confirmDelete = (item) => {
@@ -62,9 +86,8 @@ const confirmDelete = (item) => {
 
 const deleteItem = () => {
   if (itemToDelete.value) {
-    // Delete record from the array
-    tableData.value = tableData.value.filter(item => item.id !== itemToDelete.value.id);
     console.log("Item deleted:", itemToDelete.value);
+    emit("delete", itemToDelete.value);
     
     // Close the dialog
     deleteDialog.value = false;
@@ -72,33 +95,47 @@ const deleteItem = () => {
   }
 };
 
+// Handle status change
+const handleStatusChange = (item, newStatus) => {
+  console.log("Status changed for item:", item, "New status:", newStatus);
+  emit("status-change", item, newStatus);
+};
 
+// Handle row selection
+const onRowSelect = (event) => {
+  console.log("Row selected:", event.data);
+  emit("row-select", event.data);
+};
 </script>
-
 
 <template>
   <div class="flex flex-col gap-3">
     <!-- Create button outside the table -->
-    <div class="flex justify-end">
-      <Button 
-        icon="pi pi-plus" 
-        label="Create new" 
-        @click="createNew" 
-        class="p-button-success"
-
-      />
+    <div v-if="$slots.createButton" class="flex justify-end">
+      <slot name="createButton">
+        <Button 
+          icon="pi pi-plus" 
+          label="Create new" 
+          @click="createNew" 
+          class="p-button-success"
+        />
+      </slot>
     </div>
 
     <DataTable 
-    :value="tableData" 
+      :value="data" 
       v-model:expandedRows="expandedRows"
+      :rowClass="$attrs.rowClass"
+      :selection="selectable ? $attrs.selection : null"
+      :selectionMode="selectable ? 'single' : null"
+      @row-select="onRowSelect"
       rowExpandMode="row"
-      class="bg-gray-700" 
+      :class="tableClass"
+      :loading="loading"
+      v-bind="$attrs"
     >
-
-
-      <!-- Toggle column -->
-      <Column :expander="true" headerStyle="width: 3rem" class="bg-gray-700">
+      <!-- Toggle column for expandable rows -->
+      <Column v-if="expandable" :expander="true" headerStyle="width: 3rem" :class="tableClass">
         <template #body="slotProps">
           <button 
             @click="toggleRow(slotProps.data)"
@@ -112,43 +149,94 @@ const deleteItem = () => {
         </template>
       </Column>
 
-      <!-- Other columns -->
-      <Column 
-        v-for="(col, index) in columns"
-        :key="index"
-        :field="col.field"
-        :header="col.header"
-        :sortable="true"
-        class="bg-gray-700" 
-      />
+      <!-- Dynamic columns -->
+      <template v-for="(col, index) in columns" :key="index">
+        <!-- Column with custom template -->
+        <Column 
+          v-if="col.template"
+          :field="col.field" 
+          :header="col.header"
+          :sortable="col.sortable !== false"
+          :class="tableClass"
+          :style="col.style"
+          :headerStyle="col.headerStyle"
+        >
+          <template #body="slotProps">
+            <slot :name="`column-${col.field}`" :data="slotProps.data" :column="col">
+              <!-- Default rendering if no slot provided -->
+              <div v-html="col.template(slotProps.data)"></div>
+            </slot>
+          </template>
+        </Column>
+        
+        <!-- Standard column -->
+        <Column 
+          v-else
+          :field="col.field" 
+          :header="col.header"
+          :sortable="col.sortable !== false"
+          :class="tableClass"
+          :style="col.style"
+          :headerStyle="col.headerStyle"
+        />
+      </template>
 
       <!-- Actions column -->
-      <Column header="Actions" :exportable="false" class="bg-gray-700">
+      <Column v-if="actions" header="Actions" :exportable="false" :class="tableClass">
         <template #body="slotProps">
-          <div class="flex gap-2">
-            <Button 
-              icon="pi pi-pencil" 
-              @click="editItem(slotProps.data)" 
-              class="p-button-rounded p-button-success p-button-sm" 
-              title="Edit"
-            />
-            <Button 
-              icon="pi pi-trash" 
-              @click="confirmDelete(slotProps.data)" 
-              class="p-button-rounded p-button-danger p-button-sm" 
-              title="Delete"
-            />
-          </div>
+          <slot name="actions" :data="slotProps.data">
+            <div class="flex gap-2">
+              <Button 
+                icon="pi pi-pencil" 
+                @click="editItem(slotProps.data)" 
+                class="p-button-success p-button-sm" 
+                title="Edit"
+              />
+              <Button 
+                icon="pi pi-trash" 
+                @click="confirmDelete(slotProps.data)" 
+                class="p-button-danger p-button-sm" 
+                title="Delete"
+              />
+            </div>
+          </slot>
+        </template>
+      </Column>
+
+      <!-- Status column with dropdown -->
+      <Column v-if="$slots.status" header="Status" :exportable="false" :class="tableClass">
+        <template #body="slotProps">
+          <slot name="status" :data="slotProps.data" :onChange="handleStatusChange" />
         </template>
       </Column>
 
       <!-- Expanded content slot -->
       <template #expansion="slotProps">
-        <div class="p-3 bg-surface-100">
-          <h5>Details for {{ slotProps.data.name }}</h5>
-          <p>Additional information here...</p>
-          <pre>{{ JSON.stringify(slotProps.data, null, 2) }}</pre>
-        </div>
+        <slot name="expansion" :data="slotProps.data">
+          <div class="p-3 bg-gray-800">
+            <h5>Details for {{ slotProps.data.name || slotProps.data.title }}</h5>
+            <p>Additional information here...</p>
+            <pre>{{ JSON.stringify(slotProps.data, null, 2) }}</pre>
+          </div>
+        </slot>
+      </template>
+
+      <!-- Empty state -->
+      <template #empty>
+        <slot name="empty">
+          <div class="p-4 text-center text-gray-500 dark:text-gray-400">
+            No records found
+          </div>
+        </slot>
+      </template>
+
+      <!-- Loading state -->
+      <template #loading>
+        <slot name="loading">
+          <div class="p-4 text-center text-gray-500 dark:text-gray-400">
+            Loading data...
+          </div>
+        </slot>
       </template>
     </DataTable>
 
@@ -181,13 +269,12 @@ const deleteItem = () => {
   </div>
 </template>
 
-
-
 <style>
 .p-button-sm {
   width: 2rem;
   height: 2rem;
 }
+
 /* Styles for table header */
 .p-datatable .p-datatable-thead > tr > th {
   @apply bg-gray-700;
@@ -197,5 +284,4 @@ const deleteItem = () => {
 .p-datatable .p-datatable-tbody > tr.p-datatable-row-expansion > td {
   @apply bg-gray-800;
 }
-
 </style>
