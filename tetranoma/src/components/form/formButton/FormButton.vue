@@ -13,18 +13,23 @@ const props = defineProps({
     type: {
         type: String,
         default: "submit"
-    }, align: {
+    }, 
+    align: {
         type: String,
         default: "center",
         validator: (value) => ["start", "center", "end"].includes(value)
-    },size: {
+    },
+    size: {
         type: String,
         default: "full",
         validator: (value) => ["full", "1/2", "1/3", "1/4"].includes(value)
+    },
+    variant: {
+        type: String,
+        default: "primary",
+        validator: (value) => ["primary", "secondary", "outline"].includes(value)
     }
-
 })
-
 
 const getIcon = () => {
     if (props.icon !== "") {
@@ -50,21 +55,32 @@ const sizeClass = computed(() => {
     }
     return sizeMap[props.size] || "w-full"
 })
+
+const variantClass = computed(() => {
+    const variantMap = {
+        primary: "bg-[#00BD7E] text-white",
+        secondary: "bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-white",
+        outline: "bg-transparent border border-[#00BD7E] text-[#00BD7E] dark:text-[#00BD7E]"
+    }
+    return variantMap[props.variant] || "bg-[#00BD7E] text-white"
+})
 </script>
 
 <template>
-    <div class="flex items-center w-full" :class="justifyClass">
-        <button type="submit" class="group my-4 h-[58px]
-                 text-white py-3 xs:py-3.5 sm:py-4 px-4 xs:px-6
-                 rounded-lg xs:rounded-xl
-                 text-sm xs:text-base sm:text-lg
+    <div class="flex items-center" :class="justifyClass">
+        <button :type="type" class="group h-10 md:h-12
+                 py-2 px-4 md:px-6
+                 rounded-lg
+                 text-sm md:text-base
                  hover:shadow-lg
                  active:scale-[0.98] transform transition-all duration-200
-                 font-medium relative overflow-hidden bg-[#00BD7E]" :class="sizeClass">
+                 font-medium relative overflow-hidden flex items-center justify-center gap-2" 
+                 :class="[sizeClass, variantClass]">
             <div class="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full
                       group-hover:translate-x-full transition-transform duration-700"></div>
-            <i :class="getIcon()"></i>
-            {{ text }}
+            <i v-if="icon" :class="getIcon()" class="mr-1"></i>
+            <span v-if="text">{{ text }}</span>
+            <slot></slot>
         </button>
     </div>
 </template>
