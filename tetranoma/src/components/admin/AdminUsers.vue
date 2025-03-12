@@ -192,7 +192,7 @@ onMounted(async () => {
     <Table 
       :data="adminStore.users" 
       :columns="columns"
-      tableClass="bg-white dark:bg-gray-800"
+      tableClass="text-gray-800 dark:text-white bg-white dark:bg-gray-800"
       @edit="handleEditUser"
       @delete="handleDeleteUser"
     >
