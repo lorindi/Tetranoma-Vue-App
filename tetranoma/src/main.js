@@ -16,11 +16,8 @@ import Dialog from 'primevue/dialog'
 import InputText from 'primevue/inputtext'
 import Dropdown from 'primevue/dropdown'
 
-
-
 const app = createApp(App)
 const pinia = createPinia();
-
 
 // Register PrimeVue globally
 app.use(PrimeVue, {
@@ -29,15 +26,14 @@ app.use(PrimeVue, {
     },
 })
 
-// Register PrimeVue components only for admin routes
+app.component("DataTable", DataTable)
+app.component("Column", Column)
+app.component("Button", Button)
+app.component("Dialog", Dialog)
+app.component("InputText", InputText)
+app.component("Dropdown", Dropdown)
+
 router.beforeEach((to, from, next) => {
-  console.log("Checking route for PrimeVue components")
-  if (to.path.startsWith("/admin")) {
-    console.log("Registering PrimeVue components for admin route")
-    app.component("DataTable", DataTable)
-    app.component("Column", Column)
-    app.component("Button", Button)
-  }
   next()
 })
 
