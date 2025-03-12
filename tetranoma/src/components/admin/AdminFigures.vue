@@ -251,7 +251,7 @@ onMounted(async () => {
     </TableFilter>
 
     <!-- Figure List -->
-    <Table :data="filteredFigures" :columns="columns" :expandable="true" tableClass="bg-white dark:bg-gray-800"
+    <Table :data="filteredFigures" :columns="columns" :expandable="true" tableClass="text-gray-800 dark:text-white bg-white dark:bg-gray-800"
       @edit="handleEditFigure" @delete="handleDeleteFigure">
       <!-- ... existing slots ... -->
     </Table>
@@ -262,7 +262,7 @@ onMounted(async () => {
         <Title type="subsubtitle" color="dark">Create New Figure</Title>
 
         <!-- User Selection -->
-        <div class="mb-4">
+        <div class="my-4">
           <FormField v-model="selectedUserId" label="Select User" type="select" placeholder="Select user" icon="user"
             :options="users.map(user => ({ label: `${user.name} (${user.email})`, value: user._id }))" required />
         </div>
@@ -278,7 +278,7 @@ onMounted(async () => {
         <Title type="subsubtitle" color="dark">Edit Figure</Title>
 
         <!-- User Selection -->
-        <div class="mb-4">
+        <div class="my-4">
           <FormField v-model="selectedUserId" label="Transfer to Another User" type="select" icon="user"
             :options="users.map(user => ({ label: `${user.name} (${user.email})`, value: user._id }))" />
         </div>
