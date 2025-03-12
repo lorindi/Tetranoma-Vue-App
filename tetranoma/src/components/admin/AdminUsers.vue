@@ -4,6 +4,7 @@ import { useAdminStore } from "@/stores/useAdminStore";
 import { useToast } from "vue-toastification";
 import Table from "@/components/ui/Table.vue";
 import TableFilter from "@/components/ui/TableFilter.vue";
+import AdminUserModal from "@/components/admin/AdminUserModal.vue";
 
 const adminStore = useAdminStore();
 const toast = useToast();
@@ -70,23 +71,56 @@ const columns = ref([
   }
 ]);
 
-const showCreateModal = ref(false);
-const showEditModal = ref(false);
+// Модални състояния
+const showModal = ref(false);
+const isEditMode = ref(false);
 const selectedUser = ref(null);
-const newUser = ref({
-  name: "",
-  email: "",
-  password: "",
-  role: "user"
-});
 
-// Role options
-const roleOptions = [
-  { label: "User", value: "user" },
-  { label: "Admin", value: "admin" }
+// Полета за формата
+const userFields = [
+  {
+    name: "name",
+    label: "Name",
+    type: "text",
+    placeholder: "Enter user name",
+    icon: "user",
+    required: true
+  },
+  {
+    name: "email",
+    label: "Email",
+    type: "text",
+    placeholder: "Enter user email",
+    icon: "envelope",
+    required: true
+  },
+  {
+    name: "password",
+    label: "Password",
+    type: "password",
+    placeholder: "Enter password",
+    icon: "lock",
+    required: false
+  },
+  {
+    name: "role",
+    label: "Role",
+    type: "select",
+    placeholder: "Select role",
+    icon: "id-card",
+    options: [
+      { label: "User", value: "user" },
+      { label: "Admin", value: "admin" }
+    ],
+    required: true
+  }
 ];
 
-// Methods
+// Изчислени свойства за модала
+const modalTitle = computed(() => isEditMode.value ? "Edit User" : "Create User");
+const modalSubmitText = computed(() => isEditMode.value ? "Update" : "Create");
+
+// Методи
 const handleSearch = async () => {
   console.log("Searching with filters:", filters.value);
   try {
@@ -106,36 +140,42 @@ const resetFilters = () => {
   handleSearch();
 };
 
-const handleCreateUser = async () => {
-  console.log("Creating new user");
-  try {
-    await adminStore.createUser(newUser.value);
-    showCreateModal.value = false;
-    await adminStore.getAllUsersWithActivity();
-    newUser.value = { name: "", email: "", password: "", role: "user" };
-    toast.success("User created successfully");
-  } catch (error) {
-    console.error("Create user error:", error);
-    toast.error("Error creating user");
-  }
+const openCreateModal = () => {
+  console.log("Opening create modal");
+  isEditMode.value = false;
+  selectedUser.value = {
+    name: "",
+    email: "",
+    password: "",
+    role: "user"
+  };
+  showModal.value = true;
 };
 
-const handleEditUser = (user) => {
-  console.log("Editing user:", user.name);
+const openEditModal = (user) => {
+  console.log("Opening edit modal for user:", user.name);
+  isEditMode.value = true;
   selectedUser.value = { ...user };
-  showEditModal.value = true;
+  showModal.value = true;
 };
 
-const handleUpdateUser = async () => {
-  console.log("Updating user:", selectedUser.value.name);
+const handleSubmit = async (formData) => {
+  console.log("Form submitted:", formData);
   try {
-    await adminStore.updateUser(selectedUser.value._id, selectedUser.value);
-    showEditModal.value = false;
+    if (isEditMode.value) {
+      // Обновяване на потребител
+      await adminStore.updateUser(formData._id, formData);
+      toast.success("User updated successfully");
+    } else {
+      // Създаване на нов потребител
+      await adminStore.createUser(formData);
+      toast.success("User created successfully");
+    }
+    // Презареждане на данните
     await adminStore.getAllUsersWithActivity();
-    toast.success("User updated successfully");
   } catch (error) {
-    console.error("Update user error:", error);
-    toast.error("Error updating user");
+    console.error("User operation error:", error);
+    toast.error(isEditMode.value ? "Error updating user" : "Error creating user");
   }
 };
 
@@ -183,7 +223,7 @@ onMounted(async () => {
       :filterOptions="filterOptions"
       @filter="handleSearch"
       @reset="resetFilters"
-      @create="showCreateModal = true"
+      @create="openCreateModal"
     >
       <template #createButton>New User</template>
     </TableFilter>
@@ -193,7 +233,7 @@ onMounted(async () => {
       :data="adminStore.users" 
       :columns="columns"
       tableClass="text-gray-800 dark:text-white bg-white dark:bg-gray-800"
-      @edit="handleEditUser"
+      @edit="openEditModal"
       @delete="handleDeleteUser"
     >
       <!-- Custom role column -->
@@ -203,119 +243,23 @@ onMounted(async () => {
           @change="handleRoleChange(data, $event.target.value)"
           class="px-3 py-1 rounded-lg border dark:bg-gray-700 dark:border-gray-600"
         >
-          <option v-for="option in roleOptions" :key="option.value" :value="option.value">
+          <option v-for="option in userFields[3].options" :key="option.value" :value="option.value">
             {{ option.label }}
           </option>
         </select>
       </template>
     </Table>
 
-    <!-- Create User Modal -->
-    <div v-if="showCreateModal" class="fixed inset-0 bg-black/50 flex items-center justify-center">
-      <div class="bg-white dark:bg-gray-800 p-6 rounded-xl w-full max-w-md">
-        <h2 class="text-xl font-bold mb-4">New User</h2>
-        <div class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium mb-1">Name</label>
-            <input
-              v-model="newUser.name"
-              type="text"
-              class="w-full px-4 py-2 rounded-lg border dark:bg-gray-700 dark:border-gray-600"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-1">Email</label>
-            <input
-              v-model="newUser.email"
-              type="email"
-              class="w-full px-4 py-2 rounded-lg border dark:bg-gray-700 dark:border-gray-600"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-1">Password</label>
-            <input
-              v-model="newUser.password"
-              type="password"
-              class="w-full px-4 py-2 rounded-lg border dark:bg-gray-700 dark:border-gray-600"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-1">Role</label>
-            <select
-              v-model="newUser.role"
-              class="w-full px-4 py-2 rounded-lg border dark:bg-gray-700 dark:border-gray-600"
-            >
-              <option v-for="option in roleOptions" :key="option.value" :value="option.value">
-                {{ option.label }}
-              </option>
-            </select>
-          </div>
-        </div>
-        <div class="flex justify-end gap-4 mt-6">
-          <button
-            @click="showCreateModal = false"
-            class="px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
-          >
-            Cancel
-          </button>
-          <button
-            @click="handleCreateUser"
-            class="px-4 py-2 bg-[#00BD7E] text-white rounded-lg hover:bg-[#00BD7E]/90"
-          >
-            Create
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Edit User Modal -->
-    <div v-if="showEditModal" class="fixed inset-0 bg-black/50 flex items-center justify-center">
-      <div class="bg-white dark:bg-gray-800 p-6 rounded-xl w-full max-w-md">
-        <h2 class="text-xl font-bold mb-4">Edit User</h2>
-        <div class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium mb-1">Name</label>
-            <input
-              v-model="selectedUser.name"
-              type="text"
-              class="w-full px-4 py-2 rounded-lg border dark:bg-gray-700 dark:border-gray-600"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-1">Email</label>
-            <input
-              v-model="selectedUser.email"
-              type="email"
-              class="w-full px-4 py-2 rounded-lg border dark:bg-gray-700 dark:border-gray-600"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-1">Role</label>
-            <select
-              v-model="selectedUser.role"
-              class="w-full px-4 py-2 rounded-lg border dark:bg-gray-700 dark:border-gray-600"
-            >
-              <option v-for="option in roleOptions" :key="option.value" :value="option.value">
-                {{ option.label }}
-              </option>
-            </select>
-          </div>
-        </div>
-        <div class="flex justify-end gap-4 mt-6">
-          <button
-            @click="showEditModal = false"
-            class="px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
-          >
-            Cancel
-          </button>
-          <button
-            @click="handleUpdateUser"
-            class="px-4 py-2 bg-[#00BD7E] text-white rounded-lg hover:bg-[#00BD7E]/90"
-          >
-            Save
-          </button>
-        </div>
-      </div>
-    </div>
+    <!-- Reusable modal component -->
+    <AdminUserModal
+      v-model="showModal"
+      :title="modalTitle"
+      description="Manage user information"
+      v-model:form-data="selectedUser"
+      :fields="userFields"
+      :submit-button-text="modalSubmitText"
+      cancel-button-text="Cancel"
+      @submit="handleSubmit"
+    />
   </div>
 </template>
