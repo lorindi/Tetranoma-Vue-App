@@ -14,7 +14,7 @@ const props = defineProps({
   type: {
     type: String,
     default: "text",
-    validator: (value) => ["text", "number", "textarea", "select", "url"].includes(value)
+    validator: (value) => ["text", "number", "textarea", "select", "url", "date"].includes(value)
   },
   placeholder: {
     type: String,
@@ -39,6 +39,14 @@ const props = defineProps({
   required: {
     type: Boolean,
     default: false
+  },
+  name: {
+    type: String,
+    default: ""
+  },
+  id: {
+    type: String,
+    default: ""
   }
 })
 
@@ -46,13 +54,13 @@ const emit = defineEmits(["update:modelValue", "blur"])
 
 const updateValue = (event) => {
   let value = event.target.value
-  
+
   if (props.type === "number") {
     value = Number(value)
   } else if (props.type === "url") {
     value = value.trim()
   }
-  
+
   emit("update:modelValue", value)
 }
 
@@ -74,15 +82,26 @@ const inputClasses = computed(() => `
   ${props.type === "textarea" ? "min-h-[100px] xs:min-h-[120px]" : ""}
 `)
 
-// Проверка дали опциите са обекти или низове
+  // Checking if options are objects or strings
 const isObjectOptions = computed(() => {
   return props.options.length > 0 && typeof props.options[0] === 'object' && props.options[0] !== null;
+})
+
+// Generating unique ID if not provided
+const fieldId = computed(() => {
+  return props.id || `field-${props.label?.toLowerCase().replace(/\s+/g, "-")}-${Math.random().toString(36).substring(2, 9)}`;
+})
+
+// Generating name if not provided
+const fieldName = computed(() => {
+  return props.name || props.label?.toLowerCase().replace(/\s+/g, "-") || fieldId.value;
 })
 </script>
 
 <template>
   <div class="group relative w-full">
-    <label v-if="label" class="px-2 text-sm xs:text-base font-medium text-gray-700 dark:text-gray-300 mb-2">
+    <label v-if="label" :for="fieldId"
+      class="px-2 text-sm xs:text-base font-medium text-gray-700 dark:text-gray-300 mb-2">
       {{ label }}
       <span v-if="required" class="text-red-500">*</span>
     </label>
@@ -93,20 +112,22 @@ const isObjectOptions = computed(() => {
               text-sm xs:text-base`"></i>
 
     <template v-if="type === 'textarea'">
-      <textarea :value="modelValue" @input="updateValue" @blur="handleBlur" :placeholder="placeholder"
-        :class="inputClasses"></textarea>
+      <textarea :value="modelValue" @input="updateValue" @blur="handleBlur" :placeholder="placeholder" :id="fieldId"
+        :name="fieldName" :required="required" :class="inputClasses">
+      </textarea>
     </template>
 
     <template v-else-if="type === 'select'">
-      <select :value="modelValue" @change="updateValue" @blur="handleBlur" :class="inputClasses">
+      <select :value="modelValue" @change="updateValue" @blur="handleBlur" :id="fieldId" :name="fieldName"
+        :required="required" :class="inputClasses">
         <option value="">{{ placeholder }}</option>
-        <!-- Обработка на опции като обекти -->
+        <!--Processing options as objects-->
         <template v-if="isObjectOptions">
           <option v-for="option in options" :key="option.value" :value="option.value">
             {{ option.label }}
           </option>
         </template>
-        <!-- Обработка на опции като низове -->
+        <!--Processing options as strings-->
         <template v-else>
           <option v-for="option in options" :key="option" :value="option">
             {{ option.charAt(0).toUpperCase() + option.slice(1) }}
@@ -120,7 +141,8 @@ const isObjectOptions = computed(() => {
 
     <template v-else>
       <input :value="modelValue" @input="updateValue" @blur="handleBlur" :type="type"
-        :step="type === 'number' ? step : undefined" :placeholder="placeholder" :class="inputClasses" />
+        :step="type === 'number' ? step : undefined" :placeholder="placeholder" :id="fieldId" :name="fieldName"
+        :required="required" :class="inputClasses" autocomplete="on" />
     </template>
 
     <span v-if="error" class="absolute -bottom-5 left-0 text-red-500 text-xs">{{ error }}</span>
