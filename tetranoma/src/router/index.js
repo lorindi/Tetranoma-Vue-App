@@ -17,9 +17,8 @@ import UpdateFigureView from '@/views/UpdateFigureView.vue'
 import AdminLayout from '@/components/admin/AdminLayout.vue'
 import AdminDashboard from '@/components/admin/dashboard/AdminDashboard.vue'
 import AdminUsers from '@/components/admin/AdminUsers.vue'
-import AdminFigures from '@/components/admin/AdminFigures.vue' 
+import AdminFigures from '@/components/admin/AdminFigures.vue'
 import AdminOrders from '@/components/admin/AdminOrders.vue'
-
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -41,6 +40,7 @@ const router = createRouter({
             component: CreateAccountView,
             meta: { requiresGuest: true },
         },
+   
         {
             path: '/figures',
             name: 'figures',
@@ -97,8 +97,7 @@ const router = createRouter({
         },
         {
             path: '/admin',
-            component: AdminLayout
-            ,
+            component: AdminLayout,
             meta: { requiresAuth: true, requiresAdmin: true },
             children: [
                 {
