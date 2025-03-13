@@ -18,11 +18,11 @@
           <h2>Резюме на поръчката</h2>
           
           <div class="cart-items">
-            <div v-for="item in cartStore.items" :key="item.figure._id" class="cart-item">
+            <div v-for="item in cartStore.items" :key="getItemKey(item)" class="cart-item">
               <div class="item-details">
-                <h3>{{ item.figure.name }}</h3>
+                <h3>{{ item.figure?.name || 'Неизвестен продукт' }}</h3>
                 <p>Количество: {{ item.quantity }}</p>
-                <p>Цена: {{ item.figure.price }} лв.</p>
+                <p>Цена: {{ item.figure?.price || 0 }} лв.</p>
               </div>
             </div>
           </div>
@@ -130,10 +130,23 @@
   const orderCreated = ref(false);
   const orderId = ref(null);
   
+  // Функция за безопасно извличане на ключ
+  const getItemKey = (item) => {
+    console.log("Item in getItemKey:", item);
+    return item?.figure?._id || item?._id || Math.random().toString(36).substring(2, 9);
+  };
+  
   onMounted(async () => {
     console.log("[Checkout] Component mounted");
-    await cartStore.getCart();
-    console.log("[Checkout] Cart loaded:", cartStore.items.length, "items");
+    try {
+      await cartStore.getCart();
+      console.log("[Checkout] Cart loaded:", cartStore.items.length, "items");
+      // Проверка на структурата на данните
+      console.log("[Checkout] Cart items structure:", JSON.stringify(cartStore.items));
+    } catch (error) {
+      console.log("[Checkout] Error loading cart:", error);
+      toast.error("Грешка при зареждане на кошницата");
+    }
   });
   
   const createOrder = async () => {
