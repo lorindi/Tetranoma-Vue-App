@@ -82,7 +82,7 @@ const onSubmit = handleSubmit(async (values) => {
 </script>
 
 <template>
-  <main class="flex flex-col items-center w-full max-w-[1336px] min-h-[calc(100vh-125px)] p-4 md:p-8">
+  <main class="flex flex-col items-center justify-center w-full max-w-[1336px] min-h-[calc(100vh-125px)] p-4 md:p-8">
     <Title title="Get in Touch" />
 
     <section class="w-full max-w-4xl mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
