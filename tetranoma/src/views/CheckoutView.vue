@@ -5,6 +5,11 @@ import { useRouter } from "vue-router"
 import { useToast } from "vue-toastification"
 import FormField from "@/components/form/formField/FormField.vue"
 
+import Title from "@/components/ui/Title.vue"
+import Paragraph from "@/components/ui/Paragraph.vue"
+import FormButton from "@/components/form/formButton/FormButton.vue"
+import FormGridContainer from "@/components/form/formGridContainer/FormGridContainer.vue"
+
 const router = useRouter()
 const toast = useToast()
 const cartStore = useCartStore()
@@ -56,66 +61,84 @@ const handleCheckout = async () => {
 
 <template>
     <div class="flex flex-col px-4 py-8 w-full">
-        <h1 class="text-2xl font-bold mb-8 text-center">Complete Your Order</h1>
+        <Title type="title" align="left-center" class="mb-4">Complete Your Order</Title>
 
-        <div class="flex w-full justify-between gap-4">
+        <FormGridContainer :columns="2" :gap="4">
             <div class="bg-white dark:bg-gray-800 rounded-lg w-full shadow p-6">
-                <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
+                <Title type="subsubtitle" align="left" color="dark" class="mb-4">Order Summary</Title>
 
                 <div v-if="cartStore.loading" class="text-center py-4">
-                    Loading...
+                    <Paragraph color="transparent" size="medium" align="center">Loading...</Paragraph>
                 </div>
 
                 <div v-else>
                     <div class="space-y-4">
                         <div v-for="item in cartStore.items" :key="item.product._id"
                             class="flex items-center justify-between border-b pb-4 dark:border-gray-700">
-                            <div class="flex items-center gap-4">
+                            <div class="flex items-center gap-4 w-full">
                                 <img :src="item.product.images[0]" :alt="item.product.title"
                                     class="w-16 h-16 object-cover rounded" />
-                                <div>
-                                    <h3 class="font-semibold">{{ item.product.title }}</h3>
-                                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                                <div class="flex flex-col justify-start items-start">
+                                    <Title type="minortitle" align="left-center" color="dark" size="small">{{ item.product.title }}</Title>
+                                    <Paragraph color="transparent" size="small">
                                         Quantity: {{ item.quantity }}
-                                    </p>
+                                    </Paragraph>
                                 </div>
                             </div>
-                            <p class="font-semibold">{{ item.price * item.quantity }} BGN</p>
+                            <Paragraph color="primary" size="small">{{ item.price * item.quantity }} BGN</Paragraph>
                         </div>
                     </div>
 
                     <div class="mt-6 text-right">
-                        <p class="text-xl font-bold">
+                        <Title type="subsubtitle" align="right" color="primary">
                             Total: {{ cartStore.totalPrice }} BGN
-                        </p>
+                        </Title>
                     </div>
                 </div>
             </div>
 
             <div class="bg-white dark:bg-gray-800 w-full rounded-lg shadow p-6">
-                <h2 class="text-xl font-semibold mb-4">Shipping Information</h2>
+                <Title type="subsubtitle" align="left" color="dark" class="mb-4">Shipping Information</Title>
 
                 <div class="space-y-4">
-                    <FormField v-model="shippingAddress" label="Shipping Address" type="textarea"
-                        placeholder="Enter your complete shipping address" required />
+                    <FormField 
+                        v-model="shippingAddress" 
+                        label="Shipping Address" 
+                        type="textarea"
+                        placeholder="Enter your complete shipping address" 
+                        icon="map-marker" 
+                        required 
+                    />
 
-                    <div>
-                        <label class="block text-sm font-medium mb-2">Payment Method</label>
-                        <select v-model="paymentMethod"
-                            class="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600">
-                            <option v-for="method in paymentMethods" :key="method.value" :value="method.value">
-                                {{ method.label }}
-                            </option>
-                        </select>
+                    <div class="checkout-form-field">
+                        <Paragraph color="primary" size="small" class="mb-2">Payment Method</Paragraph>
+                        <FormField
+                            v-model="paymentMethod"
+                            type="select"
+                            icon="credit-card"
+                            :options="paymentMethods"
+                            placeholder="Select payment method"
+                        />
                     </div>
 
-                    <button @click="handleCheckout" :disabled="isProcessing || !cartStore.items.length"
-                        class="w-full py-3 bg-[#00BD7E] text-white rounded-lg hover:bg-[#00a06a] disabled:opacity-50 disabled:cursor-not-allowed">
-                        <span v-if="isProcessing">Processing...</span>
-                        <span v-else>Complete Order</span>
-                    </button>
+                    <FormButton 
+                        @click="handleCheckout" 
+                        :text="isProcessing ? 'Processing...' : 'Complete Order'" 
+                        icon="check-circle"
+                        type="button"
+                        variant="primary"
+                        size="full"
+                        :disabled="isProcessing || !cartStore.items.length"
+                    />
                 </div>
             </div>
-        </div>
+        </FormGridContainer>
     </div>
 </template>
+
+<style scoped>
+.checkout-form-field :deep(.pi) {
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+}
+</style>
