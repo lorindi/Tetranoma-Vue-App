@@ -47,28 +47,28 @@ const titleMotion = useMotion(titleRef, {
 
 <template>
   <h1 v-if="type === 'title'" ref="titleRef" :class="[
-    'font-semibold text-2xl sm:text-3xl md:text-4xl',
+    'font-semibold text-2xl sm:text-3xl md:text-3xl',
     alignClasses[align],
     colorClasses[color]
   ]">
     <slot></slot>
   </h1>
   <h2 v-else-if="type === 'subtitle'" ref="titleRef" :class="[
-    'font-semibold text-xl sm:text-2xl md:text-3xl',
+    'font-semibold text-xl sm:text-2xl md:text-2xl',
     alignClasses[align],
     colorClasses[color]
   ]">
     <slot></slot>
   </h2>
   <h4 v-else-if="type === 'subsubtitle'" ref="titleRef" :class="[
-    'font-semibold text-lg sm:text-xl md:text-2xl',
+    'font-semibold text-lg sm:text-xl md:text-xl',
     alignClasses[align],
     colorClasses[color]
   ]">
     <slot></slot>
   </h4>
   <h5 v-else-if="type === 'minortitle'" ref="titleRef" :class="[
-    'font-semibold text-base sm:text-lg md:text-xl',
+    'font-semibold text-base sm:text-lg md:text-lg',
     alignClasses[align],
     colorClasses[color]
   ]">
