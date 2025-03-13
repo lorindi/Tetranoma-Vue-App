@@ -41,11 +41,6 @@ const router = createRouter({
             meta: { requiresGuest: true },
         },
         {
-            path: '/payment-success',
-            name: 'PaymentSuccess',
-            component: PaymentSuccessView,
-        },
-        {
             path: '/figures',
             name: 'figures',
             component: FiguresView,
