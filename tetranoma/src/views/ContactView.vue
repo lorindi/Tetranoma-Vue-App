@@ -1,7 +1,6 @@
 <script setup>
 import { ref } from "vue"
 import { useForm, useField } from "vee-validate"
-import * as yup from "yup"
 import emailjs from "@emailjs/browser"
 import { useToast } from "vue-toastification"
 import Title from "@/components/ui/Title.vue"
@@ -9,6 +8,7 @@ import Paragraph from "@/components/ui/Paragraph.vue"
 import FormField from "@/components/form/formField/FormField.vue"
 import FormButton from "@/components/form/formButton/FormButton.vue"
 import FormGridContainer from "@/components/form/formGridContainer/FormGridContainer.vue"
+import * as yup from "yup";
 
 const contactInfo = ref([
   {
