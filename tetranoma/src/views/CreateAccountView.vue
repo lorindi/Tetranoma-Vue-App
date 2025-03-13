@@ -65,7 +65,7 @@ const onSubmit = handleSubmit(async (values) => {
                 </div>
                 <div class="mb-4">
                     <label for="email" class="block text-gray-700 font-medium mb-2 dark:text-white" autocomplete="email">Email</label>
-                    <input type="email" id="email" placeholder="Enter your email" v-model="email" @blur="emailBlur"
+                    <input type="email" id="email" placeholder="Enter your email" v-model="email" @blur="emailBlur" autocomplete="email"
                         class="w-full p-2 border bg-[#FAFAFA] border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#42BB8B] focus:border-transparent dark:bg-gray-800 dark:text-white dark:border-gray-600" />
                     <span v-if="emailError" class="text-red-500 text-sm mt-1">{{ emailError }}</span>
                 </div>
