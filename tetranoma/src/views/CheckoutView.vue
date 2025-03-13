@@ -1,316 +1,275 @@
-<script setup>
-import { ref, onMounted, computed, watch } from "vue"
-import { useCartStore } from "@/stores/useCartStore"
-import { useRouter } from "vue-router"
-import { useToast } from "vue-toastification"
-import { loadStripe } from "@stripe/stripe-js"
-import { StripeElement } from "@vue-stripe/vue-stripe"
-import Title from "@/components/ui/Title.vue"
-import Paragraph from "@/components/ui/Paragraph.vue"
-import FormField from "@/components/form/formField/FormField.vue"
-import FormGridContainer from "@/components/form/formGridContainer/FormGridContainer.vue"
-import FormButton from "@/components/form/formButton/FormButton.vue"
-
-const router = useRouter()
-const toast = useToast()
-const cartStore = useCartStore()
-
-const paymentMethod = ref("stripe")
-const shippingAddress = ref("")
-const isProcessing = ref(false)
-const stripeLoaded = ref(false)
-const stripeElements = ref(null)
-const clientSecret = ref("")
-const paymentId = ref("")
-
-const stripePublishableKey = ref("")
-const stripePromise = ref(null)
-
-onMounted(async () => {
-  console.log("[Checkout] Initializing component")
-  await cartStore.getCart()
-
-  if (!cartStore.items.length) {
-    toast.warning("Your cart is empty")
-    router.push("/figures")
-  }
-  
-  console.log("[Checkout] Loading Stripe")
-  try {
-    stripePublishableKey.value = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY
-    if (!stripePublishableKey.value?.startsWith("pk_")) {
-      throw new Error("Invalid Stripe publishable key format")
-    }
-    
-    stripePromise.value = await loadStripe(stripePublishableKey.value)
-    if (!stripePromise.value) {
-      throw new Error("Failed to initialize Stripe")
-    }
-    
-    stripeLoaded.value = true
-    console.log("[Stripe] Initialized successfully")
-  } catch (error) {
-    console.error("[Stripe] Initialization error:", error)
-    toast.error("Payment system unavailable. Please try again later.")
-    stripeLoaded.value = false
-  }
-})
-
-watch(paymentMethod, (newValue) => {
-  console.log("[Checkout] Payment method changed to:", newValue)
-  if (newValue === "stripe" && !clientSecret.value) {
-    console.log("[Checkout] Automatically creating Stripe payment intent")
-    createPaymentIntent()
-  }
-})
-
-const createPaymentIntent = async () => {
-  console.log("[Payment] Creating payment intent")
-  try {
-    const response = await fetch("/api/stripe/create-payment-intent", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem("token")}`
-      },
-      body: JSON.stringify({
-        orderId: "temp-order-id",
-        amount: cartStore.totalPrice
-      })
-    })
-    
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
-    
-    const data = await response.json()
-    console.log("[Payment] Intent created:", data)
-    
-    if (data.clientSecret) {
-      clientSecret.value = data.clientSecret
-      paymentId.value = data.paymentId
-      stripeElementsOptions.value.clientSecret = data.clientSecret
-      console.log("[Payment] Stripe elements updated with client secret")
-      return true
-    }
-    throw new Error("Client secret not received")
-  } catch (error) {
-    console.error("[Payment] Error creating intent:", error)
-    toast.error("Error initializing payment: " + error.message)
-    return false
-  }
-}
-
-const handleCheckout = async () => {
-  console.log("[Checkout] Starting processing")
-  if (!shippingAddress.value) {
-    toast.error("Please enter shipping address")
-    return
-  }
-
-  isProcessing.value = true
-  
-  try {
-    if (paymentMethod.value === "stripe") {
-      console.log("[Checkout] Using Stripe payment")
-      const success = await createPaymentIntent()
-      if (!success) throw new Error("Failed to create payment intent")
-      return
-    }
-    
-    await cartStore.checkout({
-      paymentMethod: paymentMethod.value,
-      shippingAddress: shippingAddress.value
-    })
-
-    toast.success("Order completed successfully!")
-    router.push("/")
-  } catch (error) {
-    console.error("[Checkout] Error:", error)
-    toast.error("Error processing order: " + error.message)
-  } finally {
-    isProcessing.value = false
-  }
-}
-
-const handleStripePayment = async () => {
-  console.log("[Stripe] Starting payment confirmation")
-  isProcessing.value = true
-  
-  try {
-    if (!stripePromise.value) {
-      throw new Error("Stripe not initialized")
-    }
-    
-    const stripe = await stripePromise.value
-    console.log("[Stripe] Instance loaded:", !!stripe)
-    
-    if (!stripeElements.value) {
-      throw new Error("Stripe elements not loaded")
-    }
-
-    const { error, paymentIntent } = await stripe.confirmPayment({
-      elements: stripeElements.value,
-      confirmParams: { return_url: `${window.location.origin}/payment-success` },
-      redirect: "if_required"
-    })
-    
-    console.log("[Stripe] Payment result:", { error, paymentIntent })
-    
-    if (error) {
-      console.error("[Stripe] Payment error:", error)
-      toast.error(error.message || "Payment failed")
-      throw error
-    }
-    
-    if (paymentIntent?.status === "succeeded") {
-      console.log("[Stripe] Payment succeeded, confirming...")
-      const confirmResponse = await fetch("/api/stripe/confirm-payment", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
-        },
-        body: JSON.stringify({ paymentIntentId: paymentIntent.id })
-      })
-      
-      if (!confirmResponse.ok) {
-        throw new Error("Payment confirmation failed")
-      }
-      
-      await cartStore.checkout({
-        paymentMethod: "stripe",
-        shippingAddress: shippingAddress.value,
-        paymentId: paymentId.value
-      })
-      
-      toast.success("Payment successful!")
-      router.push("/payment-success")
-    }
-  } catch (error) {
-    console.error("[Stripe] Processing error:", error)
-    toast.error("Payment processing failed: " + error.message)
-  } finally {
-    isProcessing.value = false
-  }
-}
-
-const showStripeForm = computed(() => {
-  return paymentMethod.value === "stripe" && 
-         clientSecret.value && 
-         stripeLoaded.value &&
-         stripePromise.value
-})
-
-const onStripeElementsReady = (elements) => {
-  console.log("[Stripe] Elements ready")
-  stripeElements.value = elements
-}
-
-const stripeElementsOptions = ref({
-  clientSecret: "",
-  appearance: {
-    theme: "stripe",
-    variables: {
-      colorPrimary: "#00BD7E",
-    },
-  },
-})
-
-const paymentMethods = [
-  { value: "stripe", label: "Credit Card (Stripe)" },
-  { value: "bank transfer", label: "Bank Transfer" }
-]
-</script>
-
 <template>
-  <div class="flex flex-col px-4 py-8 w-full">
-    <Title type="title" align="center" class="mb-8">Complete Your Order</Title>
-
-    <FormGridContainer :columns="2" :gap="6" mobileColumns="1">
-      <!-- Order Summary Section -->
-      <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-        <Title type="subtitle" class="mb-4">Order Summary</Title>
-
-        <div v-if="cartStore.loading">
-          <Paragraph color="transparent" align="center">Loading products...</Paragraph>
-        </div>
-
-        <div v-else>
-          <div class="space-y-4">
-            <div v-for="item in cartStore.items" :key="item.product._id"
-              class="flex items-center justify-between border-b pb-4 dark:border-gray-700">
-              <div class="flex items-center gap-4">
-                <img :src="item.product.images[0]" :alt="item.product.title"
-                  class="w-16 h-16 object-cover rounded" />
-                <div>
-                  <Title type="minortitle">{{ item.product.title }}</Title>
-                  <Paragraph size="small" color="transparent">
-                    Quantity: {{ item.quantity }}
-                  </Paragraph>
-                </div>
+    <div class="checkout-container">
+      <h1>Завършване на поръчката</h1>
+      
+      <div v-if="cartStore.loading" class="loading">
+        Зареждане...
+      </div>
+      
+      <div v-else-if="cartStore.items.length === 0" class="empty-cart">
+        <p>Вашата кошница е празна</p>
+        <router-link to="/shop" class="continue-shopping">
+          Продължете с пазаруването
+        </router-link>
+      </div>
+      
+      <div v-else class="checkout-content">
+        <div class="order-summary">
+          <h2>Резюме на поръчката</h2>
+          
+          <div class="cart-items">
+            <div v-for="item in cartStore.items" :key="item.figure._id" class="cart-item">
+              <div class="item-details">
+                <h3>{{ item.figure.name }}</h3>
+                <p>Количество: {{ item.quantity }}</p>
+                <p>Цена: {{ item.figure.price }} лв.</p>
               </div>
-              <Paragraph class="font-semibold">{{ (item.price * item.quantity).toFixed(2) }} BGN</Paragraph>
             </div>
           </div>
-
-          <div class="mt-6 text-right">
-            <Title type="subsubtitle">Total: {{ cartStore.totalPrice.toFixed(2) }} BGN</Title>
+          
+          <div class="order-total">
+            <h3>Обща сума: {{ cartStore.totalPrice }} лв.</h3>
           </div>
         </div>
-      </div>
-
-      <!-- Payment Section -->
-      <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-        <Title type="subtitle" class="mb-4">Shipping & Payment</Title>
-
-        <FormGridContainer :columns="1" :gap="4">
-          <FormField
-            v-model="shippingAddress"
-            label="Shipping Address"
-            type="textarea"
-            icon="map-marker"
-            placeholder="Enter full shipping address"
-            required
-          />
-
-          <FormField
-            v-model="paymentMethod"
-            label="Payment Method"
-            type="select"
-            icon="credit-card"
-            :options="paymentMethods"
-          />
-
-          <!-- Stripe Payment Form -->
-          <div v-if="showStripeForm" class="mt-4">
-            <Title type="subsubtitle" class="mb-2">Card Details</Title>
-            <StripeElement 
-              v-if="clientSecret"
-              :stripe="stripePromise" 
-              :elements-options="stripeElementsOptions"
-              @element-ready="onStripeElementsReady"
-            />
+        
+        <div class="shipping-info" v-if="!orderCreated">
+          <h2>Информация за доставка</h2>
+          
+          <form @submit.prevent="createOrder" class="shipping-form">
+            <div class="form-group">
+              <label for="fullName">Име и фамилия</label>
+              <input 
+                type="text" 
+                id="fullName" 
+                v-model="shippingInfo.fullName" 
+                required
+              />
+            </div>
             
-            <FormButton 
-              v-if="stripeElements"
-              @click="handleStripePayment"
-              :disabled="isProcessing"
-              text="Pay Now"
-              icon="lock"
-              :loading="isProcessing"
-              class="mt-4"
-            />
-          </div>
-
-          <FormButton 
-            v-if="paymentMethod !== 'stripe' || !showStripeForm"
-            @click="handleCheckout" 
-            :disabled="isProcessing || !cartStore.items.length"
-            text="Complete Order"
-            icon="check-circle"
-            :loading="isProcessing"
+            <div class="form-group">
+              <label for="address">Адрес</label>
+              <input 
+                type="text" 
+                id="address" 
+                v-model="shippingInfo.address" 
+                required
+              />
+            </div>
+            
+            <div class="form-group">
+              <label for="city">Град</label>
+              <input 
+                type="text" 
+                id="city" 
+                v-model="shippingInfo.city" 
+                required
+              />
+            </div>
+            
+            <div class="form-group">
+              <label for="postalCode">Пощенски код</label>
+              <input 
+                type="text" 
+                id="postalCode" 
+                v-model="shippingInfo.postalCode" 
+                required
+              />
+            </div>
+            
+            <div class="form-group">
+              <label for="phone">Телефон</label>
+              <input 
+                type="tel" 
+                id="phone" 
+                v-model="shippingInfo.phone" 
+                required
+              />
+            </div>
+            
+            <button type="submit" class="submit-button" :disabled="isSubmitting">
+              {{ isSubmitting ? 'Обработка...' : 'Продължи към плащане' }}
+            </button>
+          </form>
+        </div>
+        
+        <div v-if="orderCreated" class="payment-section">
+          <h2>Плащане</h2>
+          
+          <StripePaymentForm 
+            :orderId="orderId" 
+            :amount="cartStore.totalPrice"
+            @payment-success="handlePaymentSuccess"
+            @payment-error="handlePaymentError"
           />
-        </FormGridContainer>
+        </div>
       </div>
-    </FormGridContainer>
-  </div>
-</template>
+    </div>
+  </template>
+  
+  <script setup>
+  import { ref, onMounted, computed } from "vue";
+  import { useCartStore } from "@/stores/useCartStore";
+  import { usePaymentStore } from "@/stores/usePaymentStore";
+  import { useToast } from "vue-toastification";
+  import StripePaymentForm from "@/components/StripePaymentForm.vue";
+  import api from "@/api/axios";
+  
+  const cartStore = useCartStore();
+  const paymentStore = usePaymentStore();
+  const toast = useToast();
+  
+  const shippingInfo = ref({
+    fullName: "",
+    address: "",
+    city: "",
+    postalCode: "",
+    phone: ""
+  });
+  
+  const isSubmitting = ref(false);
+  const orderCreated = ref(false);
+  const orderId = ref(null);
+  
+  onMounted(async () => {
+    console.log("[Checkout] Component mounted");
+    await cartStore.getCart();
+    console.log("[Checkout] Cart loaded:", cartStore.items.length, "items");
+  });
+  
+  const createOrder = async () => {
+    console.log("[Checkout] Creating order with shipping info:", shippingInfo.value);
+    isSubmitting.value = true;
+    
+    try {
+      // Създаване на поръчка
+      const response = await api.post("/orders", {
+        shippingInfo: shippingInfo.value,
+        paymentMethod: "stripe"
+      });
+      
+      console.log("[Checkout] Order created:", response.data);
+      orderId.value = response.data.order._id;
+      orderCreated.value = true;
+      toast.success("Поръчката е създадена успешно!");
+    } catch (error) {
+      console.log("[Checkout] Error:", error);
+      toast.error("Грешка при създаване на поръчката. Моля, опитайте отново.");
+    } finally {
+      isSubmitting.value = false;
+    }
+  };
+  
+  const handlePaymentSuccess = (paymentIntent) => {
+    console.log("[Checkout] Payment successful:", paymentIntent);
+    toast.success("Плащането е успешно!");
+    // Тук можете да изчистите кошницата или да направите други действия след успешно плащане
+    cartStore.getCart(); // Обновяване на кошницата
+  };
+  
+  const handlePaymentError = (error) => {
+    console.log("[Checkout] Error:", error);
+    toast.error("Възникна грешка при плащането. Моля, опитайте отново.");
+  };
+  </script>
+  
+  <style scoped>
+  .checkout-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .checkout-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+  
+  @media (max-width: 768px) {
+    .checkout-content {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  .order-summary, .shipping-info, .payment-section {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .cart-item {
+    display: flex;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .item-details {
+    flex: 1;
+  }
+  
+  .order-total {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 2px solid #ddd;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+  }
+  
+  input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .submit-button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    margin-top: 10px;
+  }
+  
+  .submit-button:hover {
+    background-color: #45a049;
+  }
+  
+  .submit-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  .empty-cart {
+    text-align: center;
+    padding: 40px;
+  }
+  
+  .continue-shopping {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #5469d4;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+  }
+  
+  .loading {
+    text-align: center;
+    padding: 40px;
+  }
+  </style>
