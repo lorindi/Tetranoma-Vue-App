@@ -12,7 +12,7 @@ const props = defineProps({
   align: {
     type: String,
     default: "left",
-    validator: (value) => ["left", "center", "right"].includes(value)
+    validator: (value) => ["left", "center", "left-center", "right"].includes(value)
   },
   color: {
     type: String,
@@ -24,6 +24,7 @@ const props = defineProps({
 const alignClasses = {
   left: "text-left",
   center: "text-center",
+  "left-center": "text-center lg:text-left",
   right: "text-right"
 };
 
