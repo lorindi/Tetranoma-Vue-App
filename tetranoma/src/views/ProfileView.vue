@@ -110,19 +110,19 @@ const handleDeleteProfile = async () => {
                     <i v-else class="pi pi-user text-[#00BD7E] text-4xl"></i>
                 </div>
                 <div class="flex-1 text-center md:text-left">
-                    <Title type="subtitle" align="left" color="dark">{{ user.name }}</Title>
-                    <Paragraph color="transparent" size="small">{{ user.email }}</Paragraph>
-                    <Paragraph color="transparent" size="small">
+                    <h1 class="text-2xl font-bold mb-2">{{ user.name }}</h1>
+                    <p class="text-gray-600 dark:text-gray-400">{{ user.email }}</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-500">
                         Joined on {{ new Date(user.createdAt).toLocaleDateString() }}
-                    </Paragraph>
+                    </p>
                     <div class="flex gap-4 mt-4 justify-center md:justify-start">
                         <div class="text-center">
-                            <Title type="minortitle" align="center" color="primary">{{ userStats.figuresCount }}</Title>
-                            <Paragraph color="transparent" size="small" align="center">Figures</Paragraph>
+                            <p class="font-bold text-[#00BD7E]">{{ userStats.figuresCount }}</p>
+                            <p class="text-sm text-gray-500">Figures</p>
                         </div>
                         <div class="text-center">
-                            <Title type="minortitle" align="center" color="primary">{{ userStats.ordersCount }}</Title>
-                            <Paragraph color="transparent" size="small" align="center">Orders</Paragraph>
+                            <p class="font-bold text-[#00BD7E]">{{ userStats.ordersCount }}</p>
+                            <p class="text-sm text-gray-500">Orders</p>
                         </div>
                     </div>
                 </div>
@@ -148,51 +148,46 @@ const handleDeleteProfile = async () => {
         <div class="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6 dark:shadow-none">
             <!-- Favorites Tab -->
             <div v-if="activeTab === 'favorites'" class="space-y-6">
-                <Title type="subsubtitle" align="left" color="dark">Favorite Figures</Title>
+                <h2 class="text-xl font-semibold mb-4">Favorite Figures</h2>
                 <FiguresList v-if="userFavorites?.length" :figures="userFavorites" />
-                <Paragraph v-else color="transparent" size="medium" align="center">
+                <p v-else class="text-center text-gray-600 dark:text-gray-400">
                     You don't have any favorite figures yet
-                </Paragraph>
+                </p>
             </div>
 
             <!-- Created Figures Tab -->
             <div v-if="activeTab === 'created'" class="space-y-6">
-                <Title type="subsubtitle" align="left" color="dark">Created Figures</Title>
+                <h2 class="text-xl font-semibold mb-4">Created Figures</h2>
                 <FiguresList v-if="userCreatedFigures?.length" :figures="userCreatedFigures" />
-                <Paragraph v-else color="transparent" size="medium" align="center">
+                <p v-else class="text-center text-gray-600 dark:text-gray-400">
                     You haven't created any figures yet
-                </Paragraph>
+                </p>
             </div>
 
             <!-- Profile Info Tab -->
             <div v-if="activeTab === 'info'" class="max-w-2xl mx-auto">
                 <div class="flex justify-between items-center mb-6">
-                    <Title type="subsubtitle" align="left" color="dark">Profile Information</Title>
+                    <h2 class="text-xl font-semibold">Profile Information</h2>
                     <div class="flex gap-2">
-                        <FormButton 
-                            v-if="!isEditing" 
-                            @click="handleEditProfile"
-                            text="Edit" 
-                            icon="pencil" 
-                            type="button"
-                            variant="primary"
-                            size="1/4"
-                        />
-                        <FormButton 
-                            @click="handleLogout"
-                            text="Logout" 
-                            icon="sign-out" 
-                            type="button"
-                            variant="secondary"
-                            size="1/4"
-                        />
+                        <button v-if="!isEditing" @click="handleEditProfile"
+                            class="px-4 py-2 bg-[#00BD7E] text-white rounded-lg hover:bg-[#00a06a]">
+                            <i class="pi pi-pencil mr-2"></i>
+                            Edit
+                        </button>
+                        <button @click="handleLogout"
+                            class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
+                            <i class="pi pi-sign-out mr-2"></i>
+                            Logout
+                        </button>
                     </div>
                 </div>
 
                 <div class="space-y-6">
                     <!-- Avatar Section -->
                     <div>
-                        <Paragraph color="primary" size="small">Avatar</Paragraph>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Avatar
+                        </label>
                         <div class="flex items-center gap-4">
                             <div
                                 class="w-24 h-24 rounded-full bg-[#00BD7E]/10 flex items-center justify-center overflow-hidden">
@@ -202,74 +197,53 @@ const handleDeleteProfile = async () => {
                                 <i v-else class="pi pi-user text-[#00BD7E] text-2xl"></i>
                             </div>
                             <div v-if="isEditing" class="flex-1">
-                                <FormField
-                                    v-model="editedUser.avatar"
-                                    placeholder="Enter avatar URL"
-                                    icon="image"
-                                    type="url"
-                                />
-                                <Paragraph color="transparent" size="small">Enter the URL of your avatar image</Paragraph>
+                                <input v-model="editedUser.avatar" placeholder="Enter avatar URL"
+                                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#00BD7E] dark:bg-gray-700" />
+                                <p class="text-sm text-gray-500 mt-1">Enter the URL of your avatar image</p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Name and Email Fields -->
-                    <FormGridContainer :columns="2" :gap="6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <Paragraph color="primary" size="small">Name</Paragraph>
-                            <FormField
-                                v-if="isEditing"
-                                v-model="editedUser.name"
-                                placeholder="Your name"
-                                icon="user"
-                            />
-                            <Paragraph v-else color="primary" size="medium">{{ user.name }}</Paragraph>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                Name
+                            </label>
+                            <input v-if="isEditing" v-model="editedUser.name"
+                                class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#00BD7E] dark:bg-gray-700" />
+                            <p v-else class="text-gray-900 dark:text-gray-100">{{ user.name }}</p>
                         </div>
 
                         <div>
-                            <Paragraph color="primary" size="small">Email</Paragraph>
-                            <FormField
-                                v-if="isEditing"
-                                v-model="editedUser.email"
-                                placeholder="Your email"
-                                icon="envelope"
-                                type="text"
-                            />
-                            <Paragraph v-else color="primary" size="medium">{{ user.email }}</Paragraph>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                Email
+                            </label>
+                            <input v-if="isEditing" v-model="editedUser.email"
+                                class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#00BD7E] dark:bg-gray-700" />
+                            <p v-else class="text-gray-900 dark:text-gray-100">{{ user.email }}</p>
                         </div>
-                    </FormGridContainer>
+                    </div>
 
                     <!-- Action Buttons -->
                     <div v-if="isEditing" class="flex justify-end gap-4">
-                        <FormButton 
-                            @click="isEditing = false"
-                            text="Cancel" 
-                            type="button"
-                            variant="outline"
-                            size="1/4"
-                            align="end"
-                        />
-                        <FormButton 
-                            @click="handleSaveProfile"
-                            text="Save" 
-                            icon="check"
-                            type="button"
-                            variant="primary"
-                            size="1/4"
-                            align="end"
-                        />
+                        <button @click="isEditing = false"
+                            class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700">
+                            Cancel
+                        </button>
+                        <button @click="handleSaveProfile"
+                            class="px-4 py-2 bg-[#00BD7E] text-white rounded-lg hover:bg-[#00a06a]">
+                            Save
+                        </button>
                     </div>
 
                     <!-- Delete Profile Button -->
                     <div class="border-t pt-6 mt-6">
-                        <FormButton 
-                            @click="handleDeleteProfile"
-                            text="Delete Profile" 
-                            icon="trash"
-                            type="button"
-                            variant="primary"
-                            size="1/3"
-                        />
+                        <button @click="handleDeleteProfile"
+                            class="px-4 py-2 bg-[#00BD7E] text-white rounded-lg hover:bg-[#00a06a]">
+                            <i class="pi pi-trash mr-2"></i>
+                            Delete Profile
+                        </button>
                     </div>
                 </div>
             </div>
