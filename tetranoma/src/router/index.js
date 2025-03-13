@@ -19,6 +19,7 @@ import AdminDashboard from '@/components/admin/dashboard/AdminDashboard.vue'
 import AdminUsers from '@/components/admin/AdminUsers.vue'
 import AdminFigures from '@/components/admin/AdminFigures.vue'
 import AdminOrders from '@/components/admin/AdminOrders.vue'
+import PaymentSuccessView from '@/views/PaymentSuccessView.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,7 +41,11 @@ const router = createRouter({
             component: CreateAccountView,
             meta: { requiresGuest: true },
         },
-   
+        {
+            path: '/payment-success',
+            name: 'PaymentSuccess',
+            component: PaymentSuccessView,
+        },
         {
             path: '/figures',
             name: 'figures',
